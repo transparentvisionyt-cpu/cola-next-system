@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Cola Next - Distributor Management</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e31e24'/%3E%3Cpath d='M16 4c-1.5 0-2.5.8-2.5 2v4h-1c-.8 0-1.5.7-1.5 1.5v15c0 .8.7 1.5 1.5 1.5h7c.8 0 1.5-.7 1.5-1.5V11.5c0-.8-.7-1.5-1.5-1.5h-1V6c0-1.2-1-2-2.5-2zm0 2.5c.8 0 1 .5 1 1v4h-2V6.5c0-.5.2-1 1-1z' fill='%23fff'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -87,6 +88,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-particle:nth-child(5){left:90%;top:40%;animation-delay:4s;width:5px;height:5px}
 @keyframes floatBottle{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(var(--r,0deg))}}
 @keyframes dashParticle{0%{opacity:0;transform:translateY(0)}20%{opacity:.6}80%{opacity:.6}100%{opacity:0;transform:translateY(-40px)}}
+.product-strip{display:flex;align-items:center;justify-content:center;gap:0;padding:14px 20px;background:linear-gradient(135deg,#fff5f5,#fff);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;overflow:hidden;position:relative}
+.product-strip::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(227,30,36,.02) 40px,rgba(227,30,36,.02) 41px)}
+.strip-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;z-index:1}
+.strip-item:hover{transform:translateY(-6px) scale(1.08)}
+.strip-item img{height:60px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.1));transition:all .3s}
+.strip-item:hover img{filter:drop-shadow(0 4px 12px rgba(0,0,0,.2))}
+.strip-item span{font-size:9px;font-weight:600;color:var(--text2);white-space:nowrap}
 
 /* ============ SIDEBAR ============ */
 .sidebar{width:var(--sidebar-w);background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%);position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s;display:flex;flex-direction:column}
@@ -355,6 +363,7 @@ tr:hover{background:rgba(227,30,36,.02)}
       <p>Distributor Management System</p>
     </div>
   </div>
+  <div class="product-strip" id="dashProductStrip"></div>
   <div class="kpi-grid" style="margin-top:16px">
     <div class="kpi" style="animation-delay:.1s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(227,30,36,.1)"><i class="fas fa-cart-shopping" style="color:var(--primary)"></i></div></div><div class="kpi-val" data-target="0" id="d-totalOrders">0</div><div class="kpi-lbl">Total Orders</div></div>
     <div class="kpi" style="animation-delay:.2s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(34,197,94,.1)"><i class="fas fa-money-bill-wave" style="color:var(--success)"></i></div></div><div class="kpi-val" data-target="0" id="d-todaySales">0</div><div class="kpi-lbl">Today Sales</div></div>
@@ -434,8 +443,8 @@ tr:hover{background:rgba(227,30,36,.02)}
     <div class="card-header">
       <h3><i class="fas fa-boxes-stacked"></i>Stock Details</h3>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-success btn-sm" onclick="openStockModal('add')"><i class="fas fa-plus"></i> Add Stock</button>
-        <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="openStockModal('remove')"><i class="fas fa-minus"></i> Remove Stock</button>
+        <button class="btn btn-success btn-sm" onclick="openStockModal('add')"><i class="fas fa-plus"></i> Add PETs</button>
+        <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="openStockModal('remove')"><i class="fas fa-minus"></i> Remove PETs</button>
       </div>
     </div>
     <div class="card-body" style="padding:0;overflow-x:auto">
@@ -555,11 +564,13 @@ tr:hover{background:rgba(227,30,36,.02)}
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-stock">
   <div class="modal">
-    <h3 id="sm-title">Add Stock</h3>
-    <div class="form-group"><label class="label">Select Product</label><select id="sm-product" class="input"></select></div>
-    <div class="form-group"><label class="label">Quantity (Cases)</label><input id="sm-qty" type="number" class="input" value="1" min="1"></div>
+    <h3 id="sm-title">Add PETs</h3>
+    <div class="form-group"><label class="label">Select Product</label><select id="sm-product" class="input" onchange="updatePetInfo()"></select></div>
+    <div style="background:#f8fafc;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text2)" id="sm-petinfo"></div>
+    <div class="form-group"><label class="label">Number of PETs</label><input id="sm-qty" type="number" class="input" value="1" min="1" oninput="previewPetCases()"></div>
+    <div id="sm-cases-preview" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1e40af;display:none"></div>
     <div class="form-group"><label class="label">Note (optional)</label><input id="sm-note" class="input" placeholder="Reason for stock change"></div>
-    <div class="btns"><button class="btn btn-secondary" onclick="closeModal('modal-stock')">Cancel</button><button id="sm-submit" class="btn btn-success" onclick="submitStock()"><i class="fas fa-save"></i> Add</button></div>
+    <div class="btns"><button class="btn btn-secondary" onclick="closeModal('modal-stock')">Cancel</button><button id="sm-submit" class="btn btn-success" onclick="submitStock()"><i class="fas fa-save"></i> Add PETs</button></div>
   </div>
 </div>
 <div class="modal-overlay" id="modal-product">
@@ -738,7 +749,8 @@ async function loadDashboard(){
   animateCount('d-receivable',d.totalReceivable,'Rs.',true);
   animateCount('d-products',d.totalProducts,'');
   document.getElementById('d-recentOrders').innerHTML=d.recentOrders.length?d.recentOrders.map(o=>`<tr><td><strong>${o.order_number}</strong></td><td>${o.retailer_name||'-'}</td><td>Rs.${fmt(o.net_amount)}</td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--text2)">No orders</td></tr>';
-  document.getElementById('d-lowStock').innerHTML=d.lowStock.length?d.lowStock.map(p=>`<tr><td>${p.name}</td><td>${p.size}</td><td><span class="badge badge-${p.stock<10?'danger':'warning'}">${p.stock} cases</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text2)">All OK</td></tr>';
+  document.getElementById('d-lowStock').innerHTML=d.lowStock.length?d.lowStock.map(p=>{const pets=p.stock*p.pieces_per_case;return `<tr><td>${p.name}</td><td>${p.size}</td><td><span class="badge badge-${pets<200?'danger':'warning'}">${pets.toLocaleString()} PETs</span></td></tr>`}).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text2)">All OK</td></tr>';
+  renderProductStrip();
 }
 function animateCount(id,target,prefix,isMoney){
   const el=document.getElementById(id);
@@ -750,6 +762,15 @@ function animateCount(id,target,prefix,isMoney){
     if(current>=target){current=target;clearInterval(timer)}
     el.textContent=prefix+fmt(current);
   },30);
+}
+function renderProductStrip(){
+  const strip=document.getElementById('dashProductStrip');
+  if(!strip||!allProducts.length)return;
+  const unique=[...new Map(allProducts.map(p=>[p.name,p])).values()];
+  strip.innerHTML=unique.map(p=>{
+    const img=getBottleImg(p.name,p.size);
+    return `<div class="strip-item"><img src="${img}" alt="${p.name}" onerror="this.parentElement.style.display='none'"><span>${p.name}</span></div>`;
+  }).join('');
 }
 
 // ============ PRODUCTS ============
@@ -808,37 +829,65 @@ async function loadGodown(){
   const p=await(await fetch(API+'/api/products')).json();
   allProducts=p;
   const totalCases=p.reduce((s,x)=>s+x.stock,0);
+  const totalPets=p.reduce((s,x)=>s+(x.stock*x.pieces_per_case),0);
   const totalValue=p.reduce((s,x)=>s+(x.purchase_price*x.stock),0);
   const lowStock=p.filter(x=>x.stock<20);
-  document.getElementById('g-totalCases').textContent=totalCases;
+  document.getElementById('g-totalCases').textContent=totalPets.toLocaleString();
   document.getElementById('g-totalProducts').textContent=p.length;
   document.getElementById('g-totalValue').textContent='Rs.'+fmt(totalValue);
   document.getElementById('g-lowStock').textContent=lowStock.length;
-  document.getElementById('g-body').innerHTML=p.map(x=>{const c=colorMap[x.name]||x.color||'#e31e24';const v=x.purchase_price*x.stock;const sb=x.stock<10?'danger':x.stock<20?'warning':'success';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(x.name,x.size)}" style="width:16px;height:30px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${x.name}</strong></div></td><td><span class="badge badge-${x.category==='Classic'?'info':'warning'}">${x.category}</span></td><td>${x.size}</td><td>${x.pieces_per_case}</td><td><span class="badge badge-${sb}">${x.stock} cases</span></td><td>Rs.${fmt(v)}</td><td><span class="badge badge-${sb}">${x.stock<10?'LOW':x.stock<20?'Medium':'OK'}</span></td><td><div style="display:flex;gap:4px"><button class="action-btn" onclick="openStockModal('add',${x.id})" title="Add Stock"><i class="fas fa-plus" style="color:#16a34a"></i></button><button class="action-btn" onclick="openStockModal('remove',${x.id})" title="Remove Stock"><i class="fas fa-minus" style="color:#ef4444"></i></button></div></td></tr>`}).join('');
+  document.getElementById('g-body').innerHTML=p.map(x=>{const c=colorMap[x.name]||x.color||'#e31e24';const v=x.purchase_price*x.stock;const pets=x.stock*x.pieces_per_case;const sb=pets<200?'danger':pets<500?'warning':'success';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(x.name,x.size)}" style="width:16px;height:30px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${x.name}</strong></div></td><td><span class="badge badge-${x.category==='Classic'?'info':'warning'}">${x.category}</span></td><td>${x.size}</td><td>${x.pieces_per_case}</td><td><span class="badge badge-${sb}">${pets.toLocaleString()} PETs</span></td><td>Rs.${fmt(v)}</td><td><span class="badge badge-${sb}">${pets<200?'LOW':pets<500?'Medium':'OK'}</span></td><td><div style="display:flex;gap:4px"><button class="action-btn" onclick="openStockModal('add',${x.id})" title="Add PETs"><i class="fas fa-plus" style="color:#16a34a"></i></button><button class="action-btn" onclick="openStockModal('remove',${x.id})" title="Remove PETs"><i class="fas fa-minus" style="color:#ef4444"></i></button></div></td></tr>`}).join('');
 }
 let stockMode='add';
 function openStockModal(mode,pid){
   stockMode=mode;
-  document.getElementById('sm-title').textContent=mode==='add'?'Add Stock':'Remove Stock';
+  document.getElementById('sm-title').textContent=mode==='add'?'Add PETs':'Remove PETs';
   const btn=document.getElementById('sm-submit');
-  if(mode==='add'){btn.className='btn btn-success';btn.innerHTML='<i class="fas fa-plus"></i> Add'}else{btn.className='btn btn-sm';btn.style.background='#ef4444';btn.style.color='#fff';btn.innerHTML='<i class="fas fa-minus"></i> Remove'}
+  if(mode==='add'){btn.className='btn btn-success';btn.innerHTML='<i class="fas fa-plus"></i> Add PETs'}else{btn.className='btn btn-sm';btn.style.background='#ef4444';btn.style.color='#fff';btn.innerHTML='<i class="fas fa-minus"></i> Remove PETs'}
   const sel=document.getElementById('sm-product');
-  sel.innerHTML=allProducts.map(p=>`<option value="${p.id}" ${pid==p.id?'selected':''}>${p.name} ${p.size} (Stock: ${p.stock})</option>`).join('');
+  sel.innerHTML=allProducts.map(p=>`<option value="${p.id}" ${pid==p.id?'selected':''}>${p.name} ${p.size} (${(p.stock*p.pieces_per_case).toLocaleString()} PETs)</option>`).join('');
   document.getElementById('sm-qty').value=1;
   document.getElementById('sm-note').value='';
+  document.getElementById('sm-cases-preview').style.display='none';
+  updatePetInfo();
   openModal('modal-stock');
+}
+function updatePetInfo(){
+  const sel=document.getElementById('sm-product');
+  const p=allProducts.find(x=>x.id==sel.value);
+  if(!p)return;
+  const pets=p.stock*p.pieces_per_case;
+  document.getElementById('sm-petinfo').innerHTML=`<i class="fas fa-info-circle"></i> Current stock: <strong>${pets.toLocaleString()} PETs</strong> (${p.stock} cases × ${p.pieces_per_case} pcs)`;
+  previewPetCases();
+}
+function previewPetCases(){
+  const sel=document.getElementById('sm-product');
+  const p=allProducts.find(x=>x.id==sel.value);
+  const qty=parseInt(document.getElementById('sm-qty').value)||0;
+  if(!p||!qty){document.getElementById('sm-cases-preview').style.display='none';return}
+  const cases=Math.ceil(qty/p.pieces_per_case);
+  const div=document.getElementById('sm-cases-preview');
+  div.style.display='block';
+  div.innerHTML=`<i class="fas fa-arrow-right"></i> This will add <strong>${cases} case${cases>1?'s':''}</strong> to godown (${qty} PETs ÷ ${p.pieces_per_case} pcs/case)`;
 }
 async function submitStock(){
   const pid=parseInt(document.getElementById('sm-product').value);
-  const qty=parseInt(document.getElementById('sm-qty').value)||0;
-  if(!pid||!qty){toast('Select product and quantity','error');return}
+  const pets=parseInt(document.getElementById('sm-qty').value)||0;
+  if(!pid||!pets){toast('Select product and PETs','error');return}
   const prod=allProducts.find(p=>p.id===pid);
-  if(stockMode==='remove'&&qty>prod.stock){toast('Cannot remove more than stock!','error');return}
-  const newStock=stockMode==='add'?prod.stock+qty:prod.stock-qty;
-  await fetch(API+'/api/products/'+pid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...prod,stock:newStock})});
+  const casesToAdd=Math.ceil(pets/prod.pieces_per_case);
+  if(stockMode==='remove'){
+    if(pets>prod.stock*prod.pieces_per_case){toast('Cannot remove more PETs than available!','error');return}
+    const casesToRemove=pets/prod.pieces_per_case;
+    const newStock=prod.stock-casesToRemove;
+    await fetch(API+'/api/products/'+pid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...prod,stock:Math.round(newStock*100)/100})});
+  }else{
+    const newStock=prod.stock+casesToAdd;
+    await fetch(API+'/api/products/'+pid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...prod,stock:newStock})});
+  }
   closeModal('modal-stock');
   loadGodown();
-  toast(stockMode==='add'?`Added ${qty} cases`:`Removed ${qty} cases`);
+  toast(stockMode==='add'?`Added ${pets} PETs`:`Removed ${pets} PETs`);
 }
 
 // ============ ORDERS ============
