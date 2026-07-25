@@ -106,6 +106,9 @@ select.input{cursor:pointer;appearance:none;background-image:url("data:image/svg
 .btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#16a34a;transform:translateY(-2px)}
 .btn-secondary{background:#f1f5f9;color:var(--text)}.btn-secondary:hover{background:#e2e8f0}
 .btn-sm{padding:7px 12px;font-size:11px;border-radius:8px}
+.order-tab-btn{padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;border:1.5px solid var(--border);background:#fff;color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+.order-tab-btn:hover{border-color:var(--primary);color:var(--primary)}
+.order-tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block}
 .form-group{margin-bottom:14px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -276,11 +279,17 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
   <div class="stats-row">
     <div class="stat-card"><h3 id="my-total-orders">0</h3><p data-t="total_orders">Total Orders</p></div>
     <div class="stat-card" style="background:linear-gradient(135deg,#22c55e,#16a34a)"><h3 id="my-total-amount">Rs.0</h3><p data-t="total_spent">Total Spent</p></div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#ef4444,#dc2626)"><h3 id="my-cancelled-orders">0</h3><p>Cancelled</p></div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#6b7280,#4b5563)"><h3 id="my-cancelled-amount">Rs.0</h3><p>Cancelled Value</p></div>
   </div>
   <div class="card">
     <div class="card-header">
       <h3><i class="fas fa-receipt"></i> <span data-t="my_orders">My Orders</span></h3>
-      <input class="search-input" style="max-width:200px" id="o-search" placeholder="Search orders..." oninput="filterMyOrders()">
+      <div style="display:flex;gap:6px">
+        <button class="order-tab-btn active" data-view="active" onclick="switchMyOrdersView('active')"><i class="fas fa-clock"></i> Active</button>
+        <button class="order-tab-btn" data-view="cancelled" onclick="switchMyOrdersView('cancelled')"><i class="fas fa-times-circle"></i> Cancelled</button>
+        <input class="search-input" style="max-width:160px" id="o-search" placeholder="Search..." oninput="filterMyOrders()">
+      </div>
     </div>
     <div class="card-body" style="padding:0;overflow-x:auto">
       <table>
@@ -411,15 +420,17 @@ function renderProducts(products){
 let orderItemIndex=0;
 function addOrderItem(){
   if(!allProducts.length)return;
-  const opts=allProducts.map(p=>`<option value="${p.id}">${p.name} ${p.size} - Rs.${p.sale_price}</option>`).join('');
-  document.getElementById('om-items').insertAdjacentHTML('beforeend',`<div class="order-item" id="oi-${orderItemIndex}"><select class="input" style="max-width:300px" onchange="calcTotal()">${opts}</select><input type="number" class="input" style="max-width:80px" value="1" min="1" onchange="calcTotal()" placeholder="Qty"><span style="font-weight:600;min-width:80px;text-align:right" id="oi-t-${orderItemIndex}">Rs.0</span><button class="remove-btn" onclick="removeItem(${orderItemIndex})"><i class="fas fa-times"></i></button></div>`);
+  const opts=allProducts.map(p=>`<option value="${p.id}" data-price="${p.sale_price}">${p.name} ${p.size} - Rs.${p.sale_price}</option>`).join('');
+  const idx=orderItemIndex;
+  document.getElementById('om-items').insertAdjacentHTML('beforeend',`<div class="order-item" id="oi-${idx}"><select class="input" style="max-width:300px" onchange="calcTotal()">${opts}</select><input type="number" class="input" style="max-width:80px" value="1" min="1" onchange="calcTotal()" placeholder="Qty"><span style="font-weight:600;min-width:80px;text-align:right" id="oi-t-${idx}">Rs.0</span><button class="remove-btn" onclick="removeItem(${idx})"><i class="fas fa-times"></i></button></div>`);
   orderItemIndex++;
   updateCartCount();
+  setTimeout(calcTotal,50);
 }
 
 function quickAdd(pid){
   switchTab('order');
-  setTimeout(()=>{addOrderItem();const last=document.querySelector('#om-items .order-item:last-child select');if(last)last.value=pid;calcTotal()},300);
+  setTimeout(()=>{addOrderItem();const items=document.querySelectorAll('#om-items .order-item');const last=items[items.length-1];if(last){last.querySelector('select').value=pid}calcTotal()},300);
 }
 
 function removeItem(i){const el=document.getElementById('oi-'+i);if(el)el.remove();calcTotal();updateCartCount()}
@@ -428,10 +439,14 @@ function updateCartCount(){const c=document.querySelectorAll('#om-items .order-i
 function calcTotal(){
   let t=0;
   document.querySelectorAll('#om-items .order-item').forEach(item=>{
-    const p=allProducts.find(x=>x.id==item.querySelector('select').value);
+    const sel=item.querySelector('select');
+    const opt=sel.options[sel.selectedIndex];
+    const price=opt?parseFloat(opt.getAttribute('data-price'))||0:0;
     const q=parseInt(item.querySelector('input[type=number]').value)||0;
-    const it=p?p.sale_price*q:0;
-    item.querySelector('span[id^=oi-t]').textContent='Rs.'+fmt(it);t+=it;
+    const it=price*q;
+    const span=item.querySelector('span[id^=oi-t]');
+    if(span)span.textContent='Rs.'+fmt(it);
+    t+=it;
   });
   document.getElementById('om-total').textContent='Rs.'+fmt(t);
 }
@@ -443,7 +458,11 @@ async function placeOrder(){
   if(!name){toast(currentLang==='ur'?'اپنا نام درج کریں':'Enter your name','error');return}
   if(!phone){toast(currentLang==='ur'?'فون نمبر درج کریں':'Enter phone number','error');return}
   const items=[];
-  document.querySelectorAll('#om-items .order-item').forEach(item=>{items.push({product_id:parseInt(item.querySelector('select').value),quantity:parseInt(item.querySelector('input[type=number]').value)||1})});
+  document.querySelectorAll('#om-items .order-item').forEach(item=>{
+    const pid=parseInt(item.querySelector('select').value);
+    const qty=parseInt(item.querySelector('input[type=number]').value)||1;
+    if(pid)items.push({product_id:pid,quantity:qty});
+  });
   if(!items.length){toast(currentLang==='ur'?'کم از کم ایک آئٹم شامل کریں':'Add at least one item','error');return}
   let retailers=await(await fetch(API+'/api/retailers')).json();
   let retailer=retailers.find(r=>r.phone===phone);
@@ -451,39 +470,57 @@ async function placeOrder(){
   const notes=document.getElementById('om-notes').value;
   const res=await fetch(API+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({retailer_id:retailer.id,items,discount:0,notes:(notes?notes+' | Address: '+address:'Address: '+address)})});
   const orderData=await res.json();
+  localStorage.setItem('myPhone',phone);
   document.getElementById('success-order-id').textContent=orderData.order_number;
   openModal('modal-success');
   document.getElementById('om-items').innerHTML='';document.getElementById('om-total').textContent='Rs.0';
   document.getElementById('om-name').value='';document.getElementById('om-phone').value='';document.getElementById('om-address').value='';document.getElementById('om-notes').value='';
   orderItemIndex=0;updateCartCount();
+  addOrderItem();
 }
 
+let myOrdersView='active';
 async function loadMyOrders(){
-  const phone=document.getElementById('om-phone')?document.getElementById('om-phone').value:'';
+  const phone=localStorage.getItem('myPhone')||'';
   let retailers=await(await fetch(API+'/api/retailers')).json();
   let myRetailer=retailers.find(r=>r.phone===phone);
-  if(!myRetailer){myRetailer=retailers[0]}
+  if(!myRetailer&&retailers.length)myRetailer=retailers[0];
   if(!myRetailer){document.getElementById('u-orders').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text2)">No orders yet</td></tr>';return}
   const orders=await(await fetch(API+'/api/orders')).json();
   allMyOrders=orders.filter(o=>o.retailer_id===myRetailer.id);
-  renderMyOrders(allMyOrders);
-  document.getElementById('my-total-orders').textContent=allMyOrders.length;
-  document.getElementById('my-total-amount').textContent='Rs.'+fmt(allMyOrders.reduce((s,o)=>s+o.net_amount,0));
+  const active=allMyOrders.filter(o=>o.status!=='cancelled');
+  const cancelled=allMyOrders.filter(o=>o.status==='cancelled');
+  document.getElementById('my-total-orders').textContent=active.length;
+  document.getElementById('my-total-amount').textContent='Rs.'+fmt(active.reduce((s,o)=>s+o.net_amount,0));
+  document.getElementById('my-cancelled-orders').textContent=cancelled.length;
+  document.getElementById('my-cancelled-amount').textContent='Rs.0';
+  renderMyOrders();
+}
+
+function switchMyOrdersView(v){
+  myOrdersView=v;
+  document.querySelectorAll('.order-tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.order-tab-btn[data-view="${v}"]`).classList.add('active');
+  renderMyOrders();
 }
 
 function filterMyOrders(){
-  const q=document.getElementById('o-search').value.toLowerCase();
-  renderMyOrders(allMyOrders.filter(o=>o.order_number.toLowerCase().includes(q)||o.status.includes(q)));
+  renderMyOrders();
 }
 
-function renderMyOrders(orders){
-  document.getElementById('u-orders').innerHTML=orders.length?orders.map(o=>{
+function renderMyOrders(){
+  const q=(document.getElementById('o-search')?document.getElementById('o-search').value:'').toLowerCase();
+  let filtered=myOrdersView==='cancelled'
+    ?allMyOrders.filter(o=>o.status==='cancelled')
+    :allMyOrders.filter(o=>o.status!=='cancelled');
+  if(q)filtered=filtered.filter(o=>o.order_number.toLowerCase().includes(q)||o.status.includes(q));
+  document.getElementById('u-orders').innerHTML=filtered.length?filtered.map(o=>{
     const canCancel=o.status==='pending';
-    return `<tr><td><strong>${o.order_number}</strong></td><td>${new Date(o.order_date).toLocaleDateString()}</td><td>Rs.${fmt(o.total_amount)}</td><td><strong>Rs.${fmt(o.net_amount)}</strong></td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-secondary btn-sm" onclick="viewOrder(${o.id})"><i class="fas fa-eye"></i></button>${canCancel?`<button class="btn btn-sm" style="background:var(--danger);color:#fff" onclick="cancelOrder(${o.id})"><i class="fas fa-times"></i></button>`:''}</div></td></tr>`}).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--text2)">No orders found</td></tr>';
+    return `<tr><td><strong>${o.order_number}</strong></td><td>${new Date(o.order_date).toLocaleDateString()}</td><td>Rs.${fmt(o.total_amount)}</td><td><strong>Rs.${myOrdersView==='cancelled'?'0':fmt(o.net_amount)}</strong></td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-secondary btn-sm" onclick="viewOrder(${o.id})"><i class="fas fa-eye"></i></button>${canCancel?`<button class="btn btn-sm" style="background:var(--danger);color:#fff" onclick="cancelOrder(${o.id})"><i class="fas fa-times"></i></button>`:''}</div></td></tr>`}).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--text2)">'+(myOrdersView==='cancelled'?'No cancelled orders':'No orders found')+'</td></tr>';
 }
 
 async function cancelOrder(id){
-  if(!confirm('Cancel this order?'))return;
+  if(!confirm(currentLang==='ur'?'کیا آپ اس آرڈر کو منسوخ کرنا چاہتے ہیں؟':'Are you sure you want to cancel this order?'))return;
   await fetch(API+'/api/orders/'+id+'/status',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'cancelled'})});
   toast(currentLang==='ur'?'آرڈر منسوخ ہو گیا':'Order cancelled');
   loadMyOrders();
