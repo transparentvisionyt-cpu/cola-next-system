@@ -231,9 +231,13 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 .faq-msg.user{justify-content:flex-end}
 .faq-msg-bubble{max-width:85%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5;animation:fadeInUp .2s ease}
 .faq-msg.bot .faq-msg-bubble{background:#f1f5f9;color:var(--text);border-bottom-left-radius:4px}
+.faq-inline-btn{padding:6px 14px;border-radius:20px;border:1.5px solid #6366f1;background:#6366f1;color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+.faq-inline-btn:hover{background:#4f46e5;border-color:#4f46e5}
 .faq-msg.user .faq-msg-bubble{background:var(--primary);color:#fff;border-bottom-right-radius:4px}
 .faq-quick-btns{padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--border);background:#fafbfc}
 .faq-quick-btns button{padding:5px 12px;border-radius:20px;border:1.5px solid #e0e0ff;background:#fff;color:#6366f1;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.faq-main-menu-btn{background:#6366f1!important;color:#fff!important;border-color:#6366f1!important;padding:5px 14px!important}
+.faq-main-menu-btn:hover{background:#4f46e5!important}
 .faq-quick-btns button:hover{background:#6366f1;color:#fff;border-color:#6366f1}
 .faq-bot-input{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);background:#fff}
 .faq-bot-input input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;outline:none;transition:border .2s}
@@ -417,6 +421,7 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     <div class="faq-msg bot"><div class="faq-msg-bubble">Salaam! Main Cola Next Bot hoon. Neeche diye gaye sawalon mein se koi bhi puchain ya apna sawal likhain!</div></div>
   </div>
   <div class="faq-quick-btns" id="faqQuickBtns">
+    <button class="faq-main-menu-btn" onclick="showMainMenu()"><i class="fas fa-bars"></i> Main Menu</button>
     <button onclick="askFaq('Delivery kahan hoti hai?')">Delivery Area</button>
     <button onclick="askFaq('Payment kaise karein?')">Payment Method</button>
     <button onclick="askFaq('Mera order kahan hai?')">Order Tracking</button>
@@ -743,12 +748,18 @@ function askFaq(q){
     const lower=q.toLowerCase().trim();
     let ans=FAQ_ANSWERS[lower];
     if(!ans){const keys=Object.keys(FAQ_ANSWERS);for(const k of keys){if(lower.includes(k.split(' ')[0])){ans=FAQ_ANSWERS[k];break}}}
-    if(!ans)ans='Maafi chahta hoon, yeh sawal samajh nahi aaya. Kya aap dobara puch sakte hain ya neeche diye gaye options mein se koi select karein?';
+    if(!ans)ans='Maafi chahta hoon, yeh sawal samajh nahi aaya. Kya aap dobara puch sakte hain ya Main Menu se koi option select karein?';
     addFaqMsg(ans,'bot');
+    setTimeout(()=>{addFaqMsg('<button class="faq-inline-btn" onclick="showMainMenu()"><i class="fas fa-arrow-left"></i> Main Menu</button>','bot')},300);
   },600);
 }
 function sendFaqMsg(){const input=document.getElementById('faqInput');const q=input.value.trim();if(!q)return;input.value='';askFaq(q)}
 function addFaqMsg(text,who){const div=document.createElement('div');div.className='faq-msg '+who;div.innerHTML='<div class="faq-msg-bubble">'+text+'</div>';document.getElementById('faqMessages').appendChild(div);const m=document.getElementById('faqMessages');m.scrollTop=m.scrollHeight}
+function showMainMenu(){
+  addFaqMsg('Ye raha main menu! Neeche se koi bhi sawal puchain ya khud type karein.','bot');
+  const qb=document.getElementById('faqQuickBtns');
+  qb.innerHTML='<button class="faq-main-menu-btn" onclick="showMainMenu()"><i class="fas fa-bars"></i> Main Menu</button><button onclick="askFaq(\'Delivery kahan hoti hai?\')">Delivery Area</button><button onclick="askFaq(\'Payment kaise karein?\')">Payment Method</button><button onclick="askFaq(\'Mera order kahan hai?\')">Order Tracking</button><button onclick="askFaq(\'Minimum order kitna hai?\')">Min Order</button><button onclick="askFaq(\'Wholesale price kya hai?\')">Wholesale Price</button><button onclick="askFaq(\'Products ki list kya hai?\')">Products List</button><button onclick="askFaq(\'Return policy kya hai?\')">Return Policy</button><button onclick="askFaq(\'Contact number kya hai?\')">Contact</button>';
+}
 function renderCartSideBadge(){const total=Object.values(cart).reduce((s,q)=>s+q,0);document.getElementById('cartSideCount').textContent=total;document.getElementById('cartSideFab').style.display=total>0?'flex':'none'}
 const _origRenderCartBadge=renderCartBadge;
 renderCartBadge=function(){_origRenderCartBadge();renderCartSideBadge()};
