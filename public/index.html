@@ -360,10 +360,8 @@ tr:hover{background:rgba(227,30,36,.02)}
     </div>
     <div style="padding:10px 18px;display:flex;gap:8px;border-bottom:1px solid var(--border);flex-wrap:wrap">
       <input id="p-search" class="input" style="max-width:250px" placeholder="Search..." oninput="filterProducts()">
-      <select id="p-category" class="input" style="max-width:150px" onchange="filterProducts()">
-        <option value="">All</option>
-        <option value="Classic">Classic</option>
-        <option value="Flavored">Flavored</option>
+      <select id="p-category" class="input" style="max-width:180px" onchange="filterProducts()">
+        <option value="">All Products</option>
       </select>
     </div>
     <div class="card-body" style="padding:0">
@@ -697,7 +695,7 @@ async function loadDashboard(){
 }
 
 // ============ PRODUCTS ============
-async function loadProducts(){allProducts=await(await fetch(API+'/api/products')).json();renderProducts(allProducts)}
+async function loadProducts(){allProducts=await(await fetch(API+'/api/products')).json();const names=[...new Set(allProducts.map(p=>p.name))];const dd=document.getElementById('p-category');dd.innerHTML='<option value="">All Products</option>'+names.map(n=>`<option value="${n}">${n}</option>`).join('');renderProducts(allProducts)}
 function renderProducts(products){
   const grid=document.getElementById('p-grid');
   grid.innerHTML=products.length?products.map((p,i)=>{
@@ -731,7 +729,7 @@ function renderProducts(products){
 }
 let currentView='grid';
 function setView(v){currentView=v;document.getElementById('p-grid').style.display=v==='grid'?'grid':'none';document.getElementById('p-list').style.display=v==='list'?'block':'none';document.getElementById('v-grid').classList.toggle('active',v==='grid');document.getElementById('v-list').classList.toggle('active',v==='list')}
-function filterProducts(){const q=document.getElementById('p-search').value.toLowerCase();const cat=document.getElementById('p-category').value;renderProducts(allProducts.filter(p=>p.name.toLowerCase().includes(q)&&(!cat||p.category===cat)))}
+function filterProducts(){const q=document.getElementById('p-search').value.toLowerCase();const cat=document.getElementById('p-category').value;renderProducts(allProducts.filter(p=>p.name.toLowerCase().includes(q)&&(!cat||p.name===cat)))}
 function openProductModal(p){document.getElementById('pm-id').value=p?p.id:'';document.getElementById('pm-title').textContent=p?'Edit Product':'Add Product';document.getElementById('pm-name').value=p?p.name:'Cola Next';document.getElementById('pm-category').value=p?p.category:'Classic';document.getElementById('pm-size').value=p?p.size:'300ml';document.getElementById('pm-pieces').value=p?p.pieces_per_case:12;document.getElementById('pm-stock').value=p?p.stock:0;document.getElementById('pm-purchase').value=p?p.purchase_price:0;document.getElementById('pm-sale').value=p?p.sale_price:0;document.getElementById('pm-color').value=p?(p.color||'#e31e24'):'#e31e24';openModal('modal-product')}
 function editProduct(id){const p=allProducts.find(x=>x.id===id);if(p)openProductModal(p)}
 async function saveProduct(){const id=document.getElementById('pm-id').value;const data={name:document.getElementById('pm-name').value,category:document.getElementById('pm-category').value,size:document.getElementById('pm-size').value,pieces_per_case:parseInt(document.getElementById('pm-pieces').value),stock:parseInt(document.getElementById('pm-stock').value),purchase_price:parseFloat(document.getElementById('pm-purchase').value),sale_price:parseFloat(document.getElementById('pm-sale').value),color:document.getElementById('pm-color').value};if(id){await fetch(API+'/api/products/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}else{await fetch(API+'/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}closeModal('modal-product');loadProducts();toast(id?'Updated!':'Added!')}

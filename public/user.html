@@ -234,9 +234,9 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
   </div>
   <div class="search-bar">
     <input class="search-input" id="p-search" placeholder="Search products..." oninput="filterProducts()">
-    <button class="filter-btn active" onclick="filterCategory('',this)" data-cat="all">All</button>
-    <button class="filter-btn" onclick="filterCategory('Classic',this)" data-cat="Classic">Classic</button>
-    <button class="filter-btn" onclick="filterCategory('Flavored',this)" data-cat="Flavored">Flavored</button>
+    <select class="search-input" id="p-category" style="max-width:200px" onchange="filterProducts()">
+      <option value="">All Products</option>
+    </select>
   </div>
   <div class="card">
     <div class="card-header"><h3><i class="fas fa-boxes-stacked"></i> <span data-t="all_products">All Products</span></h3><span id="product-count" style="font-size:12px;color:var(--text2)"></span></div>
@@ -361,21 +361,18 @@ function switchTab(n){
 }
 
 let currentFilter='';
-function filterCategory(cat,btn){
-  currentFilter=cat;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  filterProducts();
-}
-
 function filterProducts(){
   const q=document.getElementById('p-search').value.toLowerCase();
-  let filtered=allProducts.filter(p=>p.name.toLowerCase().includes(q)&&(!currentFilter||p.category===currentFilter));
+  const cat=document.getElementById('p-category').value;
+  let filtered=allProducts.filter(p=>p.name.toLowerCase().includes(q)&&(!cat||p.name===cat));
   renderProducts(filtered);
 }
 
 async function loadProducts(){
   allProducts=await(await fetch(API+'/api/products')).json();
+  const names=[...new Set(allProducts.map(p=>p.name))];
+  const dd=document.getElementById('p-category');
+  dd.innerHTML='<option value="">All Products</option>'+names.map(n=>`<option value="${n}">${n}</option>`).join('');
   filterProducts();
   if(orderItemIndex===0)addOrderItem();
 }
