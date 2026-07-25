@@ -71,8 +71,8 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-banner::before{content:'';position:absolute;bottom:0;left:0;width:200%;height:80px;background:rgba(255,255,255,.06);animation:waterWave 3s ease-in-out infinite;border-radius:40%}
 .dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
-.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:0 20px;z-index:1;opacity:.12;pointer-events:none}
-.dash-bg-strip img{height:80px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
+.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:0;padding:0 10px;z-index:1;opacity:.25;pointer-events:none}
+.dash-bg-strip img{height:90px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
 .dash-bottle{position:absolute;z-index:2;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle img{height:120px;width:auto;object-fit:contain;transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle-1{left:8%;bottom:10px;animation:floatBottle 4s ease-in-out infinite;transform:rotate(-8deg)}
@@ -90,13 +90,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-particle:nth-child(5){left:90%;top:40%;animation-delay:4s;width:5px;height:5px}
 @keyframes floatBottle{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(var(--r,0deg))}}
 @keyframes dashParticle{0%{opacity:0;transform:translateY(0)}20%{opacity:.6}80%{opacity:.6}100%{opacity:0;transform:translateY(-40px)}}
-.product-strip{display:flex;align-items:center;justify-content:center;gap:0;padding:14px 20px;background:linear-gradient(135deg,#fff5f5,#fff);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;overflow:hidden;position:relative}
-.product-strip::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(227,30,36,.02) 40px,rgba(227,30,36,.02) 41px)}
-.strip-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;z-index:1}
-.strip-item:hover{transform:translateY(-6px) scale(1.08)}
-.strip-item img{height:60px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.1));transition:all .3s}
-.strip-item:hover img{filter:drop-shadow(0 4px 12px rgba(0,0,0,.2))}
-.strip-item span{font-size:9px;font-weight:600;color:var(--text2);white-space:nowrap}
 
 /* ============ SIDEBAR ============ */
 .sidebar{width:var(--sidebar-w);background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%);position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s;display:flex;flex-direction:column}
@@ -354,12 +347,18 @@ tr:hover{background:rgba(227,30,36,.02)}
 <div id="tab-dashboard" class="tab active">
   <div class="dash-banner">
     <div class="dash-bg-strip">
+      <img src="/images/cola_300ml.webp" alt="">
+      <img src="/images/cola_500ml.webp" alt="">
       <img src="/images/cola_1500ml.webp" alt="">
+      <img src="/images/dare_500ml.webp" alt="">
       <img src="/images/dare_1500ml.webp" alt="">
+      <img src="/images/fizzup_500ml.webp" alt="">
       <img src="/images/fizzup_1500ml.webp" alt="">
+      <img src="/images/rango_500ml.webp" alt="">
       <img src="/images/rango_1500ml.webp" alt="">
-      <img src="/images/anaar_1500ml.webp" alt="">
+      <img src="/images/anaar_500ml.webp" alt="">
       <img src="/images/storm_500ml.webp" alt="">
+      <img src="/images/lychee_1000ml.webp" alt="">
     </div>
     <div class="dash-bottle dash-bottle-1"><img src="/images/cola_1500ml.webp" alt="Cola Next"></div>
     <div class="dash-bottle dash-bottle-2"><img src="/images/fizzup_500ml.webp" alt="Fizzup"></div>
@@ -372,7 +371,6 @@ tr:hover{background:rgba(227,30,36,.02)}
       <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
     </div>
   </div>
-  <div class="product-strip" id="dashProductStrip"></div>
   <div class="kpi-grid" style="margin-top:16px">
     <div class="kpi" style="animation-delay:.1s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(227,30,36,.1)"><i class="fas fa-cart-shopping" style="color:var(--primary)"></i></div></div><div class="kpi-val" data-target="0" id="d-totalOrders">0</div><div class="kpi-lbl">Total Orders</div></div>
     <div class="kpi" style="animation-delay:.2s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(34,197,94,.1)"><i class="fas fa-money-bill-wave" style="color:var(--success)"></i></div></div><div class="kpi-val" data-target="0" id="d-todaySales">0</div><div class="kpi-lbl">Today Sales</div></div>
@@ -763,7 +761,6 @@ async function loadDashboard(){
   animateCount('d-products',d.totalProducts,'');
   document.getElementById('d-recentOrders').innerHTML=d.recentOrders.length?d.recentOrders.map(o=>`<tr><td><strong>${o.order_number}</strong></td><td>${o.retailer_name||'-'}</td><td>Rs.${fmt(o.net_amount)}</td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--text2)">No orders</td></tr>';
   document.getElementById('d-lowStock').innerHTML=d.lowStock.length?d.lowStock.map(p=>{const pets=p.stock*p.pieces_per_case;return `<tr><td>${p.name}</td><td>${p.size}</td><td><span class="badge badge-${pets<200?'danger':'warning'}">${pets.toLocaleString()} PETs</span></td></tr>`}).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text2)">All OK</td></tr>';
-  renderProductStrip();
 }
 function animateCount(id,target,prefix,isMoney){
   const el=document.getElementById(id);
@@ -775,15 +772,6 @@ function animateCount(id,target,prefix,isMoney){
     if(current>=target){current=target;clearInterval(timer)}
     el.textContent=prefix+fmt(current);
   },30);
-}
-function renderProductStrip(){
-  const strip=document.getElementById('dashProductStrip');
-  if(!strip||!allProducts.length)return;
-  const unique=[...new Map(allProducts.map(p=>[p.name,p])).values()];
-  strip.innerHTML=unique.map(p=>{
-    const img=getBottleImg(p.name,p.size);
-    return `<div class="strip-item" onclick="editProduct(${p.id})" title="Edit ${p.name}"><img src="${img}" alt="${p.name}" onerror="this.parentElement.style.display='none'"><span>${p.name}</span></div>`;
-  }).join('');
 }
 
 // ============ PRODUCTS ============

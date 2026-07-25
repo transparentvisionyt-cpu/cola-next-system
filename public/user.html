@@ -67,8 +67,12 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-banner::before{content:'';position:absolute;bottom:0;left:0;width:200%;height:80px;background:rgba(255,255,255,.06);animation:waterWave 3s ease-in-out infinite;border-radius:40%}
 .dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
-.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:0 20px;z-index:1;opacity:.12;pointer-events:none}
-.dash-bg-strip img{height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
+.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:0;padding:0 10px;z-index:1;opacity:.25;pointer-events:none}
+.dash-bg-strip img{height:90px;width:auto;object-fit:contain;filter:brightness(0) invert(1);transition:all .3s}
+.banner-side-link{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;text-decoration:none;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+.banner-side-link:hover{background:rgba(255,255,255,.3);transform:translateX(-4px)}
+.banner-side-link.wa{background:rgba(37,211,102,.3);border-color:rgba(37,211,102,.4)}
+.banner-side-link.wa:hover{background:rgba(37,211,102,.5)}
 .dash-bottle{position:absolute;z-index:2;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle img{height:110px;width:auto;object-fit:contain;transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle-1{left:6%;bottom:8px;animation:floatBottle 4s ease-in-out infinite;transform:rotate(-8deg)}
@@ -86,13 +90,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-particle:nth-child(5){left:90%;top:40%;animation-delay:4s;width:5px;height:5px}
 @keyframes floatBottle{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(var(--r,0deg))}}
 @keyframes dashParticle{0%{opacity:0;transform:translateY(0)}20%{opacity:.6}80%{opacity:.6}100%{opacity:0;transform:translateY(-40px)}}
-.product-strip{display:flex;align-items:center;justify-content:center;gap:0;padding:14px 20px;background:linear-gradient(135deg,#fff5f5,#fff);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;overflow:hidden;position:relative}
-.product-strip::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(227,30,36,.02) 40px,rgba(227,30,36,.02) 41px)}
-.strip-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;z-index:1}
-.strip-item:hover{transform:translateY(-6px) scale(1.08)}
-.strip-item img{height:55px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.1));transition:all .3s}
-.strip-item:hover img{filter:drop-shadow(0 4px 12px rgba(0,0,0,.2))}
-.strip-item span{font-size:9px;font-weight:600;color:var(--text2);white-space:nowrap}
 
 .content{padding:20px}
 .tab{display:none;animation:fadeInUp .4s ease-out}.tab.active{display:block}
@@ -329,14 +326,20 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- PRODUCTS -->
 <div id="tab-products" class="tab active">
-  <div class="dash-banner" style="min-height:180px">
+  <div class="dash-banner" style="min-height:200px">
     <div class="dash-bg-strip">
+      <img src="/images/cola_300ml.webp" alt="">
+      <img src="/images/cola_500ml.webp" alt="">
       <img src="/images/cola_1500ml.webp" alt="">
+      <img src="/images/dare_500ml.webp" alt="">
       <img src="/images/dare_1500ml.webp" alt="">
+      <img src="/images/fizzup_500ml.webp" alt="">
       <img src="/images/fizzup_1500ml.webp" alt="">
+      <img src="/images/rango_500ml.webp" alt="">
       <img src="/images/rango_1500ml.webp" alt="">
-      <img src="/images/anaar_1500ml.webp" alt="">
+      <img src="/images/anaar_500ml.webp" alt="">
       <img src="/images/storm_500ml.webp" alt="">
+      <img src="/images/lychee_1000ml.webp" alt="">
     </div>
     <div class="dash-bottle dash-bottle-1"><img src="/images/cola_1500ml.webp" alt="Cola Next"></div>
     <div class="dash-bottle dash-bottle-2"><img src="/images/fizzup_500ml.webp" alt="Fizzup"></div>
@@ -347,14 +350,12 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     </div>
     <div class="splash-content" style="position:relative;z-index:2">
       <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
-      <p>Pakistan ki apni premium beverage company!</p>
-      <div class="contact-grid" style="margin-top:14px;grid-template-columns:auto auto;justify-content:center;gap:10px">
-        <a id="info-phone" href="tel:+923000000000" class="contact-item" style="background:rgba(255,255,255,.15);border:none;color:#fff"><i class="fas fa-phone"></i><span class="info-phone-text">0300 0000000</span></a>
-        <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="contact-item" style="background:rgba(255,255,255,.15);border:none;color:#fff"><i class="fab fa-whatsapp"></i><span>WhatsApp Order</span></a>
-      </div>
+    </div>
+    <div class="banner-contact-side" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:8px">
+      <a id="info-phone" href="tel:+923000000000" class="banner-side-link"><i class="fas fa-phone"></i> <span class="info-phone-text">0300 0000000</span></a>
+      <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="banner-side-link wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
     </div>
   </div>
-  <div class="product-strip" id="dashProductStrip"></div>
   <div class="search-bar">
     <input class="search-input" id="p-search" placeholder="Search products..." oninput="filterProducts()">
     <select class="search-input" id="p-category" style="max-width:200px" onchange="filterProducts()">
@@ -553,16 +554,6 @@ async function loadProducts(){
   dd.innerHTML='<option value="">All Products</option>'+names.map(n=>`<option value="${n}">${n}</option>`).join('');
   loadCart();renderCartBadge();
   filterProducts();
-  renderProductStrip();
-}
-function renderProductStrip(){
-  const strip=document.getElementById('dashProductStrip');
-  if(!strip||!allProducts.length)return;
-  const unique=[...new Map(allProducts.map(p=>[p.name,p])).values()];
-  strip.innerHTML=unique.map(p=>{
-    const img=getBottleImg(p.name,p.size);
-    return `<div class="strip-item"><img src="${img}" alt="${p.name}" onerror="this.parentElement.style.display='none'"><span>${p.name}</span></div>`;
-  }).join('');
 }
 
 function toggleFav(id,btn){
@@ -752,7 +743,7 @@ async function viewOrder(id){
 
 // Language - only content area translates, sidebar stays English
 const T={
-  en:{nav_products:'Products',nav_order:'Place Order',nav_myorders:'My Orders',nav_contact:'Contact',info_text:'Pakistan ki apni premium beverage company. Hamare products aapke liye!',all_products:'All Products',your_order:'Your Order',add_item:'Add Item',total:'Total:',your_details:'Your Details',your_name:'Your Name',phone:'Phone Number',address:'Delivery Address',notes:'Notes (optional)',submit_order:'Submit Order',my_orders:'My Orders',total_orders:'Total Orders',total_spent:'Total Spent',contact_us:'Contact Us',contact_text:'Koi bhi sawal ho toh hamare sath rabta karein!',order_placed:'Order Placed Successfully!',order_msg:'Your order has been received. We will contact you soon.',order_num:'Order #',order_details:'Order Details',close:'Close',th_order:'Order #',th_date:'Date',th_items:'Items',th_total:'Total',th_status:'Status',th_action:'Action'},
+  en:{nav_products:'Products',nav_order:'Place Order',nav_myorders:'My Orders',nav_contact:'Contact',all_products:'All Products',your_order:'Your Order',add_item:'Add Item',total:'Total:',your_details:'Your Details',your_name:'Your Name',phone:'Phone Number',address:'Delivery Address',notes:'Notes (optional)',submit_order:'Submit Order',my_orders:'My Orders',total_orders:'Total Orders',total_spent:'Total Spent',contact_us:'Contact Us',contact_text:'Koi bhi sawal ho toh hamare sath rabta karein!',order_placed:'Order Placed Successfully!',order_msg:'Your order has been received. We will contact you soon.',order_num:'Order #',order_details:'Order Details',close:'Close',th_order:'Order #',th_date:'Date',th_items:'Items',th_total:'Total',th_status:'Status',th_action:'Action'},
   ur:{info_text:'پاکستان کی اپنی پریمیم بیوریج کمپنی۔ ہماری مصنوعات آپ کے لیے!',all_products:'تمام مصنوعات',your_order:'آپ کا آرڈر',add_item:'شامل کریں',total:'کل:',your_details:'آپ کی معلومات',your_name:'آپ کا نام',phone:'فون نمبر',address:'ڈلیوری ایڈریس',notes:'نوٹس (اختیاری)',submit_order:'آرڈر جمع کریں',my_orders:'میرے آرڈرز',total_orders:'کل آرڈرز',total_spent:'کل خرچ',contact_us:'رابطہ کریں',contact_text:'کوئی بھی سوال ہو توہم سے رابطہ کریں!',order_placed:'آرڈر کامیابی سے ہو گیا!',order_msg:'آپ کا آرڈر مل گیا ہے۔ ہم جلد آپ سے رابطہ کریں گے۔',order_num:'آرڈر نمبر',order_details:'آرڈر کی تفصیلات',close:'بند کریں',th_order:'آرڈر #',th_date:'تاریخ',th_items:'اشیاء',th_total:'کل',th_status:'حالت',th_action:'عمل'}
 };
 let currentLang='en';
