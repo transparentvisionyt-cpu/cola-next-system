@@ -236,9 +236,11 @@ app.get('/api/dashboard', (req, res) => {
   const totalReceivable = get('SELECT COALESCE(SUM(current_balance),0) as c FROM retailers WHERE current_balance > 0').c;
   const lowStock = all('SELECT * FROM products WHERE stock < 20 ORDER BY stock ASC');
   const recentOrders = all(`SELECT o.*, r.name as retailer_name FROM orders o LEFT JOIN retailers r ON o.retailer_id = r.id ORDER BY o.order_date DESC LIMIT 10`);
+  const stockDetails = all('SELECT stock, pieces_per_case FROM products');
+  const totalBottles = stockDetails.reduce((sum, p) => sum + (p.stock * p.pieces_per_case), 0);
 
   res.json({
-    totalProducts, totalRetailers, totalOrders, pendingOrders, totalStock,
+    totalProducts, totalRetailers, totalOrders, pendingOrders, totalStock: totalBottles,
     todaySales, todayPayments, totalReceivable, lowStock, recentOrders
   });
 });

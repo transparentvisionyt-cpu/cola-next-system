@@ -64,6 +64,29 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .bubble:nth-child(4){left:70%;animation-delay:.5s;animation-duration:4.5s;width:10px;height:10px}
 .bubble:nth-child(5){left:90%;animation-delay:1.5s;animation-duration:3s;width:5px;height:5px}
 
+/* ============ DASHBOARD BANNER ============ */
+.dash-banner{background:linear-gradient(135deg,#e31e24 0%,#c41017 40%,#8b0000 100%);padding:40px 20px;position:relative;overflow:hidden;min-height:220px;display:flex;align-items:center;justify-content:center;border-radius:20px;margin-bottom:16px}
+.dash-banner::before{content:'';position:absolute;bottom:0;left:0;width:200%;height:80px;background:rgba(255,255,255,.06);animation:waterWave 3s ease-in-out infinite;border-radius:40%}
+.dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
+.dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
+.dash-bottle{position:absolute;z-index:2;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));transition:transform .3s}
+.dash-bottle img{height:120px;width:auto;object-fit:contain}
+.dash-bottle-1{left:8%;bottom:10px;animation:floatBottle 4s ease-in-out infinite;transform:rotate(-8deg)}
+.dash-bottle-2{right:10%;bottom:20px;animation:floatBottle 5s ease-in-out infinite 1s;transform:rotate(5deg)}
+.dash-bottle-3{left:50%;bottom:5px;transform:translateX(-50%) rotate(-3deg);animation:floatBottle 4.5s ease-in-out infinite .5s}
+.dash-banner:hover .dash-bottle-1{transform:rotate(-8deg) translateY(-10px) scale(1.05)}
+.dash-banner:hover .dash-bottle-2{transform:rotate(5deg) translateY(-10px) scale(1.05)}
+.dash-banner:hover .dash-bottle-3{transform:translateX(-50%) rotate(-3deg) translateY(-10px) scale(1.05)}
+.dash-particles{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;z-index:1}
+.dash-particle{position:absolute;width:6px;height:6px;background:rgba(255,255,255,.2);border-radius:50%;animation:dashParticle 6s ease-in infinite}
+.dash-particle:nth-child(1){left:15%;top:20%;animation-delay:0s}
+.dash-particle:nth-child(2){left:35%;top:60%;animation-delay:1.5s;width:4px;height:4px}
+.dash-particle:nth-child(3){left:55%;top:30%;animation-delay:3s;width:8px;height:8px}
+.dash-particle:nth-child(4){left:75%;top:70%;animation-delay:2s}
+.dash-particle:nth-child(5){left:90%;top:40%;animation-delay:4s;width:5px;height:5px}
+@keyframes floatBottle{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(var(--r,0deg))}}
+@keyframes dashParticle{0%{opacity:0;transform:translateY(0)}20%{opacity:.6}80%{opacity:.6}100%{opacity:0;transform:translateY(-40px)}}
+
 /* ============ SIDEBAR ============ */
 .sidebar{width:var(--sidebar-w);background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%);position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s;display:flex;flex-direction:column}
 .sidebar-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:14px}
@@ -318,26 +341,30 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- DASHBOARD -->
 <div id="tab-dashboard" class="tab active">
-  <div class="splash-header">
-    <div class="bubbles">
-      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+  <div class="dash-banner">
+    <div class="dash-bottle dash-bottle-1"><img src="/images/cola-next-1.5l.webp" alt="Cola Next"></div>
+    <div class="dash-bottle dash-bottle-2"><img src="/images/fizzup-500.webp" alt="Fizzup"></div>
+    <div class="dash-bottle dash-bottle-3"><img src="/images/storm-500.webp" alt="Storm"></div>
+    <div class="dash-wave"></div>
+    <div class="dash-particles">
+      <div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div>
     </div>
-    <div class="splash-content">
+    <div class="splash-content" style="position:relative;z-index:2">
       <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
       <p>Distributor Management System</p>
     </div>
   </div>
   <div class="kpi-grid" style="margin-top:16px">
-    <div class="kpi" style="animation-delay:.1s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(227,30,36,.1)"><i class="fas fa-cart-shopping" style="color:var(--primary)"></i></div></div><div class="kpi-val" id="d-totalOrders">0</div><div class="kpi-lbl">Total Orders</div></div>
-    <div class="kpi" style="animation-delay:.2s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(34,197,94,.1)"><i class="fas fa-money-bill-wave" style="color:var(--success)"></i></div></div><div class="kpi-val" id="d-todaySales">0</div><div class="kpi-lbl">Today Sales</div></div>
-    <div class="kpi" style="animation-delay:.3s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,158,11,.1)"><i class="fas fa-clock" style="color:var(--warning)"></i></div></div><div class="kpi-val" id="d-pending">0</div><div class="kpi-lbl">Pending Orders</div></div>
-    <div class="kpi" style="animation-delay:.4s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(59,130,246,.1)"><i class="fas fa-users" style="color:var(--info)"></i></div></div><div class="kpi-val" id="d-retailers">0</div><div class="kpi-lbl">Total Retailers</div></div>
+    <div class="kpi" style="animation-delay:.1s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(227,30,36,.1)"><i class="fas fa-cart-shopping" style="color:var(--primary)"></i></div></div><div class="kpi-val" data-target="0" id="d-totalOrders">0</div><div class="kpi-lbl">Total Orders</div></div>
+    <div class="kpi" style="animation-delay:.2s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(34,197,94,.1)"><i class="fas fa-money-bill-wave" style="color:var(--success)"></i></div></div><div class="kpi-val" data-target="0" id="d-todaySales">0</div><div class="kpi-lbl">Today Sales</div></div>
+    <div class="kpi" style="animation-delay:.3s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,158,11,.1)"><i class="fas fa-clock" style="color:var(--warning)"></i></div></div><div class="kpi-val" data-target="0" id="d-pending">0</div><div class="kpi-lbl">Pending Orders</div></div>
+    <div class="kpi" style="animation-delay:.4s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(59,130,246,.1)"><i class="fas fa-users" style="color:var(--info)"></i></div></div><div class="kpi-val" data-target="0" id="d-retailers">0</div><div class="kpi-lbl">Total Retailers</div></div>
   </div>
   <div class="kpi-grid">
-    <div class="kpi" style="animation-delay:.5s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(34,197,94,.1)"><i class="fas fa-arrow-down" style="color:var(--success)"></i></div></div><div class="kpi-val" id="d-cashIn">0</div><div class="kpi-lbl">Cash Received</div></div>
-    <div class="kpi" style="animation-delay:.6s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,158,11,.1)"><i class="fas fa-boxes-stacked" style="color:var(--warning)"></i></div></div><div class="kpi-val" id="d-stock">0</div><div class="kpi-lbl">Total Stock</div></div>
-    <div class="kpi" style="animation-delay:.7s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(239,68,68,.1)"><i class="fas fa-hand-holding-dollar" style="color:var(--danger)"></i></div></div><div class="kpi-val" id="d-receivable">0</div><div class="kpi-lbl">Receivable</div></div>
-    <div class="kpi" style="animation-delay:.8s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(59,130,246,.1)"><i class="fas fa-box" style="color:var(--info)"></i></div></div><div class="kpi-val" id="d-products">0</div><div class="kpi-lbl">Products</div></div>
+    <div class="kpi" style="animation-delay:.5s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(34,197,94,.1)"><i class="fas fa-arrow-down" style="color:var(--success)"></i></div></div><div class="kpi-val" data-target="0" id="d-cashIn">0</div><div class="kpi-lbl">Cash Received</div></div>
+    <div class="kpi" style="animation-delay:.6s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,158,11,.1)"><i class="fas fa-wine-bottle" style="color:var(--warning)"></i></div></div><div class="kpi-val" data-target="0" id="d-stock">0</div><div class="kpi-lbl">Total Bottles (Pet)</div></div>
+    <div class="kpi" style="animation-delay:.7s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(239,68,68,.1)"><i class="fas fa-hand-holding-dollar" style="color:var(--danger)"></i></div></div><div class="kpi-val" data-target="0" id="d-receivable">0</div><div class="kpi-lbl">Receivable</div></div>
+    <div class="kpi" style="animation-delay:.8s"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(59,130,246,.1)"><i class="fas fa-box" style="color:var(--info)"></i></div></div><div class="kpi-val" data-target="0" id="d-products">0</div><div class="kpi-lbl">Products</div></div>
   </div>
   <div class="grid-2">
     <div class="card"><div class="card-header"><h3><i class="fas fa-clock"></i>Recent Orders</h3></div><div class="card-body" style="padding:0"><table><thead><tr><th>Order #</th><th>Retailer</th><th>Amount</th><th>Status</th></tr></thead><tbody id="d-recentOrders"></tbody></table></div></div>
@@ -701,16 +728,27 @@ function bottleImg(p){
 // ============ DASHBOARD ============
 async function loadDashboard(){
   const d=await(await fetch(API+'/api/dashboard')).json();
-  document.getElementById('d-totalOrders').textContent=d.totalOrders;
-  document.getElementById('d-todaySales').textContent='Rs.'+fmt(d.todaySales);
-  document.getElementById('d-pending').textContent=d.pendingOrders;
-  document.getElementById('d-retailers').textContent=d.totalRetailers;
-  document.getElementById('d-cashIn').textContent='Rs.'+fmt(d.todayPayments);
-  document.getElementById('d-stock').textContent=d.totalStock;
-  document.getElementById('d-receivable').textContent='Rs.'+fmt(d.totalReceivable);
-  document.getElementById('d-products').textContent=d.totalProducts;
+  animateCount('d-totalOrders',d.totalOrders,'');
+  animateCount('d-todaySales',d.todaySales,'Rs.',true);
+  animateCount('d-pending',d.pendingOrders,'');
+  animateCount('d-retailers',d.totalRetailers,'');
+  animateCount('d-cashIn',d.todayPayments,'Rs.',true);
+  animateCount('d-stock',d.totalStock,'');
+  animateCount('d-receivable',d.totalReceivable,'Rs.',true);
+  animateCount('d-products',d.totalProducts,'');
   document.getElementById('d-recentOrders').innerHTML=d.recentOrders.length?d.recentOrders.map(o=>`<tr><td><strong>${o.order_number}</strong></td><td>${o.retailer_name||'-'}</td><td>Rs.${fmt(o.net_amount)}</td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--text2)">No orders</td></tr>';
   document.getElementById('d-lowStock').innerHTML=d.lowStock.length?d.lowStock.map(p=>`<tr><td>${p.name}</td><td>${p.size}</td><td><span class="badge badge-${p.stock<10?'danger':'warning'}">${p.stock} cases</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text2)">All OK</td></tr>';
+}
+function animateCount(id,target,prefix,isMoney){
+  const el=document.getElementById(id);
+  if(!el)return;
+  let current=0;
+  const step=Math.max(1,Math.ceil(target/40));
+  const timer=setInterval(()=>{
+    current+=step;
+    if(current>=target){current=target;clearInterval(timer)}
+    el.textContent=prefix+fmt(current);
+  },30);
 }
 
 // ============ PRODUCTS ============
