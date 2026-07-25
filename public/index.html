@@ -403,9 +403,15 @@ tr:hover{background:rgba(227,30,36,.02)}
     <div class="stat-box"><h4 id="g-lowStock">0</h4><p>Low Stock Items</p></div>
   </div>
   <div class="card">
-    <div class="card-header"><h3><i class="fas fa-boxes-stacked"></i>Stock Details</h3></div>
+    <div class="card-header">
+      <h3><i class="fas fa-boxes-stacked"></i>Stock Details</h3>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-success btn-sm" onclick="openStockModal('add')"><i class="fas fa-plus"></i> Add Stock</button>
+        <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="openStockModal('remove')"><i class="fas fa-minus"></i> Remove Stock</button>
+      </div>
+    </div>
     <div class="card-body" style="padding:0;overflow-x:auto">
-      <table><thead><tr><th>Product</th><th>Category</th><th>Size</th><th>Pcs/Case</th><th>Stock</th><th>Value</th><th>Status</th></tr></thead><tbody id="g-body"></tbody></table>
+      <table><thead><tr><th>Product</th><th>Category</th><th>Size</th><th>Pcs/Case</th><th>Stock</th><th>Value</th><th>Status</th><th>Action</th></tr></thead><tbody id="g-body"></tbody></table>
     </div>
   </div>
 </div>
@@ -520,6 +526,15 @@ tr:hover{background:rgba(227,30,36,.02)}
 </div>
 
 <!-- MODALS -->
+<div class="modal-overlay" id="modal-stock">
+  <div class="modal">
+    <h3 id="sm-title">Add Stock</h3>
+    <div class="form-group"><label class="label">Select Product</label><select id="sm-product" class="input"></select></div>
+    <div class="form-group"><label class="label">Quantity (Cases)</label><input id="sm-qty" type="number" class="input" value="1" min="1"></div>
+    <div class="form-group"><label class="label">Note (optional)</label><input id="sm-note" class="input" placeholder="Reason for stock change"></div>
+    <div class="btns"><button class="btn btn-secondary" onclick="closeModal('modal-stock')">Cancel</button><button id="sm-submit" class="btn btn-success" onclick="submitStock()"><i class="fas fa-save"></i> Add</button></div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-product">
   <div class="modal">
     <h3 id="pm-title">Add Product</h3>
@@ -753,6 +768,7 @@ async function deleteRetailer(id){if(!confirm('Delete?'))return;await fetch(API+
 // ============ GODOWN ============
 async function loadGodown(){
   const p=await(await fetch(API+'/api/products')).json();
+  allProducts=p;
   const totalCases=p.reduce((s,x)=>s+x.stock,0);
   const totalValue=p.reduce((s,x)=>s+(x.purchase_price*x.stock),0);
   const lowStock=p.filter(x=>x.stock<20);
@@ -760,7 +776,31 @@ async function loadGodown(){
   document.getElementById('g-totalProducts').textContent=p.length;
   document.getElementById('g-totalValue').textContent='Rs.'+fmt(totalValue);
   document.getElementById('g-lowStock').textContent=lowStock.length;
-  document.getElementById('g-body').innerHTML=p.map(x=>{const c=colorMap[x.name]||x.color||'#e31e24';const v=x.purchase_price*x.stock;const sb=x.stock<10?'danger':x.stock<20?'warning':'success';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(x.name,x.size)}" style="width:16px;height:30px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${x.name}</strong></div></td><td><span class="badge badge-${x.category==='Classic'?'info':'warning'}">${x.category}</span></td><td>${x.size}</td><td>${x.pieces_per_case}</td><td><span class="badge badge-${sb}">${x.stock} cases</span></td><td>Rs.${fmt(v)}</td><td><span class="badge badge-${sb}">${x.stock<10?'LOW':x.stock<20?'Medium':'OK'}</span></td></tr>`}).join('');
+  document.getElementById('g-body').innerHTML=p.map(x=>{const c=colorMap[x.name]||x.color||'#e31e24';const v=x.purchase_price*x.stock;const sb=x.stock<10?'danger':x.stock<20?'warning':'success';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(x.name,x.size)}" style="width:16px;height:30px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${x.name}</strong></div></td><td><span class="badge badge-${x.category==='Classic'?'info':'warning'}">${x.category}</span></td><td>${x.size}</td><td>${x.pieces_per_case}</td><td><span class="badge badge-${sb}">${x.stock} cases</span></td><td>Rs.${fmt(v)}</td><td><span class="badge badge-${sb}">${x.stock<10?'LOW':x.stock<20?'Medium':'OK'}</span></td><td><div style="display:flex;gap:4px"><button class="action-btn" onclick="openStockModal('add',${x.id})" title="Add Stock"><i class="fas fa-plus" style="color:#16a34a"></i></button><button class="action-btn" onclick="openStockModal('remove',${x.id})" title="Remove Stock"><i class="fas fa-minus" style="color:#ef4444"></i></button></div></td></tr>`}).join('');
+}
+let stockMode='add';
+function openStockModal(mode,pid){
+  stockMode=mode;
+  document.getElementById('sm-title').textContent=mode==='add'?'Add Stock':'Remove Stock';
+  const btn=document.getElementById('sm-submit');
+  if(mode==='add'){btn.className='btn btn-success';btn.innerHTML='<i class="fas fa-plus"></i> Add'}else{btn.className='btn btn-sm';btn.style.background='#ef4444';btn.style.color='#fff';btn.innerHTML='<i class="fas fa-minus"></i> Remove'}
+  const sel=document.getElementById('sm-product');
+  sel.innerHTML=allProducts.map(p=>`<option value="${p.id}" ${pid==p.id?'selected':''}>${p.name} ${p.size} (Stock: ${p.stock})</option>`).join('');
+  document.getElementById('sm-qty').value=1;
+  document.getElementById('sm-note').value='';
+  openModal('modal-stock');
+}
+async function submitStock(){
+  const pid=parseInt(document.getElementById('sm-product').value);
+  const qty=parseInt(document.getElementById('sm-qty').value)||0;
+  if(!pid||!qty){toast('Select product and quantity','error');return}
+  const prod=allProducts.find(p=>p.id===pid);
+  if(stockMode==='remove'&&qty>prod.stock){toast('Cannot remove more than stock!','error');return}
+  const newStock=stockMode==='add'?prod.stock+qty:prod.stock-qty;
+  await fetch(API+'/api/products/'+pid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...prod,stock:newStock})});
+  closeModal('modal-stock');
+  loadGodown();
+  toast(stockMode==='add'?`Added ${qty} cases`:`Removed ${qty} cases`);
 }
 
 // ============ ORDERS ============
