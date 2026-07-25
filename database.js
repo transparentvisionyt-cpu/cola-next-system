@@ -95,6 +95,18 @@ async function initDB() {
   `);
 
   db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      name TEXT NOT NULL,
+      phone TEXT,
+      role TEXT DEFAULT 'user',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  db.run(`
     CREATE TABLE IF NOT EXISTS settings (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       company_name TEXT DEFAULT 'Cola Next Distributor',
@@ -106,6 +118,7 @@ async function initDB() {
 
   seedProducts();
   seedSettings();
+  seedAdmin();
   saveDB();
 
   return db;
@@ -157,6 +170,13 @@ function seedSettings() {
   const result = db.exec("SELECT COUNT(*) as c FROM settings");
   if (result.length > 0 && result[0].values[0][0] > 0) return;
   db.run("INSERT INTO settings (company_name, phone, address, credit_terms_days) VALUES (?, ?, ?, ?)", ['Cola Next Distributor', '', '', 30]);
+}
+
+function seedAdmin() {
+  const result = db.exec("SELECT COUNT(*) as c FROM users WHERE role='admin'");
+  if (result.length > 0 && result[0].values[0][0] > 0) return;
+  db.run("INSERT INTO users (username, password, name, phone, role) VALUES (?, ?, ?, ?, ?)", ['admin', 'cola2026', 'System Admin', '03000000000', 'admin']);
+  console.log('Admin seeded: admin / cola2026');
 }
 
 function all(sql, params = []) {

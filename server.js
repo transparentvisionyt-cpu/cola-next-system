@@ -10,6 +10,37 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/user', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'user.html'));
+});
+
+// ============ AUTH ============
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = get('SELECT id, username, name, phone, role FROM users WHERE username=? AND password=?', [username, password]);
+  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+  res.json(user);
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { username, password, name, phone } = req.body;
+  if (!username || !password || !name) return res.status(400).json({ error: 'All fields required' });
+  const exists = get('SELECT id FROM users WHERE username=?', [username]);
+  if (exists) return res.status(400).json({ error: 'Username already exists' });
+  const result = run('INSERT INTO users (username, password, name, phone, role) VALUES (?, ?, ?, ?, ?)', [username, password, name, phone || '', 'user']);
+  res.json({ id: result.lastInsertRowid, username, name, role: 'user' });
+});
+
+// User panel routes
+app.get('/api/user/orders', (req, res) => {
+  const userId = req.query.user_id;
+  if (!userId) return res.status(400).json({ error: 'user_id required' });
+  const user = get('SELECT id, name FROM users WHERE id=?', [userId]);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  const orders = all(`SELECT o.*, r.name as retailer_name FROM orders o LEFT JOIN retailers r ON o.retailer_id = r.id WHERE r.name LIKE ? ORDER BY o.order_date DESC`, ['%' + user.name + '%']);
+  res.json({ user, orders });
+});
+
 // ============ PRODUCTS ============
 app.get('/api/products', (req, res) => {
   res.json(all('SELECT * FROM products ORDER BY category, name, size'));
