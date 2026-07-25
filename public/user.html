@@ -374,7 +374,7 @@ async function loadProducts(){
   const dd=document.getElementById('p-category');
   dd.innerHTML='<option value="">All Products</option>'+names.map(n=>`<option value="${n}">${n}</option>`).join('');
   filterProducts();
-  if(orderItemIndex===0)addOrderItem();
+  if(orderItemIndex===0){addOrderItem();setTimeout(calcTotal,100)}
 }
 
 function toggleFav(id,btn){
@@ -477,7 +477,16 @@ function filterMyOrders(){
 }
 
 function renderMyOrders(orders){
-  document.getElementById('u-orders').innerHTML=orders.length?orders.map(o=>`<tr><td><strong>${o.order_number}</strong></td><td>${new Date(o.order_date).toLocaleDateString()}</td><td>Rs.${fmt(o.total_amount)}</td><td><strong>Rs.${fmt(o.net_amount)}</strong></td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td><td><button class="btn btn-secondary btn-sm" onclick="viewOrder(${o.id})"><i class="fas fa-eye"></i></button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--text2)">No orders found</td></tr>';
+  document.getElementById('u-orders').innerHTML=orders.length?orders.map(o=>{
+    const canCancel=o.status==='pending';
+    return `<tr><td><strong>${o.order_number}</strong></td><td>${new Date(o.order_date).toLocaleDateString()}</td><td>Rs.${fmt(o.total_amount)}</td><td><strong>Rs.${fmt(o.net_amount)}</strong></td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-secondary btn-sm" onclick="viewOrder(${o.id})"><i class="fas fa-eye"></i></button>${canCancel?`<button class="btn btn-sm" style="background:var(--danger);color:#fff" onclick="cancelOrder(${o.id})"><i class="fas fa-times"></i></button>`:''}</div></td></tr>`}).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--text2)">No orders found</td></tr>';
+}
+
+async function cancelOrder(id){
+  if(!confirm('Cancel this order?'))return;
+  await fetch(API+'/api/orders/'+id+'/status',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'cancelled'})});
+  toast(currentLang==='ur'?'آرڈر منسوخ ہو گیا':'Order cancelled');
+  loadMyOrders();
 }
 
 async function viewOrder(id){
