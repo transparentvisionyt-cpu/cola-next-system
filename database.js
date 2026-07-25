@@ -175,8 +175,8 @@ function seedSettings() {
 function seedAdmin() {
   const result = db.exec("SELECT COUNT(*) as c FROM users WHERE role='admin'");
   if (result.length > 0 && result[0].values[0][0] > 0) return;
-  db.run("INSERT INTO users (username, password, name, phone, role) VALUES (?, ?, ?, ?, ?)", ['admin', 'cola2026', 'System Admin', '03000000000', 'admin']);
-  console.log('Admin seeded: admin / cola2026');
+  db.run("INSERT INTO users (username, password, name, phone, role) VALUES (?, ?, ?, ?, ?)", ['admin', 'cola2026admin', 'System Admin', '03000000000', 'admin']);
+  console.log('Admin seeded: admin / cola2026admin');
 }
 
 function all(sql, params = []) {

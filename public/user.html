@@ -419,7 +419,6 @@ async function loadProducts(){
         </div>
         <div class="product-prices">
           <div class="product-price">Rs.${fmt(p.sale_price)}</div>
-          <div class="product-stock"><span class="badge badge-${sb}">${p.stock} in stock</span></div>
         </div>
       </div>
     </div>`}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)"><i class="fas fa-box" style="font-size:40px;opacity:.3;display:block;margin-bottom:10px"></i>No products available</div>';
@@ -435,7 +434,7 @@ function openOrderModal(){
 }
 
 function addOrderItem(){
-  const opts=allProducts.map(p=>`<option value="${p.id}">${p.name} ${p.size} Rs.${p.sale_price} [${p.stock}]</option>`).join('');
+  const opts=allProducts.map(p=>`<option value="${p.id}">${p.name} ${p.size} - Rs.${p.sale_price}</option>`).join('');
   document.getElementById('om-items').insertAdjacentHTML('beforeend',`<div class="order-item" id="oi-${orderItemIndex}"><select style="flex:1;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-family:inherit" onchange="calcTotal()">${opts}</select><input type="number" style="width:60px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px" value="1" min="1" onchange="calcTotal()" placeholder="Qty"><span style="font-weight:600;min-width:60px;text-align:right;font-size:12px" id="oi-t-${orderItemIndex}">Rs.0</span><button class="remove-btn" onclick="removeItem(${orderItemIndex})"><i class="fas fa-times"></i></button></div>`);
   orderItemIndex++;
 }
