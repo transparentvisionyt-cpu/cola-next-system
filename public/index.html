@@ -434,7 +434,7 @@ tr:hover{background:rgba(227,30,36,.02)}
     </div>
   </div>
   <div class="stats-row" style="margin-top:16px">
-    <div class="stat-box"><h4 id="g-totalCases">0</h4><p>Total Cases</p></div>
+    <div class="stat-box"><h4 id="g-totalCases">0</h4><p>Total PETs</p></div>
     <div class="stat-box"><h4 id="g-totalProducts">0</h4><p>Products</p></div>
     <div class="stat-box"><h4 id="g-totalValue">0</h4><p>Stock Value</p></div>
     <div class="stat-box"><h4 id="g-lowStock">0</h4><p>Low Stock Items</p></div>
@@ -769,7 +769,7 @@ function renderProductStrip(){
   const unique=[...new Map(allProducts.map(p=>[p.name,p])).values()];
   strip.innerHTML=unique.map(p=>{
     const img=getBottleImg(p.name,p.size);
-    return `<div class="strip-item"><img src="${img}" alt="${p.name}" onerror="this.parentElement.style.display='none'"><span>${p.name}</span></div>`;
+    return `<div class="strip-item" onclick="editProduct(${p.id})" title="Edit ${p.name}"><img src="${img}" alt="${p.name}" onerror="this.parentElement.style.display='none'"><span>${p.name}</span></div>`;
   }).join('');
 }
 
