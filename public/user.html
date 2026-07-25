@@ -3,44 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Cola Next - User Panel</title>
+<title>Cola Next - Products & Orders</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--primary:#e31e24;--primary-dark:#b8181d;--bg:#f0f2f5;--card:#fff;--text:#1a1a2e;--text2:#64748b;--border:#e2e8f0;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6}
 body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
 @keyframes dropIn{0%{opacity:0;transform:translateY(-30px) scale(.8)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes waterWave{0%{transform:translateX(0) translateZ(0) scaleY(1)}50%{transform:translateX(-25%) translateZ(0) scaleY(.55)}100%{transform:translateX(-50%) translateZ(0) scaleY(1)}}
 @keyframes bubble{0%{bottom:-10%;opacity:0}10%{opacity:1}90%{opacity:1}100%{bottom:105%;opacity:0}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 5px rgba(227,30,36,.2)}50%{box-shadow:0 0 20px rgba(227,30,36,.4),0 0 40px rgba(227,30,36,.1)}}
 @keyframes realBottleBounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-12px) rotate(-3deg)}60%{transform:translateY(-6px) rotate(2deg)}}
-@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 @keyframes rippleBg{0%{box-shadow:inset 0 0 0 0 rgba(227,30,36,.08)}50%{box-shadow:inset 0 0 0 20px rgba(227,30,36,0)}100%{box-shadow:inset 0 0 0 0 rgba(227,30,36,.08)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 body{position:relative}
 body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 20% 50%,rgba(227,30,36,.03) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(59,130,246,.03) 0%,transparent 50%);pointer-events:none;z-index:0}
-
 .bg-particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
 .bg-particle{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:0}
-.bg-particle:nth-child(1){left:10%;width:4px;height:4px;background:rgba(227,30,36,.15);animation-duration:12s;animation-delay:0s}
-.bg-particle:nth-child(2){left:25%;width:6px;height:6px;background:rgba(59,130,246,.12);animation-duration:15s;animation-delay:2s}
-.bg-particle:nth-child(3){left:40%;width:3px;height:3px;background:rgba(34,197,94,.15);animation-duration:10s;animation-delay:4s}
-.bg-particle:nth-child(4){left:55%;width:5px;height:5px;background:rgba(245,158,11,.12);animation-duration:14s;animation-delay:1s}
-.bg-particle:nth-child(5){left:70%;width:4px;height:4px;background:rgba(227,30,36,.1);animation-duration:11s;animation-delay:3s}
-.bg-particle:nth-child(6){left:85%;width:7px;height:7px;background:rgba(59,130,246,.08);animation-duration:16s;animation-delay:5s}
+.bg-particle:nth-child(1){left:10%;width:4px;height:4px;background:rgba(227,30,36,.15);animation-duration:12s}
+.bg-particle:nth-child(2){left:30%;width:6px;height:6px;background:rgba(59,130,246,.12);animation-duration:15s;animation-delay:2s}
+.bg-particle:nth-child(3){left:50%;width:3px;height:3px;background:rgba(34,197,94,.15);animation-duration:10s;animation-delay:4s}
+.bg-particle:nth-child(4){left:70%;width:5px;height:5px;background:rgba(245,158,11,.12);animation-duration:14s;animation-delay:1s}
+.bg-particle:nth-child(5){left:90%;width:4px;height:4px;background:rgba(227,30,36,.1);animation-duration:11s;animation-delay:3s}
 
-.splash-header{background:linear-gradient(135deg,#e31e24 0%,#c41017 50%,#8b0000 100%);padding:40px 20px;position:relative;overflow:hidden;min-height:220px;display:flex;align-items:center;justify-content:center}
+.splash-header{background:linear-gradient(135deg,#e31e24 0%,#c41017 50%,#8b0000 100%);padding:30px 20px;position:relative;overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center}
 .splash-header::before{content:'';position:absolute;bottom:0;left:0;width:200%;height:80px;background:rgba(255,255,255,.08);animation:waterWave 3s ease-in-out infinite;border-radius:40%}
 .splash-header::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:60px;background:rgba(255,255,255,.05);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .splash-content{text-align:center;z-index:10;position:relative}
-.splash-content h1{font-size:32px;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.3);animation:dropIn .8s ease-out}
-.splash-content p{font-size:14px;color:rgba(255,255,255,.8);margin-top:6px;animation:dropIn 1s ease-out}
+.splash-content h1{font-size:28px;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.3);animation:dropIn .8s ease-out}
+.splash-content p{font-size:13px;color:rgba(255,255,255,.8);margin-top:6px;animation:dropIn 1s ease-out}
 .bubbles{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none}
 .bubble{position:absolute;width:8px;height:8px;background:rgba(255,255,255,.2);border-radius:50%;animation:bubble 4s ease-in infinite}
 .bubble:nth-child(1){left:10%;animation-delay:0s;animation-duration:3s}
@@ -49,51 +41,15 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .bubble:nth-child(4){left:70%;animation-delay:.5s;animation-duration:4.5s;width:10px;height:10px}
 .bubble:nth-child(5){left:90%;animation-delay:1.5s;animation-duration:3s;width:5px;height:5px}
 
-.auth-container{max-width:420px;margin:-60px auto 40px;padding:0 20px;position:relative;z-index:10}
-.auth-card{background:#fff;border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,.08);overflow:hidden;animation:dropIn .5s ease-out}
-.auth-tabs{display:flex;border-bottom:1px solid var(--border)}
-.auth-tab{flex:1;padding:16px;text-align:center;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .3s;border-bottom:3px solid transparent}
-.auth-tab.active{color:var(--primary);border-bottom-color:var(--primary);background:rgba(227,30,36,.03)}
-.auth-tab:hover{background:rgba(227,30,36,.02)}
-.auth-body{padding:28px}
-.auth-form{display:none}.auth-form.active{display:block}
-.form-group{margin-bottom:18px}
-.form-group label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
-.form-group input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;color:var(--text);transition:all .2s;font-family:inherit}
-.form-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(227,30,36,.1)}
-.form-group input::placeholder{color:#94a3b8}
-.btn{width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;position:relative;overflow:hidden}
-.btn::after{content:'';position:absolute;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,255,.3) 0%,transparent 70%);transform:scale(0);transition:transform .5s;pointer-events:none}
-.btn:active::after{transform:scale(2);transition:0s}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 15px rgba(227,30,36,.35);transform:translateY(-2px)}
-.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#16a34a;transform:translateY(-2px)}
-.btn-secondary{background:#f1f5f9;color:var(--text)}.btn-secondary:hover{background:#e2e8f0}
-.btn-sm{padding:10px 16px;font-size:12px;border-radius:10px}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-.error-msg{color:var(--danger);font-size:12px;margin-bottom:12px;display:none;text-align:center;padding:8px;background:rgba(239,68,68,.08);border-radius:8px}
-.error-msg.show{display:block;animation:dropIn .3s}
-.success-msg{color:var(--success);font-size:12px;margin-bottom:12px;display:none;text-align:center;padding:8px;background:rgba(34,197,94,.08);border-radius:8px}
-.success-msg.show{display:block;animation:dropIn .3s}
+.content{padding:20px;position:relative;z-index:1}
+.tabs-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:10px 20px;border-radius:12px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 4px 12px rgba(227,30,36,.3)}
+.tab-btn:hover:not(.active){background:#f8fafc;border-color:var(--primary);color:var(--primary)}
+.section{display:none;animation:fadeInUp .4s ease-out}.section.active{display:block}
 
-.user-panel{display:none;min-height:100vh;padding-bottom:30px}
-.topbar{background:linear-gradient(135deg,#e31e24 0%,#c41017 100%);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.topbar h2{font-size:18px;font-weight:800;color:#fff}
-.topbar .user-info{display:flex;align-items:center;gap:10px}
-.topbar .avatar{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
-.topbar .name{font-size:13px;font-weight:600;color:#fff}
-.topbar .role{font-size:10px;color:rgba(255,255,255,.7)}
-.topbar .logout{background:rgba(255,255,255,.15);border:none;color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s}
-.topbar .logout:hover{background:rgba(255,255,255,.25)}
-
-.content{padding:20px}
-.welcome-card{background:linear-gradient(135deg,#e31e24 0%,#ff6b6b 100%);border-radius:20px;padding:30px;color:#fff;margin-bottom:24px;position:relative;overflow:hidden;animation:fadeInUp .5s ease-out}
-.welcome-card::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
-.welcome-card::after{content:'';position:absolute;bottom:-30%;left:-10%;width:150px;height:150px;background:rgba(255,255,255,.05);border-radius:50%}
-.welcome-card h2{font-size:22px;font-weight:800;position:relative;z-index:1}
-.welcome-card p{font-size:13px;color:rgba(255,255,255,.8);margin-top:6px;position:relative;z-index:1}
-
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:0}
-.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .35s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;animation:fadeInUp .5s ease-out}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .35s cubic-bezier(.4,0,.2,1);animation:fadeInUp .5s ease-out}
 .product-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 35px rgba(0,0,0,.12)}
 .product-card:hover .bottle-real{animation:realBottleBounce .7s ease-in-out}
 .product-card:hover .product-img{animation:rippleBg 1.5s ease-in-out}
@@ -106,66 +62,57 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .product-tag{padding:2px 8px;border-radius:6px;font-size:9px;font-weight:600}
 .product-prices{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
 .product-price{font-size:14px;font-weight:800;color:var(--primary)}
-.product-stock{font-size:10px;font-weight:600;color:var(--text2)}
 
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;transition:all .3s;animation:fadeInUp .5s ease-out}
-.card:hover{box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;animation:fadeInUp .5s ease-out}
 .card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-header h3{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
 .card-header h3 i{color:var(--primary);font-size:13px}
 .card-body{padding:18px}
-
 table{width:100%;border-collapse:collapse}
 th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);background:#f8fafc}
 td{padding:12px 14px;font-size:12px;border-bottom:1px solid var(--border)}
-tr{transition:background .15s}
-tr:hover{background:rgba(227,30,36,.02)}
-
+tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 .badge{padding:3px 10px;border-radius:999px;font-size:10px;font-weight:600}
 .badge-success{background:rgba(34,197,94,.12);color:#16a34a}
 .badge-warning{background:rgba(245,158,11,.12);color:#d97706}
 .badge-danger{background:rgba(239,68,68,.12);color:#dc2626}
-.badge-info{background:rgba(59,130,246,.12);color:#2563eb}
 
-.stats-row{display:flex;gap:14px;margin-bottom:16px;flex-wrap:wrap}
-.stat-box{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;transition:all .3s;animation:fadeInUp .4s ease-out}
-.stat-box:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
-.stat-box h4{font-size:24px;font-weight:800;color:var(--primary)}
-.stat-box p{font-size:12px;color:var(--text2);margin-top:4px}
-
-.tabs-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.tab-btn{padding:10px 20px;border-radius:12px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
-.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 4px 12px rgba(227,30,36,.3)}
-.tab-btn:hover:not(.active){background:#f8fafc;border-color:var(--primary);color:var(--primary)}
-
-.section{display:none;animation:fadeInUp .4s ease-out}.section.active{display:block}
-
-.toast-box{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
-.toast{background:#1a1a2e;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;animation:dropIn .4s;box-shadow:0 8px 30px rgba(0,0,0,.25);font-size:13px;color:#fff;min-width:260px}
-.toast i{font-size:18px}
+.btn{padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,255,.3) 0%,transparent 70%);transform:scale(0);transition:transform .5s;pointer-events:none}
+.btn:active::after{transform:scale(2);transition:0s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 15px rgba(227,30,36,.35);transform:translateY(-2px)}
+.btn-secondary{background:#f1f5f9;color:var(--text)}.btn-secondary:hover{background:#e2e8f0}
+.btn-sm{padding:10px 16px;font-size:12px;border-radius:10px}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.show{display:flex}
-.modal{background:#fff;border-radius:20px;padding:28px;width:100%;max-width:420px;max-height:85vh;overflow-y:auto;animation:dropIn .3s ease-out}
+.modal{background:#fff;border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;animation:dropIn .3s ease-out}
 .modal h3{font-size:20px;font-weight:700;margin-bottom:18px;color:var(--text)}
 .modal .btns{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-
+.form-group{margin-bottom:14px}
+.form-group label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;color:var(--text);font-family:inherit;transition:all .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(227,30,36,.1)}
 .order-item{display:flex;align-items:center;gap:10px;padding:10px;background:#f8fafc;border-radius:10px;margin-bottom:8px}
 .order-item select,.order-item input{flex:1}
 .remove-btn{width:30px;height:30px;border-radius:8px;border:none;background:var(--danger);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .remove-btn:hover{transform:scale(1.1)}
 
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast{background:#1a1a2e;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;animation:dropIn .4s;box-shadow:0 8px 30px rgba(0,0,0,.25);font-size:13px;color:#fff;min-width:260px}
+.toast i{font-size:18px}
+
+.cart-fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;background:var(--primary);color:#fff;border-radius:50%;border:none;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(227,30,36,.4);z-index:100;transition:all .3s}
+.cart-fab:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(227,30,36,.5)}
+.cart-fab .badge-count{position:absolute;top:-4px;right:-4px;background:#fff;color:var(--primary);width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary)}
+
 @media(max-width:480px){
-  .splash-content h1{font-size:24px}
+  .splash-content h1{font-size:22px}
   .product-grid{grid-template-columns:1fr 1fr;gap:10px}
   .product-img{height:110px}
   .product-info{padding:10px 12px}
   .product-name{font-size:11px}
   .product-price{font-size:13px}
-  .stats-row{gap:10px}
-  .stat-box{min-width:100px;padding:14px}
-  .stat-box h4{font-size:20px}
   .content{padding:14px}
   .tabs-bar{gap:6px}
   .tab-btn{padding:8px 14px;font-size:11px}
@@ -176,138 +123,73 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <div class="bg-particles">
   <div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div>
-  <div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div>
+  <div class="bg-particle"></div><div class="bg-particle"></div>
 </div>
 
-<!-- AUTH SCREEN -->
-<div id="authScreen">
-  <div class="splash-header">
-    <div class="bubbles">
-      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-    </div>
-    <div class="splash-content">
-      <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
-      <p>User Panel - Order & Track</p>
-    </div>
+<div class="splash-header">
+  <div class="bubbles">
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
   </div>
-  <div class="auth-container">
-    <div class="auth-card">
-      <div class="auth-tabs">
-        <div class="auth-tab active" onclick="switchAuth('login')"><i class="fas fa-sign-in-alt"></i> Login</div>
-        <div class="auth-tab" onclick="switchAuth('register')"><i class="fas fa-user-plus"></i> Sign Up</div>
-      </div>
-      <div class="auth-body">
-        <div id="auth-error" class="error-msg"></div>
-        <div id="auth-success" class="success-msg"></div>
-
-        <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="loginUser" placeholder="Enter username" required>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="loginPass" placeholder="Enter password" required>
-          </div>
-          <button type="submit" class="btn btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
-        </form>
-
-        <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="regName" placeholder="Khan Traders" required>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Phone</label>
-              <input type="text" id="regPhone" placeholder="0300 1234567">
-            </div>
-            <div class="form-group">
-              <label>Username</label>
-              <input type="text" id="regUser" placeholder="khan123" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="regPass" placeholder="Min 4 characters" required minlength="4">
-          </div>
-          <button type="submit" class="btn btn-primary" id="regBtn"><i class="fas fa-user-plus"></i> Create Account</button>
-        </form>
-      </div>
-    </div>
+  <div class="splash-content">
+    <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
+    <p>Browse Products & Place Orders</p>
   </div>
 </div>
 
-<!-- USER PANEL -->
-<div id="userPanel" class="user-panel">
-  <div class="topbar">
-    <h2><i class="fas fa-bottle-water" style="margin-right:6px"></i>Cola Next</h2>
-    <div class="user-info">
-      <div>
-        <div class="name" id="u-name">User</div>
-        <div class="role">Customer</div>
-      </div>
-      <div class="avatar"><i class="fas fa-user"></i></div>
-      <button class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-    </div>
+<div class="content">
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> Products</button>
+    <button class="tab-btn" onclick="switchTab('order',this)"><i class="fas fa-shopping-cart"></i> Place Order</button>
   </div>
 
-  <div class="content">
-    <div class="welcome-card">
-      <h2>Welcome, <span id="w-name">User</span>!</h2>
-      <p>Browse Cola Next products and place your order</p>
-    </div>
-
-    <div class="tabs-bar">
-      <button class="tab-btn active" onclick="switchSection('products')"><i class="fas fa-box"></i> Products</button>
-      <button class="tab-btn" onclick="switchSection('myorders')"><i class="fas fa-shopping-cart"></i> My Orders</button>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div id="sec-products" class="section active">
-      <div class="product-grid" id="u-products"></div>
-    </div>
-
-    <!-- MY ORDERS -->
-    <div id="sec-myorders" class="section">
-      <div class="card">
-        <div class="card-header">
-          <h3><i class="fas fa-shopping-cart"></i>My Orders</h3>
-          <button class="btn btn-primary btn-sm" onclick="openOrderModal()"><i class="fas fa-plus"></i> New Order</button>
-        </div>
-        <div class="card-body" style="padding:0;overflow-x:auto">
-          <table>
-            <thead><tr><th>Order #</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
-            <tbody id="u-orders"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+  <div id="tab-products" class="section active">
+    <div class="product-grid" id="u-products"></div>
   </div>
-</div>
 
-<!-- ORDER MODAL -->
-<div class="modal-overlay" id="modal-order">
-  <div class="modal" style="max-width:480px">
-    <h3><i class="fas fa-shopping-cart"></i> Place Order</h3>
-    <div class="card" style="margin-top:8px">
-      <div class="card-header"><h3><i class="fas fa-box"></i>Items</h3><button class="btn btn-primary btn-sm" onclick="addOrderItem()"><i class="fas fa-plus"></i>Add</button></div>
+  <div id="tab-order" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h3><i class="fas fa-shopping-cart"></i> Your Order</h3>
+        <button class="btn btn-primary btn-sm" onclick="addOrderItem()"><i class="fas fa-plus"></i> Add Item</button>
+      </div>
       <div class="card-body" id="om-items"></div>
-    </div>
-    <div style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px">
-        <span>Total:</span>
-        <span style="color:var(--primary);font-weight:800;font-size:18px" id="om-total">Rs.0</span>
+      <div style="padding:0 18px 18px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:14px;margin-top:0">
+        <span style="font-size:14px;font-weight:600">Total:</span>
+        <span style="color:var(--primary);font-weight:800;font-size:22px" id="om-total">Rs.0</span>
       </div>
     </div>
-    <div class="form-group" style="margin-top:12px">
-      <label>Notes (optional)</label>
-      <input id="om-notes" placeholder="Any special instructions..." style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit">
+    <div class="card" style="padding:18px">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input id="om-name" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input id="om-phone" placeholder="0300 1234567">
+      </div>
+      <div class="form-group">
+        <label>Notes (optional)</label>
+        <input id="om-notes" placeholder="Any special instructions...">
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="placeOrder()"><i class="fas fa-check"></i> Place Order</button>
     </div>
-    <div class="btns">
-      <button class="btn btn-secondary" onclick="closeModal('modal-order')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveOrder()"><i class="fas fa-check"></i> Place Order</button>
+  </div>
+</div>
+
+<button class="cart-fab" onclick="switchTab('order',document.querySelectorAll('.tab-btn')[1])" id="cartFab" style="display:none">
+  <i class="fas fa-shopping-cart"></i>
+  <span class="badge-count" id="cartCount">0</span>
+</button>
+
+<div class="modal-overlay" id="modal-success">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div style="width:80px;height:80px;background:rgba(34,197,94,.1);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px">
+      <i class="fas fa-check" style="font-size:36px;color:var(--success)"></i>
     </div>
+    <h3 style="margin-bottom:8px">Order Placed!</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Your order has been received. We will contact you soon.</p>
+    <p style="font-size:12px;color:var(--text2)">Order #: <strong id="success-order-id">-</strong></p>
+    <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="closeModal('modal-success')"><i class="fas fa-check"></i> OK</button>
   </div>
 </div>
 
@@ -315,7 +197,8 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <script>
 const API='';
-let currentUser=null,allProducts=[];
+let allProducts=[];
+let cartCount=0;
 
 function toast(m,t='success'){const d=document.createElement('div');d.className='toast';d.innerHTML=`<i class="fas fa-${t==='error'?'exclamation-circle':'check-circle'}" style="color:${t==='error'?'#ef4444':'#22c55e'}"></i><span>${m}</span>`;document.getElementById('toastBox').appendChild(d);setTimeout(()=>{d.style.opacity='0';d.style.transition='opacity .3s';setTimeout(()=>d.remove(),300)},3000)}
 function openModal(id){document.getElementById(id).classList.add('show')}
@@ -336,77 +219,17 @@ const imgMap={
 const colorMap={'Cola Next':'#e31e24','Dare Next':'#ff6b00','Fizzup Next':'#00a651','Rango Next':'#ff1493','Anaar Next':'#8b0000','Green Soda Next':'#00c853','Lychee Next':'#ff69b4','Storm':'#1a237e','Mineral Water':'#2A6CDE'};
 function getBottleImg(name,size){return(imgMap[name]&&imgMap[name][size])||Object.values(imgMap[name]||{})[0]||'images/cola_500ml.webp'}
 
-function switchAuth(t){
-  document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.auth-form').forEach(x=>x.classList.remove('active'));
-  document.getElementById('auth-error').classList.remove('show');
-  document.getElementById('auth-success').classList.remove('show');
-  if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active')}
-  else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active')}
-}
-
-async function handleLogin(e){
-  e.preventDefault();
-  const username=document.getElementById('loginUser').value;
-  const password=document.getElementById('loginPass').value;
-  const err=document.getElementById('auth-error');
-  try{
-    const res=await fetch(API+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
-    const data=await res.json();
-    if(!res.ok){err.textContent=data.error;err.classList.add('show');return}
-    currentUser=data;
-    localStorage.setItem('user',JSON.stringify(data));
-    showUserPanel();
-  }catch(e){err.textContent='Connection error';err.classList.add('show')}
-}
-
-async function handleRegister(e){
-  e.preventDefault();
-  const name=document.getElementById('regName').value;
-  const phone=document.getElementById('regPhone').value;
-  const username=document.getElementById('regUser').value;
-  const password=document.getElementById('regPass').value;
-  const err=document.getElementById('auth-error');
-  const suc=document.getElementById('auth-success');
-  try{
-    const res=await fetch(API+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password,name,phone})});
-    const data=await res.json();
-    if(!res.ok){err.textContent=data.error;err.classList.add('show');return}
-    suc.textContent='Account created! Now login.';suc.classList.add('show');
-    document.getElementById('regName').value='';document.getElementById('regPhone').value='';
-    document.getElementById('regUser').value='';document.getElementById('regPass').value='';
-    setTimeout(()=>{switchAuth('login')},1500);
-  }catch(e){err.textContent='Connection error';err.classList.add('show')}
-}
-
-function logout(){
-  currentUser=null;
-  localStorage.removeItem('user');
-  document.getElementById('userPanel').style.display='none';
-  document.getElementById('authScreen').style.display='block';
-}
-
-function showUserPanel(){
-  document.getElementById('authScreen').style.display='none';
-  document.getElementById('userPanel').style.display='block';
-  document.getElementById('u-name').textContent=currentUser.name;
-  document.getElementById('w-name').textContent=currentUser.name;
-  loadProducts();
-  loadMyOrders();
-}
-
-function switchSection(s){
+function switchTab(t,btn){
   document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
-  document.getElementById('sec-'+s).classList.add('active');
-  event.currentTarget.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  btn.classList.add('active');
 }
 
 async function loadProducts(){
   allProducts=await(await fetch(API+'/api/products')).json();
   document.getElementById('u-products').innerHTML=allProducts.length?allProducts.map((p,i)=>{
     const c=colorMap[p.name]||p.color||'#e31e24';
-    const sb=p.stock<10?'danger':p.stock<20?'warning':'success';
     return `<div class="product-card" style="animation-delay:${i*0.05}s">
       <div class="product-img" style="background:linear-gradient(135deg,${c}08,${c}18,${c}08)">
         <img class="bottle-real" src="${getBottleImg(p.name,p.size)}" alt="${p.name}" onerror="this.style.display='none'">
@@ -425,21 +248,14 @@ async function loadProducts(){
 }
 
 let orderItemIndex=0;
-function openOrderModal(){
-  document.getElementById('om-items').innerHTML='';
-  document.getElementById('om-total').textContent='Rs.0';
-  orderItemIndex=0;
-  addOrderItem();
-  openModal('modal-order');
-}
-
 function addOrderItem(){
   const opts=allProducts.map(p=>`<option value="${p.id}">${p.name} ${p.size} - Rs.${p.sale_price}</option>`).join('');
   document.getElementById('om-items').insertAdjacentHTML('beforeend',`<div class="order-item" id="oi-${orderItemIndex}"><select style="flex:1;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-family:inherit" onchange="calcTotal()">${opts}</select><input type="number" style="width:60px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px" value="1" min="1" onchange="calcTotal()" placeholder="Qty"><span style="font-weight:600;min-width:60px;text-align:right;font-size:12px" id="oi-t-${orderItemIndex}">Rs.0</span><button class="remove-btn" onclick="removeItem(${orderItemIndex})"><i class="fas fa-times"></i></button></div>`);
   orderItemIndex++;
+  updateCartCount();
 }
 
-function removeItem(i){const el=document.getElementById('oi-'+i);if(el)el.remove();calcTotal()}
+function removeItem(i){const el=document.getElementById('oi-'+i);if(el)el.remove();calcTotal();updateCartCount()}
 
 function calcTotal(){
   let t=0;
@@ -453,41 +269,50 @@ function calcTotal(){
   document.getElementById('om-total').textContent='Rs.'+fmt(t);
 }
 
-async function saveOrder(){
+function updateCartCount(){
+  const count=document.querySelectorAll('#om-items .order-item').length;
+  document.getElementById('cartCount').textContent=count;
+  document.getElementById('cartFab').style.display=count>0?'flex':'none';
+}
+
+async function placeOrder(){
+  const name=document.getElementById('om-name').value.trim();
+  const phone=document.getElementById('om-phone').value.trim();
+  if(!name){toast('Enter your name','error');return}
+  if(!phone){toast('Enter phone number','error');return}
+
   const items=[];
   document.querySelectorAll('#om-items .order-item').forEach(item=>{
     items.push({product_id:parseInt(item.querySelector('select').value),quantity:parseInt(item.querySelector('input[type=number]').value)||1});
   });
-  if(!items.length){toast('Add items','error');return}
+  if(!items.length){toast('Add at least one item','error');return}
 
-  const retailers=await(await fetch(API+'/api/retailers')).json();
-  let retailer=retailers.find(r=>r.name===currentUser.name);
+  let retailers=await(await fetch(API+'/api/retailers')).json();
+  let retailer=retailers.find(r=>r.phone===phone);
   if(!retailer){
-    const res=await fetch(API+'/api/retailers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:currentUser.name,phone:currentUser.phone||'',address:'',area:'',credit_limit:50000})});
+    const res=await fetch(API+'/api/retailers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,address:'',area:'',credit_limit:50000})});
     const data=await res.json();
     retailer={id:data.id};
   }
 
   const notes=document.getElementById('om-notes').value;
-  await fetch(API+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({retailer_id:retailer.id,items,discount:0,notes})});
-  closeModal('modal-order');
-  toast('Order placed!');
-  loadMyOrders();
+  const res=await fetch(API+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({retailer_id:retailer.id,items,discount:0,notes})});
+  const orderData=await res.json();
+
+  document.getElementById('success-order-id').textContent=orderData.order_number;
+  openModal('modal-success');
+  
+  document.getElementById('om-items').innerHTML='';
+  document.getElementById('om-total').textContent='Rs.0';
+  document.getElementById('om-name').value='';
+  document.getElementById('om-phone').value='';
+  document.getElementById('om-notes').value='';
+  orderItemIndex=0;
+  updateCartCount();
 }
 
-async function loadMyOrders(){
-  const retailers=await(await fetch(API+'/api/retailers')).json();
-  const myRetailer=retailers.find(r=>r.name===currentUser.name);
-  if(!myRetailer){document.getElementById('u-orders').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text2)">No orders yet</td></tr>';return}
-  const orders=await(await fetch(API+'/api/orders')).json();
-  const myOrders=orders.filter(o=>o.retailer_id===myRetailer.id);
-  document.getElementById('u-orders').innerHTML=myOrders.length?myOrders.map(o=>{
-    const items=o.items||[];
-    return `<tr><td><strong>${o.order_number}</strong></td><td>${new Date(o.order_date).toLocaleDateString()}</td><td>${o.total_amount?o.total_amount+' PKR':'-'}</td><td><strong>Rs.${fmt(o.net_amount)}</strong></td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td></tr>`}).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text2)">No orders yet</td></tr>';
-}
-
-const saved=localStorage.getItem('user');
-if(saved){currentUser=JSON.parse(saved);showUserPanel()}
+loadProducts();
+addOrderItem();
 </script>
 </body>
 </html>
