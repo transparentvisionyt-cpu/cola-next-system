@@ -501,13 +501,17 @@ tr:hover{background:rgba(227,30,36,.02)}
 <!-- SETTINGS -->
 <div id="tab-settings" class="tab">
   <div class="card" style="max-width:500px">
-    <div class="card-header"><h3><i class="fas fa-gear"></i>Settings</h3></div>
+    <div class="card-header"><h3><i class="fas fa-gear"></i> Settings</h3></div>
     <div class="card-body">
       <div class="form-group"><label class="label">Company Name</label><input id="s-name" class="input"></div>
-      <div class="form-group"><label class="label">Phone</label><input id="s-phone" class="input"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="label">Phone</label><input id="s-phone" class="input" placeholder="0300 1234567"></div>
+        <div class="form-group"><label class="label">WhatsApp</label><input id="s-whatsapp" class="input" placeholder="923001234567"></div>
+      </div>
+      <div class="form-group"><label class="label">Email</label><input id="s-email" class="input" placeholder="info@colanext.com"></div>
       <div class="form-group"><label class="label">Address</label><input id="s-address" class="input"></div>
       <div class="form-group"><label class="label">Credit Terms (Days)</label><input id="s-credit" type="number" class="input"></div>
-      <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i>Save</button>
+      <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save</button>
     </div>
   </div>
 </div>
@@ -534,6 +538,7 @@ tr:hover{background:rgba(227,30,36,.02)}
       <div class="form-group"><label class="label">Sale Price</label><input id="pm-sale" type="number" class="input" value="0"></div>
     </div>
     <div class="form-group"><label class="label">Bottle Color</label><input id="pm-color" type="color" class="input" value="#e31e24" style="height:42px;padding:4px"></div>
+    <div class="form-group"><label class="label">Product Image</label><input type="file" id="pm-image" accept="image/*" class="input" onchange="previewProductImage(this)" style="padding:8px"><div id="pm-image-preview" style="margin-top:8px;text-align:center"></div><input type="hidden" id="pm-image-url"></div>
     <div class="btns"><button class="btn btn-secondary" onclick="closeModal('modal-product')">Cancel</button><button class="btn btn-primary" onclick="saveProduct()"><i class="fas fa-save"></i>Save</button></div>
   </div>
 </div>
@@ -730,9 +735,10 @@ function renderProducts(products){
 let currentView='grid';
 function setView(v){currentView=v;document.getElementById('p-grid').style.display=v==='grid'?'grid':'none';document.getElementById('p-list').style.display=v==='list'?'block':'none';document.getElementById('v-grid').classList.toggle('active',v==='grid');document.getElementById('v-list').classList.toggle('active',v==='list')}
 function filterProducts(){const q=document.getElementById('p-search').value.toLowerCase();const cat=document.getElementById('p-category').value;renderProducts(allProducts.filter(p=>p.name.toLowerCase().includes(q)&&(!cat||p.name===cat)))}
-function openProductModal(p){document.getElementById('pm-id').value=p?p.id:'';document.getElementById('pm-title').textContent=p?'Edit Product':'Add Product';document.getElementById('pm-name').value=p?p.name:'Cola Next';document.getElementById('pm-category').value=p?p.category:'Classic';document.getElementById('pm-size').value=p?p.size:'300ml';document.getElementById('pm-pieces').value=p?p.pieces_per_case:12;document.getElementById('pm-stock').value=p?p.stock:0;document.getElementById('pm-purchase').value=p?p.purchase_price:0;document.getElementById('pm-sale').value=p?p.sale_price:0;document.getElementById('pm-color').value=p?(p.color||'#e31e24'):'#e31e24';openModal('modal-product')}
+function openProductModal(p){document.getElementById('pm-id').value=p?p.id:'';document.getElementById('pm-title').textContent=p?'Edit Product':'Add Product';document.getElementById('pm-name').value=p?p.name:'Cola Next';document.getElementById('pm-category').value=p?p.category:'Classic';document.getElementById('pm-size').value=p?p.size:'300ml';document.getElementById('pm-pieces').value=p?p.pieces_per_case:12;document.getElementById('pm-stock').value=p?p.stock:0;document.getElementById('pm-purchase').value=p?p.purchase_price:0;document.getElementById('pm-sale').value=p?p.sale_price:0;document.getElementById('pm-color').value=p?(p.color||'#e31e24'):'#e31e24';document.getElementById('pm-image-url').value=p?(p.image||''):'';const prev=document.getElementById('pm-image-preview');if(p&&p.image){prev.innerHTML='<img src="'+p.image+'" style="max-height:80px;border-radius:8px">'}else{prev.innerHTML=''}document.getElementById('pm-image').value='';openModal('modal-product')}
 function editProduct(id){const p=allProducts.find(x=>x.id===id);if(p)openProductModal(p)}
-async function saveProduct(){const id=document.getElementById('pm-id').value;const data={name:document.getElementById('pm-name').value,category:document.getElementById('pm-category').value,size:document.getElementById('pm-size').value,pieces_per_case:parseInt(document.getElementById('pm-pieces').value),stock:parseInt(document.getElementById('pm-stock').value),purchase_price:parseFloat(document.getElementById('pm-purchase').value),sale_price:parseFloat(document.getElementById('pm-sale').value),color:document.getElementById('pm-color').value};if(id){await fetch(API+'/api/products/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}else{await fetch(API+'/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}closeModal('modal-product');loadProducts();toast(id?'Updated!':'Added!')}
+function previewProductImage(input){if(input.files&&input.files[0]){const reader=new FileReader();reader.onload=function(e){document.getElementById('pm-image-preview').innerHTML='<img src="'+e.target.result+'" style="max-height:80px;border-radius:8px">'};reader.readAsDataURL(input.files[0])}}
+async function saveProduct(){const id=document.getElementById('pm-id').value;const data={name:document.getElementById('pm-name').value,category:document.getElementById('pm-category').value,size:document.getElementById('pm-size').value,pieces_per_case:parseInt(document.getElementById('pm-pieces').value),stock:parseInt(document.getElementById('pm-stock').value),purchase_price:parseFloat(document.getElementById('pm-purchase').value),sale_price:parseFloat(document.getElementById('pm-sale').value),color:document.getElementById('pm-color').value,image:document.getElementById('pm-image-url').value||''};const fileInput=document.getElementById('pm-image');if(fileInput.files&&fileInput.files[0]){const file=fileInput.files[0];const ext=file.name.split('.').pop();const filename='product-'+Date.now()+'.'+ext;const base64=await new Promise(r=>{const reader=new FileReader();reader.onload=()=>r(reader.result);reader.readAsDataURL(file)});const uploadRes=await fetch(API+'/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:base64,filename})});const uploadData=await uploadRes.json();data.image=uploadData.url}if(id){await fetch(API+'/api/products/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}else{await fetch(API+'/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}closeModal('modal-product');loadProducts();toast(id?'Updated!':'Added!')}
 async function deleteProduct(id){if(!confirm('Delete?'))return;await fetch(API+'/api/products/'+id,{method:'DELETE'});loadProducts();toast('Deleted!')}
 
 // ============ RETAILERS ============
@@ -789,8 +795,8 @@ async function loadRetailerDropdown(){allRetailers=await(await fetch(API+'/api/r
 async function loadLedger(){const id=document.getElementById('lg-retailer').value;if(!id)return;const data=await(await fetch(API+'/api/retailers/'+id+'/ledger')).json();document.getElementById('lg-balance').textContent='Rs.'+fmt(data.retailer.current_balance);document.getElementById('lg-purchases').textContent='Rs.'+fmt(data.retailer.total_purchases);document.getElementById('lg-orders').innerHTML=data.orders.length?data.orders.map(o=>`<tr><td>${new Date(o.order_date).toLocaleDateString()}</td><td>${o.order_number}</td><td>Rs.${fmt(o.net_amount)}</td></tr>`).join(''):'<tr><td colspan="3">No orders</td></tr>';document.getElementById('lg-payments').innerHTML=data.payments.length?data.payments.map(p=>`<tr><td>${new Date(p.payment_date).toLocaleDateString()}</td><td style="color:var(--success)">Rs.${fmt(p.amount)}</td></tr>`).join(''):'<tr><td colspan="2">No payments</td></tr>'}
 
 // ============ SETTINGS ============
-async function loadSettings(){const s=await(await fetch(API+'/api/settings')).json();document.getElementById('s-name').value=s.company_name||'';document.getElementById('s-phone').value=s.phone||'';document.getElementById('s-address').value=s.address||'';document.getElementById('s-credit').value=s.credit_terms_days||30}
-async function saveSettings(){const d={company_name:document.getElementById('s-name').value,phone:document.getElementById('s-phone').value,address:document.getElementById('s-address').value,credit_terms_days:parseInt(document.getElementById('s-credit').value)};await fetch(API+'/api/settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});toast('Saved!')}
+async function loadSettings(){const s=await(await fetch(API+'/api/settings')).json();document.getElementById('s-name').value=s.company_name||'';document.getElementById('s-phone').value=s.phone||'';document.getElementById('s-whatsapp').value=s.whatsapp||'';document.getElementById('s-email').value=s.email||'';document.getElementById('s-address').value=s.address||'';document.getElementById('s-credit').value=s.credit_terms_days||30}
+async function saveSettings(){const d={company_name:document.getElementById('s-name').value,phone:document.getElementById('s-phone').value,whatsapp:document.getElementById('s-whatsapp').value,email:document.getElementById('s-email').value,address:document.getElementById('s-address').value,credit_terms_days:parseInt(document.getElementById('s-credit').value)};await fetch(API+'/api/settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});toast('Settings saved!')}
 
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 </script>

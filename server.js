@@ -1,14 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const { initDB, all, get, run } = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 app.get('/user', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'user.html'));
@@ -246,9 +249,22 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.put('/api/settings', (req, res) => {
-  const { company_name, phone, address, credit_terms_days } = req.body;
-  run('UPDATE settings SET company_name=?, phone=?, address=?, credit_terms_days=? WHERE id=1', [company_name, phone, address, credit_terms_days]);
+  const { company_name, phone, whatsapp, email, address, credit_terms_days } = req.body;
+  run('UPDATE settings SET company_name=?, phone=?, whatsapp=?, email=?, address=?, credit_terms_days=? WHERE id=1', [company_name, phone, whatsapp || '', email || '', address, credit_terms_days]);
   res.json({ success: true });
+});
+
+// ============ IMAGE UPLOAD ============
+const uploadDir = path.join(__dirname, 'public', 'uploads');
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+app.post('/api/upload', (req, res) => {
+  const { image, filename } = req.body;
+  if (!image || !filename) return res.status(400).json({ error: 'image and filename required' });
+  const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+  const filePath = path.join(uploadDir, filename);
+  fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+  res.json({ url: '/uploads/' + filename });
 });
 
 // ============ REPORTS ============

@@ -285,7 +285,7 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
       <div><h2 id="pgTitle">Products</h2><span class="sub" id="pgSub">Browse all products</span></div>
     </div>
     <div class="topbar-right">
-      <a href="https://wa.me/923000000000" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a id="topbar-wa" href="https://wa.me/923000000000" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       <button class="lang-btn active" onclick="setLang('en',this)">EN</button>
       <button class="lang-btn" onclick="setLang('ur',this)">اردو</button>
     </div>
@@ -299,8 +299,8 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     <h2><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h2>
     <p data-t="info_text">Pakistan ki apni premium beverage company. Hamare products aapke liye!</p>
     <div class="contact-grid">
-      <a href="tel:+923000000000" class="contact-item"><i class="fas fa-phone"></i><span>0300 0000000</span></a>
-      <a href="https://wa.me/923000000000" target="_blank" class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp Order</span></a>
+      <a id="info-phone" href="tel:+923000000000" class="contact-item"><i class="fas fa-phone"></i><span class="info-phone-text">0300 0000000</span></a>
+      <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp Order</span></a>
     </div>
   </div>
   <div class="search-bar">
@@ -374,9 +374,9 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     <h2><i class="fas fa-headset" style="margin-right:8px"></i> <span data-t="contact_us">Contact Us</span></h2>
     <p data-t="contact_text">Koi bhi sawal ho toh hamare sath rabta karein. Hum aapki madad karenge!</p>
     <div class="contact-grid" style="grid-template-columns:1fr">
-      <a href="tel:+923000000000" class="contact-item"><i class="fas fa-phone"></i><span>0300 0000000</span></a>
-      <a href="https://wa.me/923000000000" target="_blank" class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
-      <a href="mailto:info@colanext.com" class="contact-item"><i class="fas fa-envelope"></i><span>info@colanext.com</span></a>
+      <a id="ct-phone" href="tel:+923000000000" class="contact-item"><i class="fas fa-phone"></i><span class="ct-phone-text">0300 0000000</span></a>
+      <a id="ct-wa" href="https://wa.me/923000000000" target="_blank" class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+      <a id="ct-email" href="mailto:info@colanext.com" class="contact-item"><i class="fas fa-envelope"></i><span class="ct-email-text">info@colanext.com</span></a>
     </div>
   </div>
 </div>
@@ -698,6 +698,36 @@ function setLang(lang,btn){currentLang=lang;document.querySelectorAll('.lang-btn
 function applyLang(){const t=T[currentLang];document.querySelectorAll('[data-t]').forEach(el=>{const key=el.getAttribute('data-t');if(t[key])el.textContent=t[key]})}
 
 loadProducts();
+loadUserSettings();
+
+async function loadUserSettings(){
+  try{
+    const s=await(await fetch(API+'/api/settings')).json();
+    if(!s)return;
+    const ph=s.phone||'0300 0000000';
+    const wa=s.whatsapp||s.phone||'923000000000';
+    const em=s.email||'info@colanext.com';
+    const waClean=wa.replace(/[^0-9]/g,'');
+    const topWa=document.getElementById('topbar-wa');
+    if(topWa)topWa.href='https://wa.me/'+waClean;
+    const ip=document.getElementById('info-phone');
+    if(ip)ip.href='tel:'+ph;
+    const ipt=document.querySelector('.info-phone-text');
+    if(ipt)ipt.textContent=ph;
+    const iw=document.getElementById('info-wa');
+    if(iw)iw.href='https://wa.me/'+waClean;
+    const cp=document.getElementById('ct-phone');
+    if(cp)cp.href='tel:'+ph;
+    const cpt=document.querySelector('.ct-phone-text');
+    if(cpt)cpt.textContent=ph;
+    const cw=document.getElementById('ct-wa');
+    if(cw)cw.href='https://wa.me/'+waClean;
+    const ce=document.getElementById('ct-email');
+    if(ce)ce.href='mailto:'+em;
+    const cet=document.querySelector('.ct-email-text');
+    if(cet)cet.textContent=em;
+  }catch(e){}
+}
 
 function openCartPanel(){
   const pids=Object.keys(cart).filter(id=>cart[id]>0);

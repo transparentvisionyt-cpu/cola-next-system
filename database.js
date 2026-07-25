@@ -111,6 +111,8 @@ async function initDB() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       company_name TEXT DEFAULT 'Cola Next Distributor',
       phone TEXT,
+      whatsapp TEXT,
+      email TEXT,
       address TEXT,
       credit_terms_days INTEGER DEFAULT 30
     )
@@ -169,7 +171,7 @@ function seedProducts() {
 function seedSettings() {
   const result = db.exec("SELECT COUNT(*) as c FROM settings");
   if (result.length > 0 && result[0].values[0][0] > 0) return;
-  db.run("INSERT INTO settings (company_name, phone, address, credit_terms_days) VALUES (?, ?, ?, ?)", ['Cola Next Distributor', '', '', 30]);
+  db.run("INSERT INTO settings (company_name, phone, whatsapp, email, address, credit_terms_days) VALUES (?, ?, ?, ?, ?, ?)", ['Cola Next Distributor', '', '', '', '', 30]);
 }
 
 function seedAdmin() {
