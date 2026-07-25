@@ -71,6 +71,8 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-banner::before{content:'';position:absolute;bottom:0;left:0;width:200%;height:80px;background:rgba(255,255,255,.06);animation:waterWave 3s ease-in-out infinite;border-radius:40%}
 .dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
+.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:0 20px;z-index:1;opacity:.12;pointer-events:none}
+.dash-bg-strip img{height:80px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
 .dash-bottle{position:absolute;z-index:2;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle img{height:120px;width:auto;object-fit:contain;transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle-1{left:8%;bottom:10px;animation:floatBottle 4s ease-in-out infinite;transform:rotate(-8deg)}
@@ -216,8 +218,8 @@ tr:hover{background:rgba(227,30,36,.02)}
 .product-prices{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
 .product-price{font-size:16px;font-weight:800;color:var(--primary)}
 .product-stock{font-size:10px;font-weight:600}
-.product-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px;opacity:0;transition:all .3s;z-index:5}
-.product-card:hover .product-actions{opacity:1}
+.product-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px;opacity:1;transition:all .3s;z-index:5}
+
 .product-view-btn{width:30px;height:30px;border-radius:8px;border:none;background:rgba(255,255,255,.95);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .2s}
 .product-view-btn:hover{background:var(--primary);color:#fff;transform:scale(1.1)}
 .product-view-btn.danger:hover{background:var(--danger);color:#fff}
@@ -351,6 +353,14 @@ tr:hover{background:rgba(227,30,36,.02)}
 <!-- DASHBOARD -->
 <div id="tab-dashboard" class="tab active">
   <div class="dash-banner">
+    <div class="dash-bg-strip">
+      <img src="/images/cola_1500ml.webp" alt="">
+      <img src="/images/dare_1500ml.webp" alt="">
+      <img src="/images/fizzup_1500ml.webp" alt="">
+      <img src="/images/rango_1500ml.webp" alt="">
+      <img src="/images/anaar_1500ml.webp" alt="">
+      <img src="/images/storm_500ml.webp" alt="">
+    </div>
     <div class="dash-bottle dash-bottle-1"><img src="/images/cola_1500ml.webp" alt="Cola Next"></div>
     <div class="dash-bottle dash-bottle-2"><img src="/images/fizzup_500ml.webp" alt="Fizzup"></div>
     <div class="dash-bottle dash-bottle-3"><img src="/images/storm_500ml.webp" alt="Storm"></div>
@@ -360,7 +370,6 @@ tr:hover{background:rgba(227,30,36,.02)}
     </div>
     <div class="splash-content" style="position:relative;z-index:2">
       <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
-      <p>Distributor Management System</p>
     </div>
   </div>
   <div class="product-strip" id="dashProductStrip"></div>
@@ -424,13 +433,17 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- GODOWN -->
 <div id="tab-godown" class="tab">
-  <div class="splash-header" style="min-height:140px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%)">
-    <div class="bubbles">
-      <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+  <div class="dash-banner" style="min-height:180px">
+    <div class="dash-bottle dash-bottle-1"><img src="/images/cola_1500ml.webp" alt="Cola"></div>
+    <div class="dash-bottle dash-bottle-2"><img src="/images/dare_1500ml.webp" alt="Dare"></div>
+    <div class="dash-bottle dash-bottle-3"><img src="/images/rango_1500ml.webp" alt="Rango"></div>
+    <div class="dash-wave"></div>
+    <div class="dash-particles">
+      <div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div>
     </div>
-    <div class="splash-content">
+    <div class="splash-content" style="position:relative;z-index:2">
       <h1 style="font-size:24px"><i class="fas fa-warehouse" style="margin-right:8px"></i>Godown Inventory</h1>
-      <p>Complete stock overview</p>
+      <p style="color:rgba(255,255,255,.8)">Complete stock overview</p>
     </div>
   </div>
   <div class="stats-row" style="margin-top:16px">
