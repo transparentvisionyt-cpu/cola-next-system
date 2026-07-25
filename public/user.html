@@ -106,6 +106,16 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 .cart-fab:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(227,30,36,.5)}
 .cart-fab .badge-count{position:absolute;top:-4px;right:-4px;background:#fff;color:var(--primary);width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary)}
 
+.lang-bar{display:flex;justify-content:flex-end;gap:6px;padding:12px 20px 0;position:relative;z-index:10}
+.lang-btn{padding:8px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;backdrop-filter:blur(4px)}
+.lang-btn:hover{background:rgba(255,255,255,.2)}
+.lang-btn.active{background:#fff;color:var(--primary);border-color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+
+[dir="rtl"]{direction:rtl;text-align:right}
+[dir="rtl"] .splash-content h1{direction:ltr}
+[dir="rtl"] .form-group input,[dir="rtl"] .form-group select{text-align:right}
+[dir="rtl"] .order-item{flex-direction:row-reverse}
+
 @media(max-width:480px){
   .splash-content h1{font-size:22px}
   .product-grid{grid-template-columns:1fr 1fr;gap:10px}
@@ -116,6 +126,7 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
   .content{padding:14px}
   .tabs-bar{gap:6px}
   .tab-btn{padding:8px 14px;font-size:11px}
+  .lang-btn{padding:6px 12px;font-size:11px}
 }
 </style>
 </head>
@@ -126,20 +137,25 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
   <div class="bg-particle"></div><div class="bg-particle"></div>
 </div>
 
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en',this)">English</button>
+  <button class="lang-btn" onclick="setLang('ur',this)">اردو</button>
+</div>
+
 <div class="splash-header">
   <div class="bubbles">
     <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
   </div>
   <div class="splash-content">
-    <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
-    <p>Browse Products & Place Orders</p>
+    <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i><span data-t="splash_title">Cola Next</span></h1>
+    <p data-t="splash_sub">Browse Products & Place Orders</p>
   </div>
 </div>
 
 <div class="content">
   <div class="tabs-bar">
-    <button class="tab-btn active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> Products</button>
-    <button class="tab-btn" onclick="switchTab('order',this)"><i class="fas fa-shopping-cart"></i> Place Order</button>
+    <button class="tab-btn active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> <span data-t="tab_products">Products</span></button>
+    <button class="tab-btn" onclick="switchTab('order',this)"><i class="fas fa-shopping-cart"></i> <span data-t="tab_order">Place Order</span></button>
   </div>
 
   <div id="tab-products" class="section active">
@@ -149,29 +165,29 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
   <div id="tab-order" class="section">
     <div class="card">
       <div class="card-header">
-        <h3><i class="fas fa-shopping-cart"></i> Your Order</h3>
-        <button class="btn btn-primary btn-sm" onclick="addOrderItem()"><i class="fas fa-plus"></i> Add Item</button>
+        <h3><i class="fas fa-shopping-cart"></i> <span data-t="your_order">Your Order</span></h3>
+        <button class="btn btn-primary btn-sm" onclick="addOrderItem()"><i class="fas fa-plus"></i> <span data-t="add_item">Add Item</span></button>
       </div>
       <div class="card-body" id="om-items"></div>
       <div style="padding:0 18px 18px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:14px;margin-top:0">
-        <span style="font-size:14px;font-weight:600">Total:</span>
+        <span style="font-size:14px;font-weight:600" data-t="total">Total:</span>
         <span style="color:var(--primary);font-weight:800;font-size:22px" id="om-total">Rs.0</span>
       </div>
     </div>
     <div class="card" style="padding:18px">
       <div class="form-group">
-        <label>Your Name</label>
-        <input id="om-name" placeholder="Enter your name">
+        <label data-t="your_name">Your Name</label>
+        <input id="om-name" data-t-placeholder="enter_name">
       </div>
       <div class="form-group">
-        <label>Phone Number</label>
-        <input id="om-phone" placeholder="0300 1234567">
+        <label data-t="phone">Phone Number</label>
+        <input id="om-phone" data-t-placeholder="enter_phone">
       </div>
       <div class="form-group">
-        <label>Notes (optional)</label>
-        <input id="om-notes" placeholder="Any special instructions...">
+        <label data-t="notes">Notes (optional)</label>
+        <input id="om-notes" data-t-placeholder="special_instructions">
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="placeOrder()"><i class="fas fa-check"></i> Place Order</button>
+      <button class="btn btn-primary" style="width:100%" onclick="placeOrder()"><i class="fas fa-check"></i> <span data-t="place_order">Place Order</span></button>
     </div>
   </div>
 </div>
@@ -186,10 +202,10 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     <div style="width:80px;height:80px;background:rgba(34,197,94,.1);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px">
       <i class="fas fa-check" style="font-size:36px;color:var(--success)"></i>
     </div>
-    <h3 style="margin-bottom:8px">Order Placed!</h3>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Your order has been received. We will contact you soon.</p>
+    <h3 style="margin-bottom:8px" data-t="order_placed">Order Placed!</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px" data-t="order_received">Your order has been received. We will contact you soon.</p>
     <p style="font-size:12px;color:var(--text2)">Order #: <strong id="success-order-id">-</strong></p>
-    <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="closeModal('modal-success')"><i class="fas fa-check"></i> OK</button>
+    <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="closeModal('modal-success')"><i class="fas fa-check"></i> <span data-t="ok">OK</span></button>
   </div>
 </div>
 
@@ -313,6 +329,57 @@ async function placeOrder(){
 
 loadProducts();
 addOrderItem();
+
+// Language translations
+const translations={
+  en:{
+    splash_title:'Cola Next',splash_sub:'Browse Products & Place Orders',
+    tab_products:'Products',tab_order:'Place Order',
+    your_order:'Your Order',add_item:'Add Item',total:'Total:',
+    your_name:'Your Name',phone:'Phone Number',notes:'Notes (optional)',
+    place_order:'Place Order',order_placed:'Order Placed!',order_received:'Your order has been received. We will contact you soon.',ok:'OK',
+    enter_name:'Enter your name',enter_phone:'0300 1234567',special_instructions:'Any special instructions...',
+    pcs:'/case',available:'available'
+  },
+  ur:{
+    splash_title:'کولا نیکسٹ',splash_sub:'مصنوعات دیکھیں اور آرڈر دیں',
+    tab_products:'مصنوعات',tab_order:'آرڈر دیں',
+    your_order:'آپ کا آرڈر',add_item:'شامل کریں',total:'کل:',
+    your_name:'آپ کا نام',phone:'فون نمبر',notes:'نوٹس (اختیاری)',
+    place_order:'آرڈر دیں',order_placed:'آرڈر ہو گیا!',order_received:'آپ کا آرڈر مل گیا ہے۔ ہم جلد آپ سے رابطہ کریں گے۔',ok:'ٹھیک ہے',
+    enter_name:'اپنا نام لکھیں',enter_phone:'0300 1234567',special_instructions:'کوئی خاص ہدایات...',
+    pcs:'/کیس',available:'دستیاب'
+  }
+};
+let currentLang='en';
+
+function setLang(lang,btn){
+  currentLang=lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const t=translations[lang];
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const key=el.getAttribute('data-t');
+    if(t[key])el.textContent=t[key];
+  });
+  document.querySelectorAll('[data-t-placeholder]').forEach(el=>{
+    const key=el.getAttribute('data-t-placeholder');
+    if(t[key])el.placeholder=t[key];
+  });
+  document.querySelectorAll('.product-tag:last-child').forEach(el=>{
+    if(el.textContent.includes('/case')||el.textContent.includes('/کیس')){
+      const num=el.textContent.split('/')[0];
+      el.textContent=num+t.pcs;
+    }
+  });
+  if(lang==='ur'){
+    document.documentElement.setAttribute('dir','rtl');
+    document.documentElement.setAttribute('lang','ur');
+  }else{
+    document.documentElement.setAttribute('dir','ltr');
+    document.documentElement.setAttribute('lang','en');
+  }
+}
 </script>
 </body>
 </html>
