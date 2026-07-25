@@ -314,6 +314,7 @@ function switchTab(n){
 async function loadProducts(){
   allProducts=await(await fetch(API+'/api/products')).json();
   renderProducts(allProducts);
+  if(orderItemIndex===0)addOrderItem();
 }
 
 function renderProducts(products){
@@ -426,7 +427,6 @@ function applyLang(){
 }
 
 loadProducts();
-addOrderItem();
 </script>
 </body>
 </html>
