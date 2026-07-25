@@ -154,13 +154,6 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 .cart-fab:hover{transform:scale(1.1)}
 .cart-fab .badge-count{position:absolute;top:-4px;right:-4px;background:#fff;color:var(--primary);width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary)}
 
-[dir="rtl"]{direction:rtl;text-align:right}
-[dir="rtl"] .sidebar{left:auto;right:0}
-[dir="rtl"] .nav-btn{border-left:none;border-right:3px solid transparent}
-[dir="rtl"] .nav-btn.active{border-right-color:var(--primary);border-left-color:transparent}
-[dir="rtl"] .fav-btn{left:auto;right:10px}
-[dir="rtl"] .quick-add{right:auto;left:10px}
-
 @media(max-width:1024px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
@@ -503,7 +496,7 @@ const T={
   ur:{info_text:'پاکستان کی اپنی پریمیم بیوریج کمپنی۔ ہماری مصنوعات آپ کے لیے!',all_products:'تمام مصنوعات',your_order:'آپ کا آرڈر',add_item:'شامل کریں',total:'کل:',your_details:'آپ کی معلومات',your_name:'آپ کا نام',phone:'فون نمبر',address:'ڈلیوری ایڈریس',notes:'نوٹس (اختیاری)',submit_order:'آرڈر جمع کریں',my_orders:'میرے آرڈرز',total_orders:'کل آرڈرز',total_spent:'کل خرچ',contact_us:'رابطہ کریں',contact_text:'کوئی بھی سوال ہو توہم سے رابطہ کریں!',order_placed:'آرڈر کامیابی سے ہو گیا!',order_msg:'آپ کا آرڈر مل گیا ہے۔ ہم جلد آپ سے رابطہ کریں گے۔',order_num:'آرڈر نمبر',order_details:'آرڈر کی تفصیلات',close:'بند کریں',th_order:'آرڈر #',th_date:'تاریخ',th_items:'اشیاء',th_total:'کل',th_status:'حالت',th_action:'عمل'}
 };
 let currentLang='en';
-function setLang(lang,btn){currentLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');applyLang();if(lang==='ur'){document.documentElement.setAttribute('dir','rtl')}else{document.documentElement.setAttribute('dir','ltr')}}
+function setLang(lang,btn){currentLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');applyLang()}
 function applyLang(){const t=T[currentLang];document.querySelectorAll('[data-t]').forEach(el=>{const key=el.getAttribute('data-t');if(t[key])el.textContent=t[key]})}
 
 loadProducts();
