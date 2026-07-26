@@ -74,8 +74,12 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
 .dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:0;padding:0 10px;z-index:1;pointer-events:none}
-.dash-bg-strip img{height:160px;width:auto;max-width:85px;object-fit:contain;opacity:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
-.dash-bg-strip img:hover{transform:translateY(-10px) scale(1.15);filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
+.dash-bg-strip img{height:160px;width:auto;max-width:85px;object-fit:contain;opacity:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0;cursor:pointer}
+.dash-bg-strip img:nth-child(5n+1):hover{animation:bottleSpin .6s ease-in-out;transform:translateY(-15px) scale(1.1);filter:drop-shadow(0 12px 30px rgba(227,30,36,.5))}
+.dash-bg-strip img:nth-child(5n+2):hover{animation:bottleBounceUp .8s ease-in-out;transform:scale(1.12);filter:drop-shadow(0 12px 30px rgba(0,166,81,.5))}
+.dash-bg-strip img:nth-child(5n+3):hover{animation:bottleWiggle .5s ease-in-out;transform:scale(1.1);filter:drop-shadow(0 12px 30px rgba(255,107,0,.5))}
+.dash-bg-strip img:nth-child(5n+4):hover{animation:bottleJello .6s ease-in-out;transform:scale(1.15);filter:drop-shadow(0 12px 30px rgba(255,20,147,.5))}
+.dash-bg-strip img:nth-child(5n+5):hover{animation:bottleSwing .6s ease-in-out;transform:scale(1.1);filter:drop-shadow(0 12px 30px rgba(26,35,126,.5))}
 @keyframes bannerFadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .dash-water{position:absolute;bottom:0;left:0;width:200%;height:70px;z-index:0;opacity:.15}
 .dash-water-layer{position:absolute;width:200%;height:100%;bottom:0;left:0}
@@ -200,6 +204,18 @@ tr:hover{background:rgba(227,30,36,.02)}
 @keyframes bgParallax{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes rippleBg{0%{box-shadow:inset 0 0 0 0 rgba(227,30,36,.08)}50%{box-shadow:inset 0 0 0 20px rgba(227,30,36,0)}100%{box-shadow:inset 0 0 0 0 rgba(227,30,36,.08)}}
 @keyframes floatParticles{0%,100%{transform:translateY(0) translateX(0)}25%{transform:translateY(-15px) translateX(10px)}50%{transform:translateY(-8px) translateX(-5px)}75%{transform:translateY(-20px) translateX(8px)}}
+
+/* ============ 5 BOTTLE HOVER ANIMATIONS ============ */
+@keyframes bottleSpin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.1)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes bottleBounceUp{0%,100%{transform:translateY(0)}20%{transform:translateY(-25px) rotate(-5deg)}40%{transform:translateY(0) rotate(3deg)}60%{transform:translateY(-15px) rotate(-2deg)}80%{transform:translateY(0)}}
+@keyframes bottleWiggle{0%,100%{transform:rotate(0)}15%{transform:rotate(-15deg)}30%{transform:rotate(12deg)}45%{transform:rotate(-8deg)}60%{transform:rotate(5deg)}75%{transform:rotate(-3deg)}}
+@keyframes bottleJello{0%,100%{transform:skewX(0) skewY(0) scale(1)}15%{transform:skewX(-8deg) skewY(-3deg) scale(1.02)}30%{transform:skewX(5deg) skewY(2deg) scale(1.01)}45%{transform:skewX(-3deg) skewY(-1deg)}60%{transform:skewX(2deg) skewY(1deg)}75%{transform:skewX(-1deg)}}
+@keyframes bottleSwing{0%,100%{transform-origin:top center;transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.anim-spin .bottle-real:hover{animation:bottleSpin .6s ease-in-out!important}
+.anim-bounce .bottle-real:hover{animation:bottleBounceUp .8s ease-in-out!important}
+.anim-wiggle .bottle-real:hover{animation:bottleWiggle .5s ease-in-out!important}
+.anim-jello .bottle-real:hover{animation:bottleJello .6s ease-in-out!important}
+.anim-swing .bottle-real:hover{animation:bottleSwing .6s ease-in-out!important}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:18px}
 .product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .35s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;animation:fadeInUp .5s ease-out}
 .product-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 35px rgba(0,0,0,.12)}
@@ -866,7 +882,8 @@ function renderProducts(products){
   grid.innerHTML=products.length?products.map((p,i)=>{
     const c=colorMap[p.name]||p.color||'#e31e24';
     const sb=p.stock<10?'danger':p.stock<20?'warning':'success';
-    return `<div class="product-card" style="animation-delay:${i*0.05}s">
+    const anims=['anim-spin','anim-bounce','anim-wiggle','anim-jello','anim-swing'];
+    return `<div class="product-card ${anims[i%5]}" style="animation-delay:${i*0.05}s">
       <div class="product-actions">
         <button class="product-view-btn" onclick="editProduct(${p.id})"><i class="fas fa-pen"></i></button>
         <button class="product-view-btn danger" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
