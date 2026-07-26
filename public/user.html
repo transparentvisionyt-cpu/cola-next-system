@@ -596,7 +596,7 @@ function switchTab(n){
   document.getElementById('tab-'+n).classList.add('active');
   document.querySelector(`[data-tab="${n}"]`).classList.add('active');
   const info={products:['Products','Browse all products'],order:['Place Order','Review cart & order'],myorders:['My Orders','View your orders'],contact:['Contact Us','Get in touch']};
-  applyLang();toggleSidebar();
+  applyLang();
   if(n==='products')loadProducts();
   if(n==='order')renderOrderItems();
   if(n==='myorders')loadMyOrders();
