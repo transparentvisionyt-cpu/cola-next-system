@@ -127,7 +127,8 @@ app.post('/api/orders', (req, res) => {
   let total_amount = 0;
   for (const item of items) {
     const product = get('SELECT sale_price FROM products WHERE id=?', [item.product_id]);
-    total_amount += product.sale_price * item.quantity;
+    const unitPrice = (item.price && item.price > 0) ? item.price : product.sale_price;
+    total_amount += unitPrice * item.quantity;
   }
 
   const net_amount = total_amount - (discount || 0);
@@ -136,7 +137,8 @@ app.post('/api/orders', (req, res) => {
 
   for (const item of items) {
     const product = get('SELECT sale_price FROM products WHERE id=?', [item.product_id]);
-    run('INSERT INTO order_items (order_id, product_id, quantity, price, total) VALUES (?, ?, ?, ?, ?)', [result.lastInsertRowid, item.product_id, item.quantity, product.sale_price, product.sale_price * item.quantity]);
+    const unitPrice = (item.price && item.price > 0) ? item.price : product.sale_price;
+    run('INSERT INTO order_items (order_id, product_id, quantity, price, total) VALUES (?, ?, ?, ?, ?)', [result.lastInsertRowid, item.product_id, item.quantity, unitPrice, unitPrice * item.quantity]);
     run('UPDATE products SET stock = stock - ? WHERE id = ?', [item.quantity, item.product_id]);
   }
 
