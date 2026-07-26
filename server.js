@@ -359,6 +359,9 @@ app.get('/api/reports/profit', (req, res) => {
 
 // ============ START ============
 initDB().then(() => {
+  run("UPDATE settings SET phone='03241281605', whatsapp='923241281605' WHERE id=1");
+  run("UPDATE users SET phone='03241281605' WHERE role='admin'");
+  console.log('Phone numbers updated to 03241281605');
   app.listen(PORT, () => {
     console.log(`
 ╔══════════════════════════════════════════════════╗

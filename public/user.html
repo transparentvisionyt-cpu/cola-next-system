@@ -224,20 +224,20 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 .sidebar-badge{background:var(--primary);color:#fff;min-width:20px;height:20px;border-radius:10px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;margin-left:auto}
 
 @media(max-width:1024px){
-  .sidebar{transform:translateX(-100%);width:260px}
-  .sidebar.open{transform:translateX(0)}
-  .sidebar-overlay.show{display:block}
-  .main{margin-left:0}
-  .menu-toggle{display:flex}
+  .sidebar{transform:translateX(-100%)!important;width:260px!important}
+  .sidebar.open{transform:translateX(0)!important}
+  .sidebar-overlay.show{display:block!important}
+  .main{margin-left:0!important}
+  .menu-toggle{display:flex!important}
   .product-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
   .product-img{height:140px}
 }
 @media(max-width:768px){
   .topbar{height:50px;padding:0 12px}
   .topbar h2{font-size:15px;font-weight:700}
-  .topbar .sub{display:none}
+  .topbar .sub{display:none!important}
   .topbar-right{gap:6px}
-  .info-phone-top,.info-wa-top{display:none}
+  .info-phone-top,.info-wa-top{display:none!important}
   .whatsapp-btn{padding:7px 12px;font-size:11px;border-radius:8px}
   .lang-btn{padding:5px 10px;font-size:10px;border-radius:8px}
   .menu-toggle{width:36px;height:36px;font-size:16px;border-radius:8px}
@@ -384,9 +384,9 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
       <div><h2 style="font-size:22px;font-weight:900;color:var(--text);letter-spacing:1px;margin:0;line-height:1.1">COLA NEXT</h2><span style="font-size:11px;color:var(--text2);font-weight:500">Premium Beverages Distribution</span></div>
     </div>
     <div class="topbar-right" style="gap:16px">
-      <a id="info-phone-top" href="tel:+923000000000" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fas fa-phone" style="color:var(--primary)"></i> <span class="info-phone-text">0300 0000000</span></a>
-      <a id="info-wa-top" href="https://wa.me/923000000000" target="_blank" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</a>
-      <a id="topbar-wa" href="https://wa.me/923000000000" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a id="info-phone-top" href="tel:+923241281605" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fas fa-phone" style="color:var(--primary)"></i> <span class="info-phone-text">03241281605</span></a>
+      <a id="info-wa-top" href="https://wa.me/923241281605" target="_blank" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</a>
+      <a id="topbar-wa" href="https://wa.me/923241281605" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       <button class="lang-btn active" onclick="setLang('en',this)">EN</button>
       <button class="lang-btn" onclick="setLang('ur',this)">اردو</button>
     </div>
@@ -499,8 +499,8 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     <h2><i class="fas fa-headset" style="margin-right:8px"></i> <span data-t="contact_us">Contact Us</span></h2>
     <p data-t="contact_text">Koi bhi sawal ho toh hamare sath rabta karein. Hum aapki madad karenge!</p>
     <div class="contact-grid" style="grid-template-columns:1fr">
-      <a id="ct-phone" href="tel:+923000000000" class="contact-item"><i class="fas fa-phone"></i><span class="ct-phone-text">0300 0000000</span></a>
-      <a id="ct-wa" href="https://wa.me/923000000000" target="_blank" class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+      <a id="ct-phone" href="tel:+923241281605" class="contact-item"><i class="fas fa-phone"></i><span class="ct-phone-text">03241281605</span></a>
+      <a id="ct-wa" href="https://wa.me/923241281605" target="_blank" class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
       <a id="ct-email" href="mailto:info@colanext.com" class="contact-item"><i class="fas fa-envelope"></i><span class="ct-email-text">info@colanext.com</span></a>
     </div>
   </div>
@@ -821,8 +821,8 @@ async function loadUserSettings(){
   try{
     const s=await(await fetch(API+'/api/settings')).json();
     if(!s)return;
-    const ph=s.phone||'0300 0000000';
-    const wa=s.whatsapp||s.phone||'923000000000';
+    const ph=s.phone||'03241281605';
+    const wa=s.whatsapp||s.phone||'923241281605';
     const em=s.email||'info@colanext.com';
     const waClean=wa.replace(/[^0-9]/g,'');
     const cn=s.company_name||'Cola Next';

@@ -391,8 +391,8 @@ tr:hover{background:rgba(227,30,36,.02)}
       <div><h2 style="font-size:22px;font-weight:900;color:var(--text);letter-spacing:1px;margin:0;line-height:1.1">COLA NEXT</h2><span style="font-size:11px;color:var(--text2);font-weight:500">Premium Beverages Distribution</span></div>
     </div>
     <div style="display:flex;align-items:center;gap:16px">
-      <a id="info-phone-top" href="tel:+923000000000" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fas fa-phone" style="color:var(--primary)"></i> <span class="info-phone-text">0300 0000000</span></a>
-      <a id="info-wa-top" href="https://wa.me/923000000000" target="_blank" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</a>
+      <a id="info-phone-top" href="tel:+923241281605" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fas fa-phone" style="color:var(--primary)"></i> <span class="info-phone-text">03241281605</span></a>
+      <a id="info-wa-top" href="https://wa.me/923241281605" target="_blank" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</a>
       <span style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px"><i class="fas fa-calendar"></i><span id="todayDate"></span></span>
     </div>
   </div>
@@ -931,8 +931,8 @@ async function loadDashboard(){
   document.getElementById('d-lowStock').innerHTML=d.lowStock.length?d.lowStock.map(p=>{const pets=p.stock*p.pieces_per_case;return `<tr><td>${p.name}</td><td>${p.size}</td><td><span class="badge badge-${pets<200?'danger':'warning'}">${pets.toLocaleString()} PETs</span></td></tr>`}).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text2)">All OK</td></tr>';
   try{
     const s=await(await fetch(API+'/api/settings')).json();
-    const ph=s.phone||'0300 0000000';
-    const wa=s.whatsapp||s.phone||'923000000000';
+    const ph=s.phone||'03241281605';
+    const wa=s.whatsapp||s.phone||'923241281605';
     const waClean=wa.replace(/[^0-9]/g,'');
     const ipt=document.getElementById('info-phone-top');
     if(ipt){ipt.href='tel:'+ph.replace(/[^0-9+]/g,'').replace(/^0/,'+92');ipt.querySelector('.info-phone-text').textContent=ph}
