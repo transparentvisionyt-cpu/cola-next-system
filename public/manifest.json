@@ -1,0 +1,22 @@
+{
+  "name": "Cola Next Distributor Management",
+  "short_name": "Cola Next",
+  "description": "Complete distributor management system for Cola Next beverages",
+  "start_url": "/user",
+  "display": "standalone",
+  "background_color": "#e31e24",
+  "theme_color": "#e31e24",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
