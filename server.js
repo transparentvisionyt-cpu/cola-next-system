@@ -251,9 +251,31 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.put('/api/settings', (req, res) => {
-  const { company_name, phone, whatsapp, email, address, credit_terms_days } = req.body;
-  run('UPDATE settings SET company_name=?, phone=?, whatsapp=?, email=?, address=?, credit_terms_days=? WHERE id=1', [company_name, phone, whatsapp || '', email || '', address, credit_terms_days]);
+  const { company_name, phone, whatsapp, email, address, credit_terms_days, logo_path, panel_name } = req.body;
+  run('UPDATE settings SET company_name=?, phone=?, whatsapp=?, email=?, address=?, credit_terms_days=?, logo_path=?, panel_name=? WHERE id=1', [company_name, phone, whatsapp || '', email || '', address || '', credit_terms_days || 30, logo_path || '', panel_name || 'Cola Next Admin']);
   res.json({ success: true });
+});
+
+app.put('/api/settings/password', (req, res) => {
+  const { old_password, new_password } = req.body;
+  const s = get('SELECT * FROM settings LIMIT 1');
+  const currentPw = s.admin_password || 'cola2026admin';
+  if (old_password !== currentPw) return res.status(400).json({ error: 'Current password is wrong' });
+  if (!new_password || new_password.length < 4) return res.status(400).json({ error: 'Password must be 4+ characters' });
+  run('UPDATE settings SET admin_password=? WHERE id=1', [new_password]);
+  run('UPDATE users SET password=? WHERE username=? AND role=?', [new_password, 'admin', 'admin']);
+  res.json({ success: true });
+});
+
+app.post('/api/settings/logo', (req, res) => {
+  const { image, filename } = req.body;
+  if (!image) return res.status(400).json({ error: 'image required' });
+  const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+  const fname = filename || 'company-logo.png';
+  const filePath = path.join(uploadDir, fname);
+  fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+  run('UPDATE settings SET logo_path=? WHERE id=1', ['/uploads/' + fname]);
+  res.json({ url: '/uploads/' + fname });
 });
 
 // ============ IMAGE UPLOAD ============

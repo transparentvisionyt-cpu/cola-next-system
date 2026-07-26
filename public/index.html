@@ -311,7 +311,7 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
+  <div class="sidebar-logo" id="sidebar-logo">
     <div class="icon"><i class="fas fa-bottle-water"></i></div>
     <div><h1>Cola Next</h1><span>DISTRIBUTOR SYSTEM</span></div>
   </div>
@@ -481,11 +481,6 @@ tr:hover{background:rgba(227,30,36,.02)}
     </div>
     <div class="dash-wave"></div>
     <div class="dash-water"><div class="dash-water-layer"></div><div class="dash-water-layer"></div><div class="dash-water-layer"></div></div>
-    <div class="banner-title-wrap">
-      <div class="banner-icon"><i class="fas fa-warehouse"></i></div>
-      <h1 style="font-size:28px">Godown Inventory</h1>
-      <div class="banner-sub">Complete stock overview</div>
-    </div>
   </div>
   <div class="stats-row" style="margin-top:16px">
     <div class="stat-box"><h4 id="g-totalCases">0</h4><p>Total PETs</p></div>
@@ -493,16 +488,26 @@ tr:hover{background:rgba(227,30,36,.02)}
     <div class="stat-box"><h4 id="g-totalValue">0</h4><p>Stock Value</p></div>
     <div class="stat-box"><h4 id="g-lowStock">0</h4><p>Low Stock Items</p></div>
   </div>
-  <div class="card">
+
+  <div class="card" style="margin-bottom:16px">
     <div class="card-header">
-      <h3><i class="fas fa-boxes-stacked"></i>Stock Details</h3>
+      <h3><i class="fas fa-boxes-stacked"></i> Quick PETs Overview</h3>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-success btn-sm" onclick="openStockModal('add')"><i class="fas fa-plus"></i> Add PETs</button>
+        <button class="btn btn-success btn-sm" onclick="openStockModal('add')"><i class="fas fa-pen"></i> Add PETs</button>
         <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="openStockModal('remove')"><i class="fas fa-minus"></i> Remove PETs</button>
       </div>
     </div>
+    <div class="card-body" style="padding:12px">
+      <div id="g-breakdown" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3><i class="fas fa-table"></i> Stock Details</h3>
+    </div>
     <div class="card-body" style="padding:0;overflow-x:auto">
-      <table><thead><tr><th>Product</th><th>Category</th><th>Size</th><th>Pcs/Case</th><th>Stock</th><th>Value</th><th>Status</th><th>Action</th></tr></thead><tbody id="g-body"></tbody></table>
+      <table><thead><tr><th>Product</th><th>Category</th><th>Size</th><th>Pcs/Case</th><th>Cases</th><th>PETs</th><th>Value</th><th>Status</th><th>Action</th></tr></thead><tbody id="g-body"></tbody></table>
     </div>
   </div>
 </div>
@@ -596,18 +601,46 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- SETTINGS -->
 <div id="tab-settings" class="tab">
-  <div class="card" style="max-width:500px">
-    <div class="card-header"><h3><i class="fas fa-gear"></i> Settings</h3></div>
-    <div class="card-body">
-      <div class="form-group"><label class="label">Company Name</label><input id="s-name" class="input"></div>
-      <div class="form-row">
-        <div class="form-group"><label class="label">Phone</label><input id="s-phone" class="input" placeholder="0300 1234567"></div>
-        <div class="form-group"><label class="label">WhatsApp</label><input id="s-whatsapp" class="input" placeholder="923001234567"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-store"></i> Company Info</h3></div>
+      <div class="card-body">
+        <div class="form-group"><label class="label">Company Name</label><input id="s-name" class="input"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="label">Phone</label><input id="s-phone" class="input" placeholder="0300 1234567"></div>
+          <div class="form-group"><label class="label">WhatsApp</label><input id="s-whatsapp" class="input" placeholder="923001234567"></div>
+        </div>
+        <div class="form-group"><label class="label">Email</label><input id="s-email" class="input" placeholder="info@colanext.com"></div>
+        <div class="form-group"><label class="label">Address</label><input id="s-address" class="input"></div>
+        <div class="form-group"><label class="label">Credit Terms (Days)</label><input id="s-credit" type="number" class="input"></div>
+        <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save</button>
       </div>
-      <div class="form-group"><label class="label">Email</label><input id="s-email" class="input" placeholder="info@colanext.com"></div>
-      <div class="form-group"><label class="label">Address</label><input id="s-address" class="input"></div>
-      <div class="form-group"><label class="label">Credit Terms (Days)</label><input id="s-credit" type="number" class="input"></div>
-      <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-header"><h3><i class="fas fa-image"></i> Logo & Branding</h3></div>
+        <div class="card-body">
+          <div class="form-group"><label class="label">Panel Name (Sidebar)</label><input id="s-panelname" class="input" placeholder="Cola Next Admin"></div>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+            <div id="logoPreview" style="width:80px;height:80px;border-radius:16px;background:var(--bg);display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);overflow:hidden">
+              <i class="fas fa-image" style="font-size:24px;color:var(--text2)"></i>
+            </div>
+            <div style="flex:1">
+              <input type="file" id="logoFile" accept="image/*" style="display:none" onchange="uploadLogo(this)">
+              <button class="btn btn-primary btn-sm" onclick="document.getElementById('logoFile').click()"><i class="fas fa-upload"></i> Upload Logo</button>
+              <p style="font-size:11px;color:var(--text2);margin-top:6px">Recommended: 200x200px PNG</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3><i class="fas fa-lock"></i> Change Password</h3></div>
+        <div class="card-body">
+          <div class="form-group"><label class="label">Current Password</label><input id="s-oldpw" type="password" class="input" placeholder="Enter current password"></div>
+          <div class="form-group"><label class="label">New Password</label><input id="s-newpw" type="password" class="input" placeholder="Enter new password (4+ chars)"></div>
+          <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="changePassword()"><i class="fas fa-key"></i> Change Password</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -889,7 +922,53 @@ async function loadGodown(){
   document.getElementById('g-totalProducts').textContent=p.length;
   document.getElementById('g-totalValue').textContent='Rs.'+fmt(totalValue);
   document.getElementById('g-lowStock').textContent=lowStock.length;
-  document.getElementById('g-body').innerHTML=p.map(x=>{const c=colorMap[x.name]||x.color||'#e31e24';const v=x.purchase_price*x.stock;const pets=x.stock*x.pieces_per_case;const sb=pets<200?'danger':pets<500?'warning':'success';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(x.name,x.size)}" style="width:16px;height:30px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${x.name}</strong></div></td><td><span class="badge badge-${x.category==='Classic'?'info':'warning'}">${x.category}</span></td><td>${x.size}</td><td>${x.pieces_per_case}</td><td><span class="badge badge-${sb}">${pets.toLocaleString()} PETs</span></td><td>Rs.${fmt(v)}</td><td><span class="badge badge-${sb}">${pets<200?'LOW':pets<500?'Medium':'OK'}</span></td><td><div style="display:flex;gap:4px"><button class="product-view-btn" onclick="openStockModal('add',${x.id})" title="Add PETs"><i class="fas fa-plus"></i></button><button class="product-view-btn danger" onclick="openStockModal('remove',${x.id})" title="Remove PETs"><i class="fas fa-minus"></i></button></div></td></tr>`}).join('');
+
+  const grouped={};
+  p.forEach(x=>{
+    if(!grouped[x.name])grouped[x.name]={items:[],totalPets:0,color:x.color||'#e31e24'};
+    const pets=x.stock*x.pieces_per_case;
+    grouped[x.name].items.push(x);
+    grouped[x.name].totalPets+=pets;
+  });
+  document.getElementById('g-breakdown').innerHTML=Object.entries(grouped).map(([name,g])=>{
+    const cards=g.items.map(x=>{
+      const pets=x.stock*x.pieces_per_case;
+      const sb=pets<200?'danger':pets<500?'warning':'success';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:12px">
+        <img src="${getBottleImg(x.name,x.size)}" style="width:14px;height:28px;object-fit:contain" onerror="this.style.display='none'">
+        <span style="color:var(--text2)">${x.size}</span>
+        <span class="badge badge-${sb}" style="margin-left:auto">${pets.toLocaleString()} PETs</span>
+      </div>`;
+    }).join('');
+    return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+        <div style="width:8px;height:8px;border-radius:50%;background:${g.color}"></div>
+        <strong style="font-size:13px">${name}</strong>
+        <span style="margin-left:auto;font-size:11px;color:var(--text2)">${g.totalPets.toLocaleString()} PETs</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">${cards}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('g-body').innerHTML=p.map(x=>{
+    const v=x.purchase_price*x.stock;
+    const pets=x.stock*x.pieces_per_case;
+    const sb=pets<200?'danger':pets<500?'warning':'success';
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(x.name,x.size)}" style="width:16px;height:30px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${x.name}</strong></div></td>
+      <td><span class="badge badge-${x.category==='Classic'?'info':'warning'}">${x.category}</span></td>
+      <td>${x.size}</td>
+      <td>${x.pieces_per_case}</td>
+      <td>${x.stock.toLocaleString()}</td>
+      <td><span class="badge badge-${sb}">${pets.toLocaleString()} PETs</span></td>
+      <td>Rs.${fmt(v)}</td>
+      <td><span class="badge badge-${sb}">${pets<200?'LOW':pets<500?'Medium':'OK'}</span></td>
+      <td><div style="display:flex;gap:4px">
+        <button class="product-view-btn" onclick="openStockModal('add',${x.id})" title="Add PETs"><i class="fas fa-pen"></i></button>
+        <button class="product-view-btn danger" onclick="openStockModal('remove',${x.id})" title="Remove PETs"><i class="fas fa-minus"></i></button>
+      </div></td>
+    </tr>`;
+  }).join('');
 }
 let stockMode='add';
 function openStockModal(mode,pid){
@@ -975,8 +1054,59 @@ async function loadRetailerDropdown(){allRetailers=await(await fetch(API+'/api/r
 async function loadLedger(){const id=document.getElementById('lg-retailer').value;if(!id)return;const data=await(await fetch(API+'/api/retailers/'+id+'/ledger')).json();document.getElementById('lg-balance').textContent='Rs.'+fmt(data.retailer.current_balance);document.getElementById('lg-purchases').textContent='Rs.'+fmt(data.retailer.total_purchases);document.getElementById('lg-orders').innerHTML=data.orders.length?data.orders.map(o=>`<tr><td>${new Date(o.order_date).toLocaleDateString()}</td><td>${o.order_number}</td><td>Rs.${fmt(o.net_amount)}</td></tr>`).join(''):'<tr><td colspan="3">No orders</td></tr>';document.getElementById('lg-payments').innerHTML=data.payments.length?data.payments.map(p=>`<tr><td>${new Date(p.payment_date).toLocaleDateString()}</td><td style="color:var(--success)">Rs.${fmt(p.amount)}</td></tr>`).join(''):'<tr><td colspan="2">No payments</td></tr>'}
 
 // ============ SETTINGS ============
-async function loadSettings(){const s=await(await fetch(API+'/api/settings')).json();document.getElementById('s-name').value=s.company_name||'';document.getElementById('s-phone').value=s.phone||'';document.getElementById('s-whatsapp').value=s.whatsapp||'';document.getElementById('s-email').value=s.email||'';document.getElementById('s-address').value=s.address||'';document.getElementById('s-credit').value=s.credit_terms_days||30}
-async function saveSettings(){const d={company_name:document.getElementById('s-name').value,phone:document.getElementById('s-phone').value,whatsapp:document.getElementById('s-whatsapp').value,email:document.getElementById('s-email').value,address:document.getElementById('s-address').value,credit_terms_days:parseInt(document.getElementById('s-credit').value)};await fetch(API+'/api/settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});toast('Settings saved!')}
+async function loadSettings(){
+  const s=await(await fetch(API+'/api/settings')).json();
+  document.getElementById('s-name').value=s.company_name||'';
+  document.getElementById('s-phone').value=s.phone||'';
+  document.getElementById('s-whatsapp').value=s.whatsapp||'';
+  document.getElementById('s-email').value=s.email||'';
+  document.getElementById('s-address').value=s.address||'';
+  document.getElementById('s-credit').value=s.credit_terms_days||30;
+  document.getElementById('s-panelname').value=s.panel_name||'Cola Next Admin';
+  if(s.logo_path){
+    document.getElementById('logoPreview').innerHTML=`<img src="${s.logo_path}" style="width:100%;height:100%;object-fit:cover">`;
+    const sbLogo=document.querySelector('#sidebar-logo .icon');
+    if(sbLogo) sbLogo.innerHTML=`<img src="${s.logo_path}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+  }
+  const pn=s.panel_name||'Cola Next';
+  const sbTitle=document.querySelector('#sidebar-logo h1');
+  if(sbTitle) sbTitle.textContent=pn;
+  const tbTitle=document.querySelector('.topbar h2');
+  if(tbTitle) tbTitle.textContent=pn;
+}
+async function saveSettings(){
+  const d={
+    company_name:document.getElementById('s-name').value,
+    phone:document.getElementById('s-phone').value,
+    whatsapp:document.getElementById('s-whatsapp').value,
+    email:document.getElementById('s-email').value,
+    address:document.getElementById('s-address').value,
+    credit_terms_days:parseInt(document.getElementById('s-credit').value)||30,
+    panel_name:document.getElementById('s-panelname').value
+  };
+  await fetch(API+'/api/settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+  toast('Settings saved!');
+}
+function uploadLogo(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    const b64=e.target.result;
+    document.getElementById('logoPreview').innerHTML=`<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;
+    await fetch(API+'/api/settings/logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b64,filename:'company-logo.png'})});
+    toast('Logo updated!');
+  };
+  reader.readAsDataURL(file);
+}
+async function changePassword(){
+  const oldpw=document.getElementById('s-oldpw').value;
+  const newpw=document.getElementById('s-newpw').value;
+  if(!oldpw||!newpw){toast('Fill both fields','error');return}
+  const r=await fetch(API+'/api/settings/password',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({old_password:oldpw,new_password:newpw})});
+  const d=await r.json();
+  if(d.success){toast('Password changed!');document.getElementById('s-oldpw').value='';document.getElementById('s-newpw').value=''}
+  else toast(d.error||'Failed','error');
+}
 
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 </script>

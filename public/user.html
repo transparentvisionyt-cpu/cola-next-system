@@ -299,9 +299,9 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 </div>
 
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
+  <div class="sidebar-logo" id="sidebar-logo">
     <div class="icon"><i class="fas fa-bottle-water"></i></div>
-    <div><h1>Cola Next</h1></div>
+    <div><h1 id="sb-company-name">Cola Next</h1></div>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Menu</div>
@@ -773,6 +773,12 @@ async function loadUserSettings(){
     const wa=s.whatsapp||s.phone||'923000000000';
     const em=s.email||'info@colanext.com';
     const waClean=wa.replace(/[^0-9]/g,'');
+    const cn=s.company_name||'Cola Next';
+    document.getElementById('sb-company-name').textContent=cn;
+    if(s.logo_path){
+      const sbIcon=document.querySelector('#sidebar-logo .icon');
+      if(sbIcon)sbIcon.innerHTML=`<img src="${s.logo_path}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+    }
     const topWa=document.getElementById('topbar-wa');
     if(topWa)topWa.href='https://wa.me/'+waClean;
     const ipt=document.getElementById('info-phone-top');

@@ -114,9 +114,17 @@ async function initDB() {
       whatsapp TEXT,
       email TEXT,
       address TEXT,
-      credit_terms_days INTEGER DEFAULT 30
+      credit_terms_days INTEGER DEFAULT 30,
+      logo_path TEXT DEFAULT '',
+      panel_name TEXT DEFAULT 'Cola Next Admin',
+      admin_password TEXT DEFAULT 'cola2026admin'
     )
   `);
+
+  const cols = ["logo_path","panel_name","admin_password"];
+  cols.forEach(c => {
+    try { db.run(`ALTER TABLE settings ADD COLUMN ${c} TEXT DEFAULT ''`); } catch(e){}
+  });
 
   seedProducts();
   seedSettings();
