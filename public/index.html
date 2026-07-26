@@ -71,9 +71,9 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-banner::before{content:'';position:absolute;bottom:0;left:0;width:200%;height:80px;background:rgba(255,255,255,.06);animation:waterWave 3s ease-in-out infinite;border-radius:40%}
 .dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
-.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-evenly;gap:0;padding:0 20px;z-index:1;pointer-events:none}
-.dash-bg-strip img{height:110px;width:auto;max-width:65px;object-fit:contain;opacity:.35;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));transition:all .5s cubic-bezier(.4,0,.2,1);flex-shrink:0}
-.dash-bg-strip img:hover{opacity:.7;transform:translateY(-8px) scale(1.1)}
+.dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:0;padding:0 10px;z-index:1;pointer-events:none}
+.dash-bg-strip img{height:130px;width:auto;max-width:70px;object-fit:contain;opacity:.5;filter:drop-shadow(0 2px 12px rgba(0,0,0,.4));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.dash-bg-strip img:hover{opacity:.85;transform:translateY(-10px) scale(1.15)}
 .dash-water{position:absolute;bottom:0;left:0;width:200%;height:70px;z-index:0;opacity:.15}
 .dash-water-layer{position:absolute;width:200%;height:100%;bottom:0;left:0}
 .dash-water-layer:nth-child(1){background:linear-gradient(90deg,transparent,#1a1a2e 20%,#16213e 40%,#0f3460 60%,#1a1a2e 80%,transparent);animation:waterScroll 8s linear infinite;opacity:.6}
@@ -352,7 +352,7 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- DASHBOARD -->
 <div id="tab-dashboard" class="tab active">
-  <div class="dash-banner">
+  <div class="dash-banner" style="min-height:220px">
     <div class="dash-bg-strip">
       <img src="/images/cola_250ml.webp" alt="">
       <img src="/images/cola_500ml.webp" alt="">
@@ -362,17 +362,25 @@ tr:hover{background:rgba(227,30,36,.02)}
       <img src="/images/dare_500ml.webp" alt="">
       <img src="/images/dare_1000ml.webp" alt="">
       <img src="/images/dare_1500ml.webp" alt="">
+      <img src="/images/dare_2250ml.webp" alt="">
       <img src="/images/fizzup_250ml.webp" alt="">
       <img src="/images/fizzup_500ml.webp" alt="">
       <img src="/images/fizzup_1000ml.webp" alt="">
+      <img src="/images/fizzup_1500ml.webp" alt="">
+      <img src="/images/fizzup_2250ml.webp" alt="">
       <img src="/images/rango_500ml.webp" alt="">
       <img src="/images/rango_1000ml.webp" alt="">
+      <img src="/images/rango_1500ml.webp" alt="">
+      <img src="/images/rango_2250ml.webp" alt="">
       <img src="/images/anaar_500ml.webp" alt="">
+      <img src="/images/anaar_1000ml.webp" alt="">
+      <img src="/images/anaar_1500ml.webp" alt="">
+      <img src="/images/anaar_2250ml.webp" alt="">
+      <img src="/images/storm_250ml.webp" alt="">
       <img src="/images/storm_500ml.webp" alt="">
+      <img src="/images/lychee_1000ml.webp" alt="">
+      <img src="/images/water_1500ml.webp" alt="">
     </div>
-    <div class="dash-bottle dash-bottle-1"><img src="/images/cola_1500ml.webp" alt="Cola Next"></div>
-    <div class="dash-bottle dash-bottle-2"><img src="/images/fizzup_500ml.webp" alt="Fizzup"></div>
-    <div class="dash-bottle dash-bottle-3"><img src="/images/storm_500ml.webp" alt="Storm"></div>
     <div class="dash-wave"></div>
     <div class="dash-water"><div class="dash-water-layer"></div><div class="dash-water-layer"></div><div class="dash-water-layer"></div></div>
     <div class="dash-particles">
@@ -442,23 +450,35 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- GODOWN -->
 <div id="tab-godown" class="tab">
-  <div class="dash-banner" style="min-height:180px">
+  <div class="dash-banner" style="min-height:220px">
     <div class="dash-bg-strip">
       <img src="/images/cola_250ml.webp" alt="">
       <img src="/images/cola_500ml.webp" alt="">
       <img src="/images/cola_1000ml.webp" alt="">
       <img src="/images/cola_1500ml.webp" alt="">
+      <img src="/images/cola_2250ml.webp" alt="">
       <img src="/images/dare_500ml.webp" alt="">
       <img src="/images/dare_1000ml.webp" alt="">
+      <img src="/images/dare_1500ml.webp" alt="">
+      <img src="/images/dare_2250ml.webp" alt="">
+      <img src="/images/fizzup_250ml.webp" alt="">
       <img src="/images/fizzup_500ml.webp" alt="">
       <img src="/images/fizzup_1000ml.webp" alt="">
+      <img src="/images/fizzup_1500ml.webp" alt="">
+      <img src="/images/fizzup_2250ml.webp" alt="">
       <img src="/images/rango_500ml.webp" alt="">
+      <img src="/images/rango_1000ml.webp" alt="">
+      <img src="/images/rango_1500ml.webp" alt="">
+      <img src="/images/rango_2250ml.webp" alt="">
       <img src="/images/anaar_500ml.webp" alt="">
+      <img src="/images/anaar_1000ml.webp" alt="">
+      <img src="/images/anaar_1500ml.webp" alt="">
+      <img src="/images/anaar_2250ml.webp" alt="">
+      <img src="/images/storm_250ml.webp" alt="">
       <img src="/images/storm_500ml.webp" alt="">
+      <img src="/images/lychee_1000ml.webp" alt="">
+      <img src="/images/water_1500ml.webp" alt="">
     </div>
-    <div class="dash-bottle dash-bottle-1"><img src="/images/cola_1500ml.webp" alt="Cola"></div>
-    <div class="dash-bottle dash-bottle-2"><img src="/images/dare_1500ml.webp" alt="Dare"></div>
-    <div class="dash-bottle dash-bottle-3"><img src="/images/rango_1500ml.webp" alt="Rango"></div>
     <div class="dash-wave"></div>
     <div class="dash-water"><div class="dash-water-layer"></div><div class="dash-water-layer"></div><div class="dash-water-layer"></div></div>
     <div class="dash-particles">
