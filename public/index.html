@@ -264,11 +264,11 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 /* ============ MOBILE ============ */
 @media(max-width:1024px){
-  .sidebar{transform:translateX(-100%);width:260px}
+  .sidebar{transform:translateX(0);width:240px}
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay.show{display:block}
-  .main{margin-left:0}
-  .menu-toggle{display:flex}
+  .main{margin-left:240px}
+  .menu-toggle{display:none}
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .grid-2{grid-template-columns:1fr}
   .form-row,.form-row-3{grid-template-columns:1fr}
@@ -280,6 +280,8 @@ tr:hover{background:rgba(227,30,36,.02)}
   .stats-row .stat-box h4{font-size:20px}
 }
 @media(max-width:768px){
+  .sidebar{width:200px}
+  .main{margin-left:200px}
   .product-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
   .product-img{height:120px}
   .product-info{padding:10px 12px}
@@ -288,6 +290,8 @@ tr:hover{background:rgba(227,30,36,.02)}
   .topbar{padding:8px 14px}
 }
 @media(max-width:480px){
+  .sidebar{width:180px}
+  .main{margin-left:180px}
   .content{padding:10px}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
   .kpi{padding:12px}
@@ -306,8 +310,8 @@ tr:hover{background:rgba(227,30,36,.02)}
   th,td{padding:6px 8px}
   .topbar{padding:6px 10px;flex-wrap:nowrap}
   .topbar h2{font-size:13px;font-weight:800}
-  .topbar .sub{display:none}
-  .info-phone-top,.info-wa-top{display:none}
+  .topbar .sub{font-size:9px}
+  .info-phone-top,.info-wa-top{font-size:11px}
   .sidebar-logo{padding:14px}
   .sidebar-logo h1{font-size:15px}
   .sidebar-logo .icon{width:38px;height:38px}
