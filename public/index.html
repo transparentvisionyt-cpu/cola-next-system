@@ -346,6 +346,7 @@ tr:hover{background:rgba(227,30,36,.02)}
     <button class="nav-btn" data-tab="ledger" onclick="switchTab('ledger')"><i class="fas fa-book"></i><span>Ledger</span></button>
     <div class="nav-label">System</div>
     <button class="nav-btn" data-tab="settings" onclick="switchTab('settings')"><i class="fas fa-gear"></i><span>Settings</span></button>
+    <button class="nav-btn" data-tab="faq" onclick="switchTab('faq')"><i class="fas fa-robot"></i><span>FAQ Bot</span></button>
   </nav>
   <div class="sidebar-user">
     <div class="avatar"><i class="fas fa-user"></i></div>
@@ -511,6 +512,7 @@ tr:hover{background:rgba(227,30,36,.02)}
       <div style="display:flex;gap:6px">
         <button class="btn btn-success btn-sm" onclick="openStockModal('add')"><i class="fas fa-pen"></i> Add PETs</button>
         <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="openStockModal('remove')"><i class="fas fa-minus"></i> Remove PETs</button>
+        <button class="btn btn-sm" style="background:#64748b;color:#fff" onclick="resetAllStock()"><i class="fas fa-undo"></i> Reset Stock</button>
       </div>
     </div>
     <div class="card-body" style="padding:12px">
@@ -685,6 +687,31 @@ tr:hover{background:rgba(227,30,36,.02)}
   </div>
 </div>
 
+<!-- FAQ BOT EDITOR -->
+<div id="tab-faq" class="tab">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-plus-circle"></i> Add / Edit FAQ</h3></div>
+      <div class="card-body">
+        <input type="hidden" id="faq-id">
+        <div class="form-group"><label class="label">Question</label><input id="faq-question" class="input" placeholder="e.g. Minimum order kitna hai?"></div>
+        <div class="form-group"><label class="label">Answer</label><textarea id="faq-answer" class="input" rows="3" placeholder="e.g. Koi minimum order nahi hai..." style="resize:vertical"></textarea></div>
+        <div class="form-group"><label class="label">Keywords (comma separated)</label><input id="faq-keywords" class="input" placeholder="e.g. minimum,order,kitna"></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-primary" onclick="saveFaq()"><i class="fas fa-save"></i> Save</button>
+          <button class="btn btn-sm" style="background:#64748b;color:#fff" onclick="resetFaqForm()"><i class="fas fa-undo"></i> Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-robot"></i> FAQ Questions (<span id="faq-count">0</span>)</h3></div>
+      <div class="card-body" style="padding:0;max-height:400px;overflow-y:auto">
+        <div id="faq-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -854,7 +881,7 @@ function switchTab(n){
   document.querySelector(`[data-tab="${n}"]`).classList.add('active');
   const info={dashboard:['Dashboard','Overview'],products:['Products','Inventory'],retailers:['Retailers','Shops'],godown:['Godown','Stock'],orders:['Orders','Sales'],payments:['Payments','Cash'],riders:['Riders','Delivery'],reports:['Reports','Analytics'],ledger:['Ledger','Account'],settings:['Settings','Config']};
   toggleSidebar();
-  const loaders={dashboard:loadDashboard,products:loadProducts,retailers:loadRetailers,godown:loadGodown,orders:loadOrders,payments:loadPayments,riders:loadRiders,reports:loadReports,ledger:loadRetailerDropdown,settings:loadSettings};
+  const loaders={dashboard:loadDashboard,products:loadProducts,retailers:loadRetailers,godown:loadGodown,orders:loadOrders,payments:loadPayments,riders:loadRiders,reports:loadReports,ledger:loadRetailerDropdown,settings:loadSettings,faq:loadFaq};
   if(loaders[n])loaders[n]();
 }
 
@@ -905,7 +932,7 @@ function renderProducts(products){
   const grid=document.getElementById('p-grid');
   grid.innerHTML=products.length?products.map((p,i)=>{
     const c=colorMap[p.name]||p.color||'#e31e24';
-    const sb=p.stock<10?'danger':p.stock<20?'warning':'success';
+    const sb=pets<100?'danger':pets<200?'warning':'success';
     const anims=['anim-spin','anim-bounce','anim-wiggle','anim-jello','anim-swing'];
     return `<div class="product-card ${anims[i%5]}" style="animation-delay:${i*0.05}s">
       <div class="product-actions">
@@ -931,7 +958,7 @@ function renderProducts(products){
     </div>`}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)"><i class="fas fa-box" style="font-size:40px;opacity:.3;display:block;margin-bottom:10px"></i>No products</div>';
 
   const body=document.getElementById('p-body');
-  body.innerHTML=products.map(p=>{const c=colorMap[p.name]||p.color||'#e31e24';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(p.name,p.size)}" style="width:20px;height:36px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${p.name}</strong></div></td><td><span class="badge badge-${p.category==='Classic'?'info':'warning'}">${p.category}</span></td><td>${p.size}</td><td>${p.pieces_per_case}</td><td>Rs.${fmt(p.purchase_price)}</td><td>Rs.${fmt(p.sale_price)}</td><td><span class="badge badge-${p.stock<10?'danger':p.stock<20?'warning':'success'}">${p.stock}</span></td><td><div class="action-btns"><button class="action-btn" onclick="editProduct(${p.id})"><i class="fas fa-pen"></i></button><button class="action-btn danger" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></td></tr>`}).join('');
+  body.innerHTML=products.map(p=>{const c=colorMap[p.name]||p.color||'#e31e24';return `<tr><td><div style="display:flex;align-items:center;gap:8px"><img src="${getBottleImg(p.name,p.size)}" style="width:20px;height:36px;object-fit:contain;border-radius:3px" onerror="this.style.display='none'"><strong>${p.name}</strong></div></td><td><span class="badge badge-${p.category==='Classic'?'info':'warning'}">${p.category}</span></td><td>${p.size}</td><td>${p.pieces_per_case}</td><td>Rs.${fmt(p.purchase_price)}</td><td>Rs.${fmt(p.sale_price)}</td><td><span class="badge badge-${(p.stock*p.pieces_per_case)<100?'danger':(p.stock*p.pieces_per_case)<200?'warning':'success'}">${p.stock}</span></td><td><div class="action-btns"><button class="action-btn" onclick="editProduct(${p.id})"><i class="fas fa-pen"></i></button><button class="action-btn danger" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></td></tr>`}).join('');
 }
 let currentView='grid';
 function setView(v){currentView=v;document.getElementById('p-grid').style.display=v==='grid'?'grid':'none';document.getElementById('p-list').style.display=v==='list'?'block':'none';document.getElementById('v-grid').classList.toggle('active',v==='grid');document.getElementById('v-list').classList.toggle('active',v==='list')}
@@ -958,7 +985,7 @@ async function loadGodown(){
   const totalCases=p.reduce((s,x)=>s+x.stock,0);
   const totalPets=p.reduce((s,x)=>s+(x.stock*x.pieces_per_case),0);
   const totalValue=p.reduce((s,x)=>s+(x.purchase_price*x.stock),0);
-  const lowStock=p.filter(x=>x.stock<20);
+  const lowStock=p.filter(x=>(x.stock*x.pieces_per_case)<100);
   document.getElementById('g-totalCases').textContent=totalPets.toLocaleString();
   document.getElementById('g-totalProducts').textContent=p.length;
   document.getElementById('g-totalValue').textContent='Rs.'+fmt(totalValue);
@@ -1219,6 +1246,17 @@ document.getElementById('s-primarycolor-hex').addEventListener('input',function(
 document.getElementById('s-bgcolor-hex').addEventListener('input',function(){try{document.getElementById('s-bgcolor').value=this.value}catch(e){}});
 document.getElementById('s-sidebarcolor-hex').addEventListener('input',function(){try{document.getElementById('s-sidebarcolor').value=this.value}catch(e){}});
 document.getElementById('s-headercolor-hex').addEventListener('input',function(){try{document.getElementById('s-headercolor').value=this.value}catch(e){}});
+
+// ============ STOCK RESET ============
+async function resetAllStock(){if(!confirm('Reset ALL product stock to 0? This cannot be undone!'))return;await fetch(API+'/api/products/reset-stock',{method:'PUT'});loadGodown();toast('All stock reset to 0!')}
+
+// ============ FAQ BOT EDITOR ============
+let allFaq=[];
+async function loadFaq(){allFaq=await(await fetch(API+'/api/faq')).json();document.getElementById('faq-count').textContent=allFaq.length;document.getElementById('faq-list').innerHTML=allFaq.length?allFaq.map(f=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);transition:background .2s" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px"><i class="fas fa-question-circle" style="color:var(--primary);margin-right:6px"></i>${f.question}</div><div style="font-size:12px;color:var(--text2);margin-bottom:4px">${f.answer}</div><div style="font-size:10px;color:var(--text2)"><i class="fas fa-tags" style="margin-right:4px"></i>${f.keywords||'No keywords'}</div></div><div style="display:flex;gap:4px;flex-shrink:0"><button class="action-btn" onclick="editFaq(${f.id})" title="Edit"><i class="fas fa-pen"></i></button><button class="action-btn danger" onclick="deleteFaq(${f.id})" title="Delete"><i class="fas fa-trash"></i></button></div></div>`).join(''):'<div style="text-align:center;padding:30px;color:var(--text2)"><i class="fas fa-robot" style="font-size:30px;margin-bottom:8px;display:block"></i>No FAQ questions yet. Add one!</div>'}
+function editFaq(id){const f=allFaq.find(x=>x.id===id);if(!f)return;document.getElementById('faq-id').value=f.id;document.getElementById('faq-question').value=f.question;document.getElementById('faq-answer').value=f.answer;document.getElementById('faq-keywords').value=f.keywords||'';document.getElementById('faq-question').focus()}
+async function deleteFaq(id){if(!confirm('Delete this FAQ?'))return;await fetch(API+'/api/faq/'+id,{method:'DELETE'});loadFaq();toast('FAQ deleted!')}
+async function saveFaq(){const id=document.getElementById('faq-id').value;const q=document.getElementById('faq-question').value.trim();const a=document.getElementById('faq-answer').value.trim();const k=document.getElementById('faq-keywords').value.trim();if(!q||!a){toast('Question & Answer required','error');return}const data={question:q,answer:a,keywords:k};if(id){await fetch(API+'/api/faq/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}else{await fetch(API+'/api/faq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}resetFaqForm();loadFaq();toast(id?'FAQ updated!':'FAQ added!')}
+function resetFaqForm(){document.getElementById('faq-id').value='';document.getElementById('faq-question').value='';document.getElementById('faq-answer').value='';document.getElementById('faq-keywords').value=''}
 </script>
 </body>
 </html>

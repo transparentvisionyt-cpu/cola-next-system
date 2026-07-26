@@ -95,6 +95,41 @@ app.get('/api/retailers/:id/ledger', (req, res) => {
   res.json({ retailer, payments, orders });
 });
 
+// ============ STOCK RESET ============
+app.put('/api/products/reset-stock', (req, res) => {
+  run('UPDATE products SET stock = 0');
+  res.json({ success: true });
+});
+
+// ============ FAQ CRUD ============
+app.get('/api/faq', (req, res) => {
+  res.json(all('SELECT * FROM faq ORDER BY sort_order ASC, id ASC'));
+});
+
+app.post('/api/faq', (req, res) => {
+  const { question, answer, keywords } = req.body;
+  if (!question || !answer) return res.status(400).json({ error: 'Question and answer required' });
+  const result = run('INSERT INTO faq (question, answer, keywords) VALUES (?, ?, ?)', [question, answer, keywords || '']);
+  res.json({ id: result.lastInsertRowid });
+});
+
+app.put('/api/faq/:id', (req, res) => {
+  const { question, answer, keywords } = req.body;
+  run('UPDATE faq SET question=?, answer=?, keywords=? WHERE id=?', [question, answer, keywords || '', req.params.id]);
+  res.json({ success: true });
+});
+
+app.delete('/api/faq/:id', (req, res) => {
+  run('DELETE FROM faq WHERE id=?', [req.params.id]);
+  res.json({ success: true });
+});
+
+// ============ LOW STOCK ALERT ============
+app.get('/api/alerts/low-stock', (req, res) => {
+  const products = all('SELECT *, (stock * pieces_per_case) as total_pets FROM products WHERE (stock * pieces_per_case) < 100 AND (stock * pieces_per_case) > 0');
+  res.json(products);
+});
+
 // ============ ORDERS ============
 app.get('/api/orders', (req, res) => {
   const { status, from, to } = req.query;

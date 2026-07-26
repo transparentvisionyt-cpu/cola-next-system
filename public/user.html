@@ -504,14 +504,6 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
   </div>
   <div class="faq-quick-btns" id="faqQuickBtns">
     <button class="faq-main-menu-btn" onclick="showMainMenu()"><i class="fas fa-bars"></i> Main Menu</button>
-    <button onclick="askFaq('Delivery kahan hoti hai?')">Delivery Area</button>
-    <button onclick="askFaq('Payment kaise karein?')">Payment Method</button>
-    <button onclick="askFaq('Mera order kahan hai?')">Order Tracking</button>
-    <button onclick="askFaq('Minimum order kitna hai?')">Min Order</button>
-    <button onclick="askFaq('Wholesale price kya hai?')">Wholesale Price</button>
-    <button onclick="askFaq('Products ki list kya hai?')">Products List</button>
-    <button onclick="askFaq('Return policy kya hai?')">Return Policy</button>
-    <button onclick="askFaq('Contact number kya hai?')">Contact</button>
   </div>
   <div class="faq-bot-input">
     <input id="faqInput" placeholder="Apna sawal likhein..." onkeydown="if(event.key==='Enter')sendFaqMsg()">
@@ -863,22 +855,18 @@ function toggleFaqBot(){
   bot.classList.toggle('open');
   if(bot.classList.contains('open'))setTimeout(()=>document.getElementById('faqInput').focus(),300);
 }
-const FAQ_ANSWERS={
-'delivery kahan hoti hai?':'Hum poori Pakistan mein delivery karte hain! Karachi, Lahore, Islamabad, Faisalabad aur baaki sab cities mein. Delivery charges order ki jagah pe depend karte hain.',
-'payment kaise karein?':'Sirf cash on delivery! Jab aapka order pohanchay, tab cash mein payment dein. Koi online payment nahi.',
-'mera order kahan hai?':'Apna order number My Orders section mein check karein. Wahan status dikhega — pending, delivered ya cancelled.',
-'minimum order kitna hai?':'Koi minimum order nahi hai! Aap 1 bhi bottle order kar sakte hain. Lekin wholesale ke liye best hai zyada order karein.',
-'wholesale price kya hai?':'Hum wholesale distributor hain. Retail se kam price milti hai. Products ke prices screen pe dikhe hain. Bulk order pe aur discount mil sakta hai.',
-'products ki list kya hai?':'Cola Next, Dare Next, Fizzup Next, Rango Next (Classic), Anaar Next, Green Soda Next, Lychee Next, Storm, Zero Cola, Zero Fizzup, Mint Fizzup, Mineral Water, Apple Next — sab available hain!',
-'return policy kya hai?':'Agar product kharab ho toh 24 ghante ke andar inform karein. Hum exchange kar denge. Open bottle ka return nahi hota.',
-'contact number kya hai?':'Phone: 0300 0000000 | WhatsApp bhi isi number pe hai. Ya Contact page pe jaayein.'
-};
+let FAQ_ANSWERS={};
+let userFaqData=[];
+async function loadFaqData(){try{userFaqData=await(await fetch(API+'/api/faq')).json();FAQ_ANSWERS={};userFaqData.forEach(f=>{FAQ_ANSWERS[f.question.toLowerCase().trim()]=f.answer;if(f.keywords){f.keywords.split(',').forEach(kw=>{FAQ_ANSWERS[kw.trim().toLowerCase()]=f.answer})}})}catch(e){}}
+loadFaqData();
 function askFaq(q){
   addFaqMsg(q,'user');
   setTimeout(()=>{
     const lower=q.toLowerCase().trim();
-    let ans=FAQ_ANSWERS[lower];
-    if(!ans){const keys=Object.keys(FAQ_ANSWERS);for(const k of keys){if(lower.includes(k.split(' ')[0])){ans=FAQ_ANSWERS[k];break}}}
+    let ans=null;
+    if(FAQ_ANSWERS[lower]){ans=FAQ_ANSWERS[lower]}
+    else{const keys=Object.keys(FAQ_ANSWERS);for(const k of keys){if(lower.includes(k)){ans=FAQ_ANSWERS[k];break}}}
+    if(!ans&&userFaqData.length){for(const f of userFaqData){const words=f.keywords?f.keywords.split(',').map(w=>w.trim().toLowerCase()):[];for(const w of words){if(w&&lower.includes(w)){ans=f.answer;break}}if(ans)break}}
     if(!ans)ans='Maafi chahta hoon, yeh sawal samajh nahi aaya. Kya aap dobara puch sakte hain ya Main Menu se koi option select karein?';
     addFaqMsg(ans,'bot');
     setTimeout(()=>{addFaqMsg('<button class="faq-inline-btn" onclick="showMainMenu()"><i class="fas fa-arrow-left"></i> Main Menu</button>','bot')},300);
@@ -889,7 +877,8 @@ function addFaqMsg(text,who){const div=document.createElement('div');div.classNa
 function showMainMenu(){
   addFaqMsg('Ye raha main menu! Neeche se koi bhi sawal puchain ya khud type karein.','bot');
   const qb=document.getElementById('faqQuickBtns');
-  qb.innerHTML='<button class="faq-main-menu-btn" onclick="showMainMenu()"><i class="fas fa-bars"></i> Main Menu</button><button onclick="askFaq(\'Delivery kahan hoti hai?\')">Delivery Area</button><button onclick="askFaq(\'Payment kaise karein?\')">Payment Method</button><button onclick="askFaq(\'Mera order kahan hai?\')">Order Tracking</button><button onclick="askFaq(\'Minimum order kitna hai?\')">Min Order</button><button onclick="askFaq(\'Wholesale price kya hai?\')">Wholesale Price</button><button onclick="askFaq(\'Products ki list kya hai?\')">Products List</button><button onclick="askFaq(\'Return policy kya hai?\')">Return Policy</button><button onclick="askFaq(\'Contact number kya hai?\')">Contact</button>';
+  const btns=userFaqData.slice(0,8).map(f=>`<button onclick="askFaq('${f.question.replace(/'/g,"\\'")}')">${f.question.length>25?f.question.substring(0,25)+'...':f.question}</button>`).join('');
+  qb.innerHTML='<button class="faq-main-menu-btn" onclick="showMainMenu()"><i class="fas fa-bars"></i> Main Menu</button>'+btns;
 }
 function renderCartSideBadge(){const total=Object.values(cart).reduce((s,q)=>s+q,0);document.getElementById('cartSideCount').textContent=total;document.getElementById('cartSideFab').style.display=total>0?'flex':'none'}
 const _origRenderCartBadge=renderCartBadge;
