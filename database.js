@@ -190,7 +190,7 @@ function seedProducts() {
 function seedSettings() {
   const result = db.exec("SELECT COUNT(*) as c FROM settings");
   if (result.length > 0 && result[0].values[0][0] > 0) return;
-  db.run("INSERT INTO settings (company_name, phone, whatsapp, email, address, credit_terms_days) VALUES (?, ?, ?, ?, ?, ?)", ['Cola Next Distributor', '', '', '', '', 30]);
+  db.run("INSERT INTO settings (company_name, phone, whatsapp, email, address, credit_terms_days) VALUES (?, ?, ?, ?, ?, ?)", ['Cola Next Distributor', '03241281605', '923241281605', '', '', 30]);
 }
 
 function seedAdmin() {
