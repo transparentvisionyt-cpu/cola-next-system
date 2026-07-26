@@ -224,53 +224,63 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 .sidebar-badge{background:var(--primary);color:#fff;min-width:20px;height:20px;border-radius:10px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;margin-left:auto}
 
 @media(max-width:1024px){
-  .sidebar{width:220px;transform:translateX(0)}
+  .sidebar{transform:translateX(-100%);width:260px}
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay.show{display:block}
-  .main{margin-left:220px}
-  .menu-toggle{display:none}
+  .main{margin-left:0}
+  .menu-toggle{display:flex}
   .product-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
   .product-img{height:140px}
-  .topbar{padding:0 16px}
-  .topbar h2{font-size:16px}
 }
 @media(max-width:768px){
-  .sidebar{width:200px}
-  .main{margin-left:200px}
   .product-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-  .product-img{height:120px}
+  .product-img{height:130px}
   .product-info{padding:10px 12px}
   .product-name{font-size:12px}
   .product-price{font-size:14px}
-  .topbar-right{gap:8px}
-  .whatsapp-btn{padding:6px 10px;font-size:11px}
-  .lang-btn{padding:5px 10px;font-size:10px}
-  .info-phone-text{font-size:11px}
+  .topbar{padding:8px 14px}
+  .topbar-right{gap:6px}
+  .whatsapp-btn{padding:7px 12px;font-size:11px}
+  .lang-btn{padding:5px 8px;font-size:10px}
+  .dash-bg-strip img{height:130px;max-width:70px}
+  .banner-contact-side{display:none}
 }
 @media(max-width:480px){
-  .sidebar{width:180px}
-  .main{margin-left:180px}
-  .content{padding:12px}
-  .product-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+  .content{padding:10px}
+  .product-grid{grid-template-columns:1fr 1fr;gap:8px}
   .product-img{height:110px}
   .product-info{padding:8px 10px}
   .product-name{font-size:11px}
   .product-price{font-size:13px}
+  .product-card .fav-btn{width:28px;height:28px;font-size:11px}
   .card-body{padding:12px}
   table{font-size:10px}
   th,td{padding:6px 8px}
-  .topbar h2{font-size:14px}
-  .topbar .sub{display:none}
-  .topbar-right{gap:6px}
-  .whatsapp-btn span{display:none}
-  .info-phone-top{display:none}
-  .info-wa-top{display:none}
-  .sidebar-logo h1{font-size:14px}
-  .sidebar-logo .icon{width:36px;height:36px}
-  .sidebar-nav .nav-btn{padding:10px 12px;font-size:12px}
+  .topbar{padding:6px 10px;flex-wrap:nowrap}
+  .topbar h2{font-size:13px;font-weight:800}
+  .topbar .sub{display:none!important}
+  .topbar-right{gap:4px}
+  .info-phone-top,.info-wa-top{display:none}
+  .whatsapp-btn{padding:6px 10px;font-size:10px}
+  .whatsapp-btn i{font-size:14px}
+  .lang-btn{padding:4px 7px;font-size:9px}
+  .dash-bg-strip img{height:100px;max-width:55px}
+  .dash-banner{min-height:140px;border-radius:14px}
+  .dash-banner:hover{transform:none}
+  .sidebar-logo{padding:14px}
+  .sidebar-logo h1{font-size:15px}
+  .sidebar-logo .icon{width:38px;height:38px}
+  .sidebar-nav .nav-btn{padding:10px 14px;font-size:12px}
   .sidebar-user p{font-size:12px}
-  .dash-bg-strip img{height:120px;max-width:65px}
-  .cart-fab{width:50px;height:50px;font-size:20px}
+  .cart-fab{width:50px;height:50px;font-size:20px;bottom:20px;right:16px}
+  .cart-side-fab{width:48px;height:48px;bottom:80px;right:16px}
+  .faq-fab{width:52px;height:52px}
+  .stat-card{min-width:100px;padding:12px}
+  .stat-card h3{font-size:18px}
+  .stats-row{gap:8px}
+  .order-item{flex-wrap:wrap}
+  .search-bar{flex-direction:column}
+  .search-input{min-width:100%}
 }
 .cart-side-fab{position:fixed;bottom:90px;right:24px;width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 6px 20px rgba(22,163,74,.4);z-index:1000;display:flex;align-items:center;justify-content:center;transition:all .3s}
 .cart-side-fab:hover{transform:scale(1.1);box-shadow:0 8px 25px rgba(22,163,74,.5)}
