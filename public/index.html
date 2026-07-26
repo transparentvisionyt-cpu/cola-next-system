@@ -264,37 +264,58 @@ tr:hover{background:rgba(227,30,36,.02)}
 
 /* ============ MOBILE ============ */
 @media(max-width:1024px){
-  .sidebar{transform:translateX(-100%)}
+  .sidebar{width:220px;transform:translateX(0)}
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay.show{display:block}
-  .main{margin-left:0}
-  .menu-toggle{display:flex}
+  .main{margin-left:220px}
+  .menu-toggle{display:none}
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .grid-2{grid-template-columns:1fr}
   .form-row,.form-row-3{grid-template-columns:1fr}
-  .product-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:12px}
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;padding:12px}
   .product-img{height:140px}
   .splash-header{min-height:160px;padding:20px 16px}
   .splash-content h1{font-size:22px}
   .stats-row .stat-box{min-width:120px;padding:14px}
   .stats-row .stat-box h4{font-size:20px}
+  .topbar{padding:0 16px}
+  .topbar h2{font-size:16px}
 }
-@media(max-width:480px){
-  .content{padding:12px}
-  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
-  .kpi{padding:14px}
-  .kpi-val{font-size:20px}
-  .product-grid{grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+@media(max-width:768px){
+  .sidebar{width:200px}
+  .main{margin-left:200px}
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
   .product-img{height:120px}
   .product-info{padding:10px 12px}
   .product-name{font-size:12px}
   .product-price{font-size:14px}
-  .card-body{padding:14px}
-  .modal{padding:20px;border-radius:16px}
-  .stats-row{gap:10px}
-  .stats-row .stat-box{min-width:100px}
+}
+@media(max-width:480px){
+  .sidebar{width:180px}
+  .main{margin-left:180px}
+  .content{padding:10px}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:12px}
+  .kpi-val{font-size:18px}
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px}
+  .product-img{height:100px}
+  .product-info{padding:8px 10px}
+  .product-name{font-size:11px}
+  .product-price{font-size:13px}
+  .card-body{padding:12px}
+  .modal{padding:16px;border-radius:14px}
+  .stats-row{gap:8px}
+  .stats-row .stat-box{min-width:80px;padding:10px}
+  .stats-row .stat-box h4{font-size:16px}
   table{font-size:10px}
-  th,td{padding:8px 10px}
+  th,td{padding:6px 8px}
+  .topbar{padding:0 12px}
+  .topbar h2{font-size:14px}
+  .sidebar-logo h1{font-size:14px}
+  .sidebar-logo .icon{width:36px;height:36px}
+  .sidebar-nav .nav-btn{padding:10px 12px;font-size:12px}
+  .sidebar-user p{font-size:12px}
+  .form-row,.form-row-3{grid-template-columns:1fr}
 }
 </style>
 </head>
