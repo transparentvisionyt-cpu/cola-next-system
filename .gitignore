@@ -3,4 +3,5 @@ android/
 .gradle/
 build/
 *.apk
+*.db
 .env
