@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -21,22 +26,21 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Gradle
+      - name: Install Capacitor
         run: |
-          curl -sL https://services.gradle.org/distributions/gradle-8.2-bin.zip -o /tmp/gradle.zip
-          sudo unzip -q /tmp/gradle.zip -d /opt
-          echo "/opt/gradle-8.2/bin" >> $GITHUB_PATH
+          npm install @capacitor/core @capacitor/cli @capacitor/android
 
-      - name: Generate Gradle Wrapper
-        working-directory: android
+      - name: Init Capacitor
         run: |
-          gradle wrapper --gradle-version 8.2
+          npx cap init "Cola Next" "com.colanext.app" --web-dir public
+          npx cap add android
 
-      - name: Build Debug APK
-        working-directory: android
+      - name: Build APK
         run: |
+          npx cap sync android
+          cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

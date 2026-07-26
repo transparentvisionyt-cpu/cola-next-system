@@ -1,3 +1,6 @@
 node_modules/
-cola_next.db
-Start.bat
+android/
+.gradle/
+build/
+*.apk
+.env

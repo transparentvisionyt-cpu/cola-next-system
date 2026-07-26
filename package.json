@@ -1,15 +1,14 @@
 {
-  "name": "cola-next-distributor",
+  "name": "cola-next-system",
   "version": "1.0.0",
   "description": "Cola Next Distributor Management System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.21.0",
-    "sql.js": "^1.10.3",
-    "cors": "^2.8.5"
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
   }
 }
