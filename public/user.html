@@ -74,16 +74,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:0;padding:0 10px;z-index:1;pointer-events:none}
 .dash-bg-strip img{height:160px;width:auto;max-width:85px;object-fit:contain;opacity:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
 .dash-bg-strip img:hover{transform:translateY(-10px) scale(1.15);filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
-.banner-title-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 40px;border-radius:16px;background:rgba(0,0,0,.2);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);animation:bannerFadeIn .8s ease-out}
-.banner-title-wrap h1{font-size:28px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 18px rgba(255,255,255,.4),0 4px 14px rgba(0,0,0,.5);margin:0;line-height:1.1}
-.banner-title-wrap .banner-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:4px;font-weight:500;letter-spacing:1px}
-.banner-title-wrap .banner-icon{font-size:22px;margin-bottom:4px;color:rgba(255,255,255,.9)}
-.banner-title-wrap .banner-logo-img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.3);margin-bottom:6px;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:float 3s ease-in-out infinite}
-.banner-contact-side{position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:6;display:flex;flex-direction:column;gap:8px}
-.banner-contact-side a{display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;text-decoration:none;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,.15)}
-.banner-contact-side a:hover{background:rgba(255,255,255,.3);transform:translateX(4px)}
-.banner-contact-side a.wa{background:rgba(37,211,102,.25);border-color:rgba(37,211,102,.35)}
-.banner-contact-side a.wa:hover{background:rgba(37,211,102,.45)}
 @keyframes bannerFadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .dash-water{position:absolute;bottom:0;left:0;width:200%;height:70px;z-index:0;opacity:.15}
 .dash-water-layer{position:absolute;width:200%;height:100%;bottom:0;left:0}
@@ -328,12 +318,15 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <div class="main">
-  <div class="topbar">
+  <div class="topbar" style="height:auto;padding:12px 24px;border-bottom:1px solid var(--border)">
     <div style="display:flex;align-items:center;gap:12px">
       <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-      <div><h2 id="pgTitle">Products</h2><span class="sub" id="pgSub">Browse all products</span></div>
+      <img src="/images/cola_1500ml.webp" alt="Cola Next" style="height:44px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(227,30,36,.3))">
+      <div><h2 style="font-size:22px;font-weight:900;color:var(--text);letter-spacing:1px;margin:0;line-height:1.1">COLA NEXT</h2><span style="font-size:11px;color:var(--text2);font-weight:500">Premium Beverages Distribution</span></div>
     </div>
-    <div class="topbar-right">
+    <div class="topbar-right" style="gap:16px">
+      <a id="info-phone-top" href="tel:+923000000000" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fas fa-phone" style="color:var(--primary)"></i> <span class="info-phone-text">0300 0000000</span></a>
+      <a id="info-wa-top" href="https://wa.me/923000000000" target="_blank" style="display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;text-decoration:none"><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</a>
       <a id="topbar-wa" href="https://wa.me/923000000000" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       <button class="lang-btn active" onclick="setLang('en',this)">EN</button>
       <button class="lang-btn" onclick="setLang('ur',this)">اردو</button>
@@ -344,7 +337,7 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
 
 <!-- PRODUCTS -->
 <div id="tab-products" class="tab active">
-  <div class="dash-banner" style="min-height:200px;position:relative;display:flex;align-items:center;justify-content:center">
+  <div class="dash-banner" style="min-height:180px;padding:10px 0">
     <div class="dash-bg-strip">
       <img src="/images/cola_250ml.webp" alt="">
       <img src="/images/cola_500ml.webp" alt="">
@@ -375,15 +368,6 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
     </div>
     <div class="dash-wave"></div>
     <div class="dash-water"><div class="dash-water-layer"></div><div class="dash-water-layer"></div><div class="dash-water-layer"></div></div>
-    <div class="banner-contact-side">
-      <a id="info-phone" href="tel:+923000000000"><i class="fas fa-phone"></i> <span class="info-phone-text">0300 0000000</span></a>
-      <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    </div>
-    <div style="position:relative;z-index:5;text-align:center;padding:0 20px">
-      <img src="/images/cola_1500ml.webp" alt="Cola Next" style="height:90px;object-fit:contain;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));margin-bottom:4px;animation:float 3s ease-in-out infinite">
-      <h1 style="font-size:32px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 20px rgba(255,255,255,.4),0 4px 16px rgba(0,0,0,.5);margin:0;line-height:1.1">Cola Next</h1>
-      <p style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;font-weight:500;letter-spacing:1px">Premium Beverages Distribution</p>
-    </div>
   </div>
   <div class="search-bar">
     <input class="search-input" id="p-search" placeholder="Search products..." oninput="filterProducts()">
@@ -561,7 +545,6 @@ function switchTab(n){
   document.getElementById('tab-'+n).classList.add('active');
   document.querySelector(`[data-tab="${n}"]`).classList.add('active');
   const info={products:['Products','Browse all products'],order:['Place Order','Review cart & order'],myorders:['My Orders','View your orders'],contact:['Contact Us','Get in touch']};
-  if(info[n]){document.getElementById('pgTitle').textContent=info[n][0];document.getElementById('pgSub').textContent=info[n][1]}
   applyLang();toggleSidebar();
   if(n==='products')loadProducts();
   if(n==='order')renderOrderItems();
@@ -792,12 +775,10 @@ async function loadUserSettings(){
     const waClean=wa.replace(/[^0-9]/g,'');
     const topWa=document.getElementById('topbar-wa');
     if(topWa)topWa.href='https://wa.me/'+waClean;
-    const ip=document.getElementById('info-phone');
-    if(ip)ip.href='tel:'+ph;
-    const ipt=document.querySelector('.info-phone-text');
-    if(ipt)ipt.textContent=ph;
-    const iw=document.getElementById('info-wa');
-    if(iw)iw.href='https://wa.me/'+waClean;
+    const ipt=document.getElementById('info-phone-top');
+    if(ipt){ipt.href='tel:'+ph.replace(/[^0-9+]/g,'').replace(/^0/,'+92');ipt.querySelector('.info-phone-text').textContent=ph}
+    const iwt=document.getElementById('info-wa-top');
+    if(iwt)iwt.href='https://wa.me/'+waClean;
     const cp=document.getElementById('ct-phone');
     if(cp)cp.href='tel:'+ph;
     const cpt=document.querySelector('.ct-phone-text');
