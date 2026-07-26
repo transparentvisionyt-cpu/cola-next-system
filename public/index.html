@@ -76,10 +76,15 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:0;padding:0 10px;z-index:1;pointer-events:none}
 .dash-bg-strip img{height:110px;width:auto;max-width:60px;object-fit:contain;opacity:.85;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
 .dash-bg-strip img:hover{transform:translateY(-10px) scale(1.15);filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
-.banner-title-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 40px;border-radius:16px;background:rgba(0,0,0,.25);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);animation:bannerFadeIn .8s ease-out}
-.banner-title-wrap h1{font-size:42px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 20px rgba(255,255,255,.3),0 4px 12px rgba(0,0,0,.4);margin:0;line-height:1.1}
-.banner-title-wrap .banner-sub{font-size:13px;color:rgba(255,255,255,.85);margin-top:6px;font-weight:500;letter-spacing:1px}
-.banner-title-wrap .banner-icon{font-size:28px;margin-bottom:4px;color:rgba(255,255,255,.9)}
+.banner-title-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 28px;border-radius:12px;background:rgba(0,0,0,.2);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);animation:bannerFadeIn .8s ease-out}
+.banner-title-wrap h1{font-size:24px;font-weight:900;color:#fff;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 14px rgba(255,255,255,.3),0 3px 10px rgba(0,0,0,.4);margin:0;line-height:1.1}
+.banner-title-wrap .banner-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:3px;font-weight:500;letter-spacing:1px}
+.banner-title-wrap .banner-icon{font-size:18px;margin-bottom:2px;color:rgba(255,255,255,.9)}
+.banner-contact-side{position:absolute;left:16px;bottom:16px;z-index:6;display:flex;flex-direction:column;gap:6px}
+.banner-contact-side a{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:600;text-decoration:none;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);transition:all .3s}
+.banner-contact-side a:hover{background:rgba(255,255,255,.25);transform:translateX(3px)}
+.banner-contact-side a.wa{background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.3)}
+.banner-contact-side a.wa:hover{background:rgba(37,211,102,.4)}
 @keyframes bannerFadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .dash-water{position:absolute;bottom:0;left:0;width:200%;height:70px;z-index:0;opacity:.15}
 .dash-water-layer{position:absolute;width:200%;height:100%;bottom:0;left:0}
@@ -397,6 +402,10 @@ tr:hover{background:rgba(227,30,36,.02)}
       <div class="banner-icon"><i class="fas fa-bottle-water"></i></div>
       <h1>Cola Next</h1>
       <div class="banner-sub">Premium Beverages Distribution</div>
+    </div>
+    <div class="banner-contact-side">
+      <a id="info-phone" href="tel:+923000000000"><i class="fas fa-phone"></i> <span class="info-phone-text">0300 0000000</span></a>
+      <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
     </div>
   </div>
   <div class="kpi-grid" style="margin-top:16px">
@@ -816,6 +825,14 @@ async function loadDashboard(){
   animateCount('d-products',d.totalProducts,'');
   document.getElementById('d-recentOrders').innerHTML=d.recentOrders.length?d.recentOrders.map(o=>`<tr><td><strong>${o.order_number}</strong></td><td>${o.retailer_name||'-'}</td><td>Rs.${fmt(o.net_amount)}</td><td><span class="badge badge-${o.status==='delivered'?'success':o.status==='cancelled'?'danger':'warning'}">${o.status}</span></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--text2)">No orders</td></tr>';
   document.getElementById('d-lowStock').innerHTML=d.lowStock.length?d.lowStock.map(p=>{const pets=p.stock*p.pieces_per_case;return `<tr><td>${p.name}</td><td>${p.size}</td><td><span class="badge badge-${pets<200?'danger':'warning'}">${pets.toLocaleString()} PETs</span></td></tr>`}).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text2)">All OK</td></tr>';
+  try{
+    const s=await(await fetch(API+'/api/settings')).json();
+    const ip=document.getElementById('info-phone');
+    const ipt=document.querySelector('.info-phone-text');
+    const iw=document.getElementById('info-wa');
+    if(ip&&s.phone){ip.href='tel:'+s.phone.replace(/\D/g,'').replace(/^0/,'+92');ipt.textContent=s.phone}
+    if(iw&&s.whatsapp){iw.href='https://wa.me/'+s.whatsapp.replace(/\D/g,'').replace(/^0/,'92')}
+  }catch(e){}
 }
 function animateCount(id,target,prefix,isMoney){
   const el=document.getElementById(id);

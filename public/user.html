@@ -74,10 +74,15 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:0;padding:0 10px;z-index:1;pointer-events:none}
 .dash-bg-strip img{height:110px;width:auto;max-width:60px;object-fit:contain;opacity:.85;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
 .dash-bg-strip img:hover{transform:translateY(-10px) scale(1.15);filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
-.banner-title-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 40px;border-radius:16px;background:rgba(0,0,0,.25);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);animation:bannerFadeIn .8s ease-out}
-.banner-title-wrap h1{font-size:42px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 20px rgba(255,255,255,.3),0 4px 12px rgba(0,0,0,.4);margin:0;line-height:1.1}
-.banner-title-wrap .banner-sub{font-size:13px;color:rgba(255,255,255,.85);margin-top:6px;font-weight:500;letter-spacing:1px}
-.banner-title-wrap .banner-icon{font-size:28px;margin-bottom:4px;color:rgba(255,255,255,.9)}
+.banner-title-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 28px;border-radius:12px;background:rgba(0,0,0,.2);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);animation:bannerFadeIn .8s ease-out}
+.banner-title-wrap h1{font-size:24px;font-weight:900;color:#fff;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 14px rgba(255,255,255,.3),0 3px 10px rgba(0,0,0,.4);margin:0;line-height:1.1}
+.banner-title-wrap .banner-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:3px;font-weight:500;letter-spacing:1px}
+.banner-title-wrap .banner-icon{font-size:18px;margin-bottom:2px;color:rgba(255,255,255,.9)}
+.banner-contact-side{position:absolute;left:16px;bottom:16px;z-index:6;display:flex;flex-direction:column;gap:6px}
+.banner-contact-side a{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:600;text-decoration:none;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);transition:all .3s}
+.banner-contact-side a:hover{background:rgba(255,255,255,.25);transform:translateX(3px)}
+.banner-contact-side a.wa{background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.3)}
+.banner-contact-side a.wa:hover{background:rgba(37,211,102,.4)}
 @keyframes bannerFadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .dash-water{position:absolute;bottom:0;left:0;width:200%;height:70px;z-index:0;opacity:.15}
 .dash-water-layer{position:absolute;width:200%;height:100%;bottom:0;left:0}
@@ -85,10 +90,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-water-layer:nth-child(2){background:linear-gradient(90deg,transparent,#0a0a15 25%,#1a1a2e 50%,#0a0a15 75%,transparent);animation:waterScroll 12s linear infinite reverse;opacity:.4}
 .dash-water-layer:nth-child(3){background:linear-gradient(90deg,transparent,rgba(26,26,46,.5) 30%,rgba(15,52,96,.3) 60%,transparent);animation:waterScroll 6s linear infinite;opacity:.5}
 @keyframes waterScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.banner-side-link{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;text-decoration:none;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
-.banner-side-link:hover{background:rgba(255,255,255,.3);transform:translateX(-4px)}
-.banner-side-link.wa{background:rgba(37,211,102,.3);border-color:rgba(37,211,102,.4)}
-.banner-side-link.wa:hover{background:rgba(37,211,102,.5)}
 .dash-bottle{position:absolute;z-index:2;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle img{height:110px;width:auto;object-fit:contain;transition:all .5s cubic-bezier(.4,0,.2,1)}
 .dash-bottle-1{left:6%;bottom:8px;animation:floatBottle 4s ease-in-out infinite;transform:rotate(-8deg)}
@@ -381,9 +382,9 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
       <h1>Cola Next</h1>
       <div class="banner-sub">Premium Beverages Distribution</div>
     </div>
-    <div class="banner-contact-side" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:8px">
-      <a id="info-phone" href="tel:+923000000000" class="banner-side-link"><i class="fas fa-phone"></i> <span class="info-phone-text">0300 0000000</span></a>
-      <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="banner-side-link wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <div class="banner-contact-side">
+      <a id="info-phone" href="tel:+923000000000"><i class="fas fa-phone"></i> <span class="info-phone-text">0300 0000000</span></a>
+      <a id="info-wa" href="https://wa.me/923000000000" target="_blank" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
     </div>
   </div>
   <div class="search-bar">
