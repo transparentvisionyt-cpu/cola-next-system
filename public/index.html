@@ -72,8 +72,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .dash-banner::after{content:'';position:absolute;bottom:0;left:0;width:200%;height:50px;background:rgba(255,255,255,.04);animation:waterWave 4s ease-in-out infinite reverse;border-radius:35%}
 .dash-wave{position:absolute;bottom:0;left:0;width:100%;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.1));z-index:1}
 .dash-bg-strip{position:absolute;bottom:0;left:0;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:0;padding:0 10px;z-index:1;pointer-events:none}
-.dash-bg-strip img{height:140px;width:auto;max-width:75px;object-fit:contain;opacity:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.dash-bg-strip img{height:110px;width:auto;max-width:60px;object-fit:contain;opacity:.85;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5));transition:all .6s cubic-bezier(.4,0,.2,1);flex-shrink:0}
 .dash-bg-strip img:hover{transform:translateY(-10px) scale(1.15);filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
+.banner-title-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 40px;border-radius:16px;background:rgba(0,0,0,.25);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);animation:bannerFadeIn .8s ease-out}
+.banner-title-wrap h1{font-size:42px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 20px rgba(255,255,255,.3),0 4px 12px rgba(0,0,0,.4);margin:0;line-height:1.1}
+.banner-title-wrap .banner-sub{font-size:13px;color:rgba(255,255,255,.85);margin-top:6px;font-weight:500;letter-spacing:1px}
+.banner-title-wrap .banner-icon{font-size:28px;margin-bottom:4px;color:rgba(255,255,255,.9)}
+@keyframes bannerFadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .dash-water{position:absolute;bottom:0;left:0;width:200%;height:70px;z-index:0;opacity:.15}
 .dash-water-layer{position:absolute;width:200%;height:100%;bottom:0;left:0}
 .dash-water-layer:nth-child(1){background:linear-gradient(90deg,transparent,#1a1a2e 20%,#16213e 40%,#0f3460 60%,#1a1a2e 80%,transparent);animation:waterScroll 8s linear infinite;opacity:.6}
@@ -386,8 +391,10 @@ tr:hover{background:rgba(227,30,36,.02)}
     <div class="dash-particles">
       <div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div>
     </div>
-    <div class="splash-content" style="position:relative;z-index:2">
-      <h1><i class="fas fa-bottle-water" style="margin-right:8px"></i>Cola Next</h1>
+    <div class="banner-title-wrap">
+      <div class="banner-icon"><i class="fas fa-bottle-water"></i></div>
+      <h1>Cola Next</h1>
+      <div class="banner-sub">Premium Beverages Distribution</div>
     </div>
   </div>
   <div class="kpi-grid" style="margin-top:16px">
@@ -484,9 +491,10 @@ tr:hover{background:rgba(227,30,36,.02)}
     <div class="dash-particles">
       <div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div><div class="dash-particle"></div>
     </div>
-    <div class="splash-content" style="position:relative;z-index:2">
-      <h1 style="font-size:24px"><i class="fas fa-warehouse" style="margin-right:8px"></i>Godown Inventory</h1>
-      <p style="color:rgba(255,255,255,.8)">Complete stock overview</p>
+    <div class="banner-title-wrap">
+      <div class="banner-icon"><i class="fas fa-warehouse"></i></div>
+      <h1 style="font-size:28px">Godown Inventory</h1>
+      <div class="banner-sub">Complete stock overview</div>
     </div>
   </div>
   <div class="stats-row" style="margin-top:16px">
