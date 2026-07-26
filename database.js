@@ -121,7 +121,7 @@ async function initDB() {
     )
   `);
 
-  const cols = ["logo_path","panel_name","admin_password"];
+  const cols = ["logo_path","panel_name","admin_password","primary_color","bg_color","sidebar_color","header_color","animations_enabled"];
   cols.forEach(c => {
     try { db.run(`ALTER TABLE settings ADD COLUMN ${c} TEXT DEFAULT ''`); } catch(e){}
   });

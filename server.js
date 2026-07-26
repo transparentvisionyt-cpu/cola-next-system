@@ -251,8 +251,8 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.put('/api/settings', (req, res) => {
-  const { company_name, phone, whatsapp, email, address, credit_terms_days, logo_path, panel_name } = req.body;
-  run('UPDATE settings SET company_name=?, phone=?, whatsapp=?, email=?, address=?, credit_terms_days=?, logo_path=?, panel_name=? WHERE id=1', [company_name, phone, whatsapp || '', email || '', address || '', credit_terms_days || 30, logo_path || '', panel_name || 'Cola Next Admin']);
+  const { company_name, phone, whatsapp, email, address, credit_terms_days, logo_path, panel_name, primary_color, bg_color, sidebar_color, header_color, animations_enabled } = req.body;
+  run(`UPDATE settings SET company_name=?, phone=?, whatsapp=?, email=?, address=?, credit_terms_days=?, logo_path=?, panel_name=?, primary_color=?, bg_color=?, sidebar_color=?, header_color=?, animations_enabled=? WHERE id=1`, [company_name || '', phone || '', whatsapp || '', email || '', address || '', credit_terms_days || 30, logo_path || '', panel_name || '', primary_color || '', bg_color || '', sidebar_color || '', header_color || '', animations_enabled || '1']);
   res.json({ success: true });
 });
 

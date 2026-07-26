@@ -812,7 +812,22 @@ async function loadUserSettings(){
     if(ce)ce.href='mailto:'+em;
     const cet=document.querySelector('.ct-email-text');
     if(cet)cet.textContent=em;
+    applyTheme(s);
   }catch(e){}
+}
+function applyTheme(s){
+  const root=document.documentElement;
+  if(s.primary_color)root.style.setProperty('--primary',s.primary_color);
+  if(s.bg_color)root.style.setProperty('--bg',s.bg_color);
+  if(s.sidebar_color){
+    document.querySelectorAll('.sidebar').forEach(el=>el.style.background=`linear-gradient(180deg,${s.sidebar_color} 0%,${s.sidebar_color}dd 100%)`);
+  }
+  if(s.header_color){
+    document.querySelector('.topbar').style.background=s.header_color;
+  }
+  if(s.animations_enabled==='0'){
+    document.querySelectorAll('.dash-bg-strip img').forEach(img=>img.style.animation='none');
+  }
 }
 
 function openCartPanel(){
