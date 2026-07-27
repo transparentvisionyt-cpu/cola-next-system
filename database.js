@@ -190,14 +190,18 @@ function seedProducts() {
 function seedSettings() {
   const result = db.exec("SELECT COUNT(*) as c FROM settings");
   if (result.length > 0 && result[0].values[0][0] > 0) return;
-  db.run("INSERT INTO settings (company_name, phone, whatsapp, email, address, credit_terms_days) VALUES (?, ?, ?, ?, ?, ?)", ['Cola Next Distributor', '03241281605', '923241281605', '', '', 30]);
+  const phone = process.env.PHONE || '03241281605';
+  const whatsapp = process.env.WHATSAPP || '923241281605';
+  db.run("INSERT INTO settings (company_name, phone, whatsapp, email, address, credit_terms_days) VALUES (?, ?, ?, ?, ?, ?)", ['Cola Next Distributor', phone, whatsapp, '', '', 30]);
 }
 
 function seedAdmin() {
   const result = db.exec("SELECT COUNT(*) as c FROM users WHERE role='admin'");
   if (result.length > 0 && result[0].values[0][0] > 0) return;
-  db.run("INSERT INTO users (username, password, name, phone, role) VALUES (?, ?, ?, ?, ?)", ['admin', 'cola2026admin', 'System Admin', '03000000000', 'admin']);
-  console.log('Admin seeded: admin / cola2026admin');
+  const user = process.env.ADMIN_USER || 'admin';
+  const pass = process.env.ADMIN_PASS || 'cola2026admin';
+  db.run("INSERT INTO users (username, password, name, phone, role) VALUES (?, ?, ?, ?, ?)", [user, pass, 'System Admin', '03000000000', 'admin']);
+  console.log(`Admin seeded: ${user} / ${pass}`);
 }
 
 function seedFaq() {

@@ -1,6 +1,30 @@
+# Dependencies
 node_modules/
+
+# Build
 .gradle/
 build/
 *.apk
+
+# Database (backup on server)
 *.db
+
+# Environment config (passwords, API keys)
 .env
+
+# SSH Keys
+*.key
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android-admin/.gradle/
+android-admin/build/
+android-admin/app/build/
+android/local.properties
+android-admin/local.properties
+
+# OS
+.DS_Store
+Thumbs.db

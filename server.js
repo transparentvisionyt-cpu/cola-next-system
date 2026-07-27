@@ -2,10 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
 const { initDB, all, get, run } = require('./database');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -411,9 +412,11 @@ app.get('/api/backup/download/:file', (req, res) => {
 
 // ============ START ============
 initDB().then(() => {
-  run("UPDATE settings SET phone='03241281605', whatsapp='923241281605' WHERE id=1");
-  run("UPDATE users SET phone='03241281605' WHERE role='admin'");
-  console.log('Phone numbers updated to 03241281605');
+  const phone = process.env.PHONE || '03241281605';
+  const whatsapp = process.env.WHATSAPP || '923241281605';
+  run("UPDATE settings SET phone=?, whatsapp=? WHERE id=1", [phone, whatsapp]);
+  run("UPDATE users SET phone=? WHERE role='admin'", [phone]);
+  console.log(`Phone: ${phone} | WhatsApp: ${whatsapp}`);
   app.listen(PORT, () => {
     console.log(`
 ╔══════════════════════════════════════════════════╗
