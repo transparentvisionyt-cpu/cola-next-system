@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ColNext" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#e31e24</item>
+        <item name="colorPrimaryDark">#b8181d</item>
+        <item name="colorAccent">#e31e24</item>
+        <item name="android:statusBarColor">#1E1E2E</item>
+    </style>
+</resources>
