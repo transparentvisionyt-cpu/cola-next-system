@@ -357,6 +357,58 @@ app.get('/api/reports/profit', (req, res) => {
   res.json({ items, totalRevenue, totalCost, profit: totalRevenue - totalCost });
 });
 
+// ============ BACKUP ============
+const { execSync } = require('child_process');
+
+app.get('/api/backup/download', (req, res) => {
+  try {
+    const dbPath = path.join(__dirname, 'cola_next.db');
+    res.download(dbPath, 'cola-next-backup.db');
+  } catch (e) {
+    res.status(500).json({ error: 'Backup failed' });
+  }
+});
+
+app.post('/api/backup/create', (req, res) => {
+  try {
+    const backupDir = path.join(__dirname, 'backups');
+    if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir);
+    const date = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const src = path.join(__dirname, 'cola_next.db');
+    const dest = path.join(backupDir, `cola-next-${date}.db`);
+    fs.copyFileSync(src, dest);
+    const files = fs.readdirSync(backupDir).filter(f => f.endsWith('.db')).sort().reverse();
+    files.slice(30).forEach(f => fs.unlinkSync(path.join(backupDir, f)));
+    res.json({ success: true, file: `cola-next-${date}.db` });
+  } catch (e) {
+    res.status(500).json({ error: 'Backup failed' });
+  }
+});
+
+app.get('/api/backup/list', (req, res) => {
+  try {
+    const backupDir = path.join(__dirname, 'backups');
+    if (!fs.existsSync(backupDir)) return res.json([]);
+    const files = fs.readdirSync(backupDir).filter(f => f.endsWith('.db')).sort().reverse();
+    const list = files.map(f => ({
+      name: f,
+      size: fs.statSync(path.join(backupDir, f)).size,
+      date: fs.statSync(path.join(backupDir, f)).mtime
+    }));
+    res.json(list);
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+app.get('/api/backup/download/:file', (req, res) => {
+  const filePath = path.join(__dirname, 'backups', req.params.file);
+  if (!fs.existsSync(filePath) || !req.params.file.endsWith('.db')) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+  res.download(filePath);
+});
+
 // ============ START ============
 initDB().then(() => {
   run("UPDATE settings SET phone='03241281605', whatsapp='923241281605' WHERE id=1");
