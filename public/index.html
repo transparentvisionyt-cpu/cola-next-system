@@ -709,6 +709,19 @@ tr:hover{background:rgba(227,30,36,.02)}
           <button class="btn btn-sm" style="background:#ef4444;color:#fff" onclick="changePassword()"><i class="fas fa-key"></i> Change Password</button>
         </div>
       </div>
+      <div class="card">
+        <div class="card-header"><h3><i class="fas fa-shield-halved"></i> Data Backup</h3></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text2);margin-bottom:12px">Database backup download karo ya naya backup banao.</p>
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="createBackup()"><i class="fas fa-plus-circle"></i> Create Backup</button>
+            <a href="/api/backup/download" class="btn btn-success" style="text-decoration:none"><i class="fas fa-download"></i> Download Latest</a>
+          </div>
+          <div id="backupStatus" style="font-size:12px;color:var(--success);display:none;margin-bottom:10px"></div>
+          <h4 style="font-size:13px;font-weight:700;margin-bottom:8px"><i class="fas fa-clock-rotate-left"></i> Previous Backups</h4>
+          <div id="backupList" style="max-height:200px;overflow-y:auto"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1179,7 +1192,28 @@ async function loadSettings(){
   const anims=s.animations_enabled!==undefined?s.animations_enabled:'1';
   document.querySelectorAll('input[name="s-anim"]').forEach(r=>{r.checked=r.value===anims});
   applyTheme(s);
+  loadBackupList();
 }
+async function loadBackupList(){
+  try{
+    const list=await(await fetch(API+'/api/backup/list')).json();
+    const el=document.getElementById('backupList');
+    if(!list.length){el.innerHTML='<p style="font-size:12px;color:var(--text2);padding:8px">No backups yet.</p>';return;}
+    el.innerHTML=list.map(b=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px"><div><i class="fas fa-database" style="color:var(--primary);margin-right:6px"></i><strong>${b.name}</strong><br><span style="color:var(--text2)">${new Date(b.date).toLocaleString()} - ${(b.size/1024).toFixed(1)} KB</span></div><a href="/api/backup/download/${b.name}" class="btn btn-sm btn-primary" style="text-decoration:none;padding:4px 10px;font-size:11px"><i class="fas fa-download"></i></a></div>`).join('');
+  }catch(e){}
+}
+async function createBackup(){
+  const st=document.getElementById('backupStatus');
+  st.style.display='block';st.style.color='var(--primary)';st.textContent='Creating backup...';
+  try{
+    const r=await fetch(API+'/api/backup/create',{method:'POST'});
+    const d=await r.json();
+    if(d.success){st.style.color='var(--success)';st.textContent='Backup created: '+d.file;loadBackupList();}
+    else{st.style.color='var(--danger)';st.textContent='Backup failed!';}
+  }catch(e){st.style.color='var(--danger)';st.textContent='Error: '+e.message;}
+  setTimeout(()=>{st.style.display='none'},5000);
+}
+
 async function saveSettings(){
   const d={
     company_name:document.getElementById('s-name').value,
