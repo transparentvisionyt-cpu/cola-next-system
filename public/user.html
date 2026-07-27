@@ -43,6 +43,9 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);ove
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 .sidebar-badge{background:var(--primary);color:#fff;min-width:20px;height:20px;border-radius:10px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;margin-left:auto}
 
+/* ============ HIDE MOBILE ON DESKTOP ============ */
+.m-header,.m-search-wrap,.m-sidebar,.m-sidebar-overlay,.m-hero-wrap,.m-sec-hdr,.m-cat-scroll,.m-feat-scroll,.m-prod-grid,.m-tab,.m-bottom-nav,#mAllProd{display:none!important}
+
 /* ============ DESKTOP: MAIN + TOPBAR ============ */
 .main{margin-left:var(--sidebar-w);min-height:100vh;transition:margin .3s;position:relative;z-index:1}
 .topbar{height:var(--topbar-h);background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
@@ -208,11 +211,21 @@ tr{transition:background .15s}tr:hover{background:rgba(227,30,36,.02)}
    MOBILE PREMIUM LAYOUT (<768px)
    ================================================================ */
 @media(max-width:767px){
-  .sidebar,.sidebar-overlay{display:none!important}
-  .main{margin-left:0!important}
-  .topbar,.menu-toggle,.bg-particles{display:none!important}
+  .sidebar,.sidebar-overlay,.topbar,.menu-toggle,.bg-particles{display:none!important}
   .content{display:none!important}
   .cart-fab,.cart-side-fab,.faq-fab,.faq-bot,.cart-panel-overlay,.cart-panel{display:none!important}
+  .m-header{display:flex!important}
+  .m-search-wrap{display:block!important}
+  .m-hero-wrap{display:block!important}
+  .m-sec-hdr{display:flex!important}
+  .m-cat-scroll{display:flex!important}
+  .m-feat-scroll{display:flex!important}
+  .m-tab.active{display:block!important}
+  .m-tab:not(.active){display:none!important}
+  .m-bottom-nav{display:flex!important}
+  .m-prod-grid{display:grid!important}
+  .m-sidebar-overlay{display:none!important}
+  .m-sidebar-overlay.show{display:block!important}
 
   body{padding-bottom:72px;background:var(--bg)}
 
