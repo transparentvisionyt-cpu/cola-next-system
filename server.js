@@ -205,7 +205,13 @@ app.delete('/api/orders/:id', (req, res) => {
 
 // ============ PAYMENTS ============
 app.get('/api/payments', (req, res) => {
-  res.json(all(`SELECT p.*, r.name as retailer_name FROM payments p LEFT JOIN retailers r ON p.retailer_id = r.id ORDER BY p.payment_date DESC`));
+  const { from, to } = req.query;
+  let query = `SELECT p.*, r.name as retailer_name FROM payments p LEFT JOIN retailers r ON p.retailer_id = r.id WHERE 1=1`;
+  const params = [];
+  if (from) { query += ' AND p.payment_date>=?'; params.push(from); }
+  if (to) { query += ' AND p.payment_date<=?'; params.push(to); }
+  query += ' ORDER BY p.payment_date DESC';
+  res.json(all(query, params));
 });
 
 app.post('/api/payments', (req, res) => {
@@ -356,6 +362,95 @@ app.get('/api/reports/profit', (req, res) => {
     totalCost += item.purchase_price * item.quantity;
   }
   res.json({ items, totalRevenue, totalCost, profit: totalRevenue - totalCost });
+});
+
+// Monthly report - generates downloadable HTML report
+app.get('/api/reports/monthly', (req, res) => {
+  const { year, month } = req.query;
+  const y = year || new Date().getFullYear();
+  const m = month || (new Date().getMonth() + 1);
+  const startDate = `${y}-${String(m).padStart(2,'0')}-01`;
+  const endDate = `${y}-${String(m).padStart(2,'0')}-31`;
+
+  const orders = all(`SELECT o.*, r.name as retailer_name FROM orders o LEFT JOIN retailers r ON o.retailer_id = r.id WHERE o.order_date>=? AND o.order_date<=? ORDER BY o.order_date DESC`, [startDate, endDate]);
+  const payments = all(`SELECT p.*, r.name as retailer_name FROM payments p LEFT JOIN retailers r ON p.retailer_id = r.id WHERE p.payment_date>=? AND p.payment_date<=? ORDER BY p.payment_date DESC`, [startDate, endDate]);
+  const products = all('SELECT * FROM products ORDER BY category, name');
+
+  const totalSales = orders.reduce((s, o) => s + o.net_amount, 0);
+  const totalPayments = payments.reduce((s, p) => s + p.amount, 0);
+  const pendingOrders = orders.filter(o => o.status === 'pending').length;
+  const deliveredOrders = orders.filter(o => o.status === 'delivered').length;
+
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const monthName = monthNames[parseInt(m) - 1] || m;
+
+  let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Monthly Report - ${monthName} ${y}</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;color:#333;padding:20px}
+.header{background:linear-gradient(135deg,#e31e24,#8b0000);color:#fff;padding:30px;border-radius:16px;margin-bottom:24px;text-align:center}
+.header h1{font-size:28px;font-weight:800;margin-bottom:6px}
+.header p{font-size:14px;opacity:.8}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat{background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.stat h3{font-size:28px;font-weight:800;color:#e31e24}
+.stat p{font-size:12px;color:#666;margin-top:4px}
+.section{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.section h2{font-size:18px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #e31e24}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eee;font-size:13px}
+th{background:#f8f8f8;font-weight:600;color:#555}
+.total-row{font-weight:700;background:#f0f0f0}
+.footer{text-align:center;padding:20px;color:#888;font-size:12px}
+@media print{body{padding:0}.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<div class="header"><h1>Cola Next Distributor</h1><p>Monthly Report - ${monthName} ${y}</p></div>
+<div class="stats">
+<div class="stat"><h3>${orders.length}</h3><p>Total Orders</p></div>
+<div class="stat"><h3>Rs.${totalSales.toLocaleString()}</h3><p>Total Sales</p></div>
+<div class="stat"><h3>Rs.${totalPayments.toLocaleString()}</h3><p>Payments Received</p></div>
+<div class="stat"><h3>${pendingOrders}</h3><p>Pending Orders</p></div>
+</div>`;
+
+  if (orders.length > 0) {
+    html += `<div class="section"><h2>Orders</h2><table><thead><tr><th>Order #</th><th>Retailer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>`;
+    orders.forEach(o => {
+      html += `<tr><td>${o.order_number}</td><td>${o.retailer_name||'-'}</td><td>Rs.${o.net_amount.toLocaleString()}</td><td>${o.status}</td><td>${o.order_date||''}</td></tr>`;
+    });
+    html += `<tr class="total-row"><td colspan="2">Total</td><td>Rs.${totalSales.toLocaleString()}</td><td colspan="2"></td></tr></tbody></table></div>`;
+  }
+
+  if (payments.length > 0) {
+    html += `<div class="section"><h2>Payments</h2><table><thead><tr><th>Retailer</th><th>Amount</th><th>Date</th></tr></thead><tbody>`;
+    payments.forEach(p => {
+      html += `<tr><td>${p.retailer_name||'-'}</td><td>Rs.${p.amount.toLocaleString()}</td><td>${p.payment_date||''}</td></tr>`;
+    });
+    html += `<tr class="total-row"><td>Total</td><td>Rs.${totalPayments.toLocaleString()}</td><td></td></tr></tbody></table></div>`;
+  }
+
+  html += `<div class="footer">Generated on ${new Date().toLocaleString()} | Cola Next Distributor System</div></body></html>`;
+
+  res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Content-Disposition', `attachment; filename="cola-next-report-${y}-${m}.html"`);
+  res.send(html);
+});
+
+// Retailer-specific report with date filter
+app.get('/api/reports/retailer', (req, res) => {
+  const { retailer_id, from, to } = req.query;
+  if (!retailer_id) return res.status(400).json({ error: 'retailer_id required' });
+  let orderQuery = `SELECT o.*, r.name as retailer_name FROM orders o LEFT JOIN retailers r ON o.retailer_id = r.id WHERE o.retailer_id=?`;
+  let paymentQuery = `SELECT p.*, r.name as retailer_name FROM payments p LEFT JOIN retailers r ON p.retailer_id = r.id WHERE p.retailer_id=?`;
+  const orderParams = [retailer_id];
+  const paymentParams = [retailer_id];
+  if (from) { orderQuery += ' AND o.order_date>=?'; orderParams.push(from); paymentQuery += ' AND p.payment_date>=?'; paymentParams.push(from); }
+  if (to) { orderQuery += ' AND o.order_date<=?'; orderParams.push(to); paymentQuery += ' AND p.payment_date<=?'; paymentParams.push(to); }
+  const orders = all(orderQuery + ' ORDER BY o.order_date DESC', orderParams);
+  const payments = all(paymentQuery + ' ORDER BY p.payment_date DESC', paymentParams);
+  const retailer = get('SELECT * FROM retailers WHERE id=?', [retailer_id]);
+  const totalSales = orders.reduce((s, o) => s + o.net_amount, 0);
+  const totalPayments = payments.reduce((s, p) => s + p.amount, 0);
+  res.json({ retailer, orders, payments, totalSales, totalPayments, balance: totalSales - totalPayments });
 });
 
 // ============ BACKUP ============
