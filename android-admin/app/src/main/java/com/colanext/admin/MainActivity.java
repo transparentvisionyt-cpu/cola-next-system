@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
-    private static final String DEFAULT_URL = "http://192.168.111.65:3001/";
+    private static final String DEFAULT_URL = "https://cola-next-system-production-1641.up.railway.app/";
     private String serverUrl;
 
     @SuppressLint("SetJavaScriptEnabled")
