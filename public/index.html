@@ -199,9 +199,10 @@ tr:hover{background:rgba(227,30,36,.02)}
 .stats-row .stat-box h4{font-size:20px}
 }
 @media(max-width:768px){
-.topbar{height:50px;padding:0 12px}
+.topbar{height:auto;padding:10px 12px;flex-wrap:wrap;gap:8px}
 .topbar h2{font-size:15px;font-weight:700}
-.topbar .sub{display:none}
+.topbar > div:last-child{width:100%;justify-content:center}
+#info-phone-top,#info-wa-top{font-size:12px !important;padding:6px 10px;background:rgba(227,30,36,.08);border-radius:8px;display:inline-flex !important;gap:4px}
 .menu-toggle{width:36px;height:36px;font-size:16px;border-radius:8px}
 .product-grid{grid-template-columns:repeat(2,1fr);gap:10px}
 .product-img{height:120px}
@@ -600,7 +601,7 @@ th,td{padding:6px 8px}
   </div>
   <div class="card">
     <div class="card-header"><h3><i class="fas fa-chart-bar"></i>Sales Report</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="rp-from" type="date" class="input" style="max-width:160px"><input id="rp-to" type="date" class="input" style="max-width:160px"><button class="btn btn-primary btn-sm" onclick="loadReports()"><i class="fas fa-search"></i>Filter</button></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><label style="font-size:12px;color:var(--text2);font-weight:600">From</label><input id="rp-from" type="date" class="input" style="max-width:160px"><label style="font-size:12px;color:var(--text2);font-weight:600">To</label><input id="rp-to" type="date" class="input" style="max-width:160px"><button class="btn btn-primary btn-sm" onclick="loadReports()"><i class="fas fa-search"></i>Filter</button></div>
     </div>
     <div class="card-body" style="padding:0;overflow-x:auto"><table><thead><tr><th>Order #</th><th>Date</th><th>Retailer</th><th>Amount</th><th>Status</th></tr></thead><tbody id="rp-body"></tbody></table></div>
   </div>
@@ -809,7 +810,7 @@ th,td{padding:6px 8px}
     <!-- REPORTS PANEL -->
     <div class="m-panel" id="m-panel-reports">
       <div class="m-section-title">Reports</div>
-      <div style="display:flex;gap:8px;margin-bottom:14px"><input id="m-rp-from" type="date" class="m-login-input" style="margin-bottom:0;flex:1;padding:10px 14px;font-size:13px;border-radius:12px"><input id="m-rp-to" type="date" class="m-login-input" style="margin-bottom:0;flex:1;padding:10px 14px;font-size:13px;border-radius:12px"><button class="m-stock-btn" style="width:auto;padding:10px 16px" onclick="mLoadReports()"><i class="fas fa-search"></i></button></div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center"><label style="font-size:11px;color:#94a3b8;font-weight:600">From</label><input id="m-rp-from" type="date" class="m-login-input" style="margin-bottom:0;flex:1;padding:10px 14px;font-size:13px;border-radius:12px"><label style="font-size:11px;color:#94a3b8;font-weight:600">To</label><input id="m-rp-to" type="date" class="m-login-input" style="margin-bottom:0;flex:1;padding:10px 14px;font-size:13px;border-radius:12px"><button class="m-stock-btn" style="width:auto;padding:10px 16px" onclick="mLoadReports()"><i class="fas fa-search"></i></button></div>
       <div id="m-reportsList" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
     <!-- PROFILE PANEL -->
@@ -924,6 +925,9 @@ function resetTheme(){document.getElementById('s-primarycolor').value='#e31e24';
 function uploadLogo(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=async function(e){const b64=e.target.result;document.getElementById('logoPreview').innerHTML=`<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;await fetch(API+'/api/settings/logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b64,filename:'company-logo.png'})});toast('Logo updated!')};reader.readAsDataURL(file)}
 async function changePassword(){const oldpw=document.getElementById('s-oldpw').value;const newpw=document.getElementById('s-newpw').value;if(!oldpw||!newpw){toast('Fill both fields','error');return}const r=await fetch(API+'/api/settings/password',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({old_password:oldpw,new_password:newpw})});const d=await r.json();if(d.success){toast('Password changed!');document.getElementById('s-oldpw').value='';document.getElementById('s-newpw').value=''}else toast(d.error||'Failed','error')}
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+const today=new Date().toISOString().split('T')[0];const monthAgo=new Date(Date.now()-30*86400000).toISOString().split('T')[0];
+['rp-from','o-from','pay-from','lg-from'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=monthAgo});
+['rp-to','o-to','pay-to','lg-to'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today});
 document.getElementById('s-primarycolor').addEventListener('input',function(){document.getElementById('s-primarycolor-hex').value=this.value});
 document.getElementById('s-bgcolor').addEventListener('input',function(){document.getElementById('s-bgcolor-hex').value=this.value});
 document.getElementById('s-sidebarcolor').addEventListener('input',function(){document.getElementById('s-sidebarcolor-hex').value=this.value});
